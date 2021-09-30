@@ -23,6 +23,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'mysql:mysql-connector-java'
+	implementation group: 'org.hibernate', name: 'hibernate-entitymanager'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
