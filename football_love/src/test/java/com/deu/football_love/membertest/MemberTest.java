@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.deu.football_love.domain.Member;
@@ -22,10 +23,11 @@ public class MemberTest {
         try {
             log.info("hello");
             Member member = new Member();
-            member.setId("12324");
+            member.setId("football");
             member.setPwd("12234");
             em.persist(member);
             tx.commit();
+            Assertions.assertEquals(member, em.find(Member.class, "football"));
         }catch(Exception e) {
             tx.rollback();
         }finally {
