@@ -12,20 +12,10 @@ import javax.persistence.Id;
 @Getter
 @Setter
 public class Member {
+	@Id
+	@Column(name = "member_id", length = 20)
+	private String id;
 
-
-    @Id
-    @Column(name = "member_id")
-    String id;
-
-    @Column(name="member_pwd")
-    String pwd;
-
-    public Member(String id, String pwd) {
-        this.id = id;
-        this.pwd = pwd;
-    }
-
-    public Member() {
-    }
+	@Column(name = "member_pwd", length = 30)
+	private String pwd;
 }

@@ -1,14 +1,15 @@
 package com.deu.football_love.repository;
 
-import com.deu.football_love.domain.Member;
-import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
+
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
+import com.deu.football_love.domain.Member;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-
 public class MemberRepository {
     private final EntityManager em;
     public void save(Member member)
