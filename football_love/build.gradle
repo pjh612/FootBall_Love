@@ -26,6 +26,7 @@ dependencies {
 	implementation 'mysql:mysql-connector-java'
 	implementation group: 'org.hibernate', name: 'hibernate-entitymanager'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.4.5'
 }
 
 test {
