@@ -1,5 +1,8 @@
 package com.deu.football_love.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,11 +36,14 @@ public class MemberController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Member> login(@PathVariable String id, @RequestParam String password) {
+	public ResponseEntity<Member> login(@PathVariable String id, @RequestParam String password,HttpServletRequest request) {
 		Member member = memberService.login(id, password);
+		HttpSession session = request.getSession();
 		if(member == null) {
+			session.invalidate();
 			return new ResponseEntity<Member>(HttpStatus.CONFLICT);
 		}else {
+			session.setAttribute("memberInfo", member);
 			return new ResponseEntity<Member>(member,HttpStatus.OK);
 		}
 	}
