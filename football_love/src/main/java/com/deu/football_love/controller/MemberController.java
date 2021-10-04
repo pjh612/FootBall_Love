@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deu.football_love.domain.Member;
@@ -35,8 +34,8 @@ public class MemberController {
 		}
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Member> login(@PathVariable String id, @RequestParam String password,HttpServletRequest request) {
+	@PostMapping("/login/{id}")
+	public ResponseEntity<Member> login(@PathVariable String id, @RequestBody String password,HttpServletRequest request) {
 		Member member = memberService.login(id, password);
 		HttpSession session = request.getSession();
 		if(member == null) {

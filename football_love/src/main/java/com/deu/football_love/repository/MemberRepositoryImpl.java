@@ -1,5 +1,8 @@
 package com.deu.football_love.repository;
 
+import java.math.BigInteger;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -8,12 +11,14 @@ import org.springframework.stereotype.Repository;
 import com.deu.football_love.domain.Member;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Repository
+@Slf4j
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 	
-	private static final String COUNT_ID = "SELECT COUNT(*) FROM MEMBER"; 
+	private static final String COUNT_ID = "SELECT COUNT(*)>0 FROM MEMBER WHERE member_id = ?"; 
 	
 	private final EntityManager em;
 	
@@ -30,8 +35,9 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 	@Override
 	public int isDuplicationId(String id) {
-		Query query = em.createNativeQuery(COUNT_ID);
-		return query.getFirstResult();
+		Query query = em.createNativeQuery(COUNT_ID).setParameter(1, id);
+		List<BigInteger> list = query.getResultList();
+		return list.get(0).intValue();
 	}
 
 
