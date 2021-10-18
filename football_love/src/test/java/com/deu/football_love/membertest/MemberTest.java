@@ -26,28 +26,6 @@ public class MemberTest {
 	private PasswordEncoder passwordEncoder;
 
 	@Test
-	public void jpa_연결테스트() {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa_unit");
-		EntityManager em = emf.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		try {
-			log.info("hello");
-			Member member = new Member();
-			member.setId("football");
-			member.setPwd("12234");
-			em.persist(member);
-			tx.commit();
-			assertEquals(member, em.find(Member.class, "football"));
-		} catch (Exception e) {
-			tx.rollback();
-		} finally {
-			em.close();
-		}
-		emf.close();
-	}
-
-	@Test
 	public void member_비밀번호_암호화_테스트() {
 		String password = "123456789";
 		String encodePassword = passwordEncoder.encode(password);

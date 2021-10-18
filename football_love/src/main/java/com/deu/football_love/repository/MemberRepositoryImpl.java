@@ -11,10 +11,8 @@ import org.springframework.stereotype.Repository;
 import com.deu.football_love.domain.Member;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Repository
-@Slf4j
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 	
