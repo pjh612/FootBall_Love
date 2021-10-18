@@ -20,7 +20,11 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(readOnly = true)
 	public Member login(String id, String password) {
 		String encodedPassword = passwordEncoder.encode(password);
-		return memberRepository.selectMember(id, encodedPassword);
+		Member member = memberRepository.selectMember(id);
+		if (member != null && member.getId().equals(id) && member.getPwd().equals(encodedPassword)) {
+			return member;
+		}
+		throw new IllegalArgumentException();
 	}
 
 	@Override
@@ -28,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
 	public Member join(Member member) {
 		String password = member.getPwd();
 		String encodedPassword = passwordEncoder.encode(password);
-		member.setPwd(encodedPassword);		
+		member.setPwd(encodedPassword);
 		return memberRepository.insertMember(member);
 	}
 
@@ -36,13 +40,11 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(readOnly = true)
 	public boolean isDuplicationId(String id) {
 		int cnt = memberRepository.isDuplicationId(id);
-		if(cnt == 0) {
-			return true;
-		}else {
+		if (cnt == 0) {
 			return false;
+		} else {
+			return true;
 		}
 	}
-
-
 
 }
