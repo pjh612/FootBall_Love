@@ -8,4 +8,6 @@ public interface MemberService {
 	Member login(String id, String password);
 
 	Member join(Member member);
+
+	Member findMember(String id);
 }

@@ -1,10 +1,14 @@
 package com.deu.football_love.domain;
 
+import com.deu.football_love.domain.type.BoardType;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Setter
 public class Board {
 
     @Id
@@ -16,7 +20,7 @@ public class Board {
     private String boardName;
 
     @Column(name="board_type")
-    private String boardType;
+    private BoardType boardType;
 
     @OneToMany(mappedBy = "id")
     private List<Post> posts = new ArrayList<>();
@@ -25,4 +29,8 @@ public class Board {
     @JoinColumn(name = "team_id", referencedColumnName ="team_id")
     private Team team;
 
+    public Board(String boardName, BoardType boardType) {
+        this.boardName = boardName;
+        this.boardType = boardType;
+    }
 }

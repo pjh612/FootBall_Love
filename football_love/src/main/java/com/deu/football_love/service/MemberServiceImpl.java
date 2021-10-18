@@ -47,4 +47,11 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+
+	@Override
+	@Transactional(readOnly = true)
+	public Member findMember(String id) {
+		return memberRepository.selectMember(id,"123");
+	}
+
 }
