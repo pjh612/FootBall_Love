@@ -7,7 +7,7 @@ public class Stadium {
 
     @Id
     @GeneratedValue
-    @Column(name = "statdium_id")
+    @Column(name = "stadium_id")
     private Long id;
 
     @Column(name="stadium_type")
