@@ -12,13 +12,14 @@ public class Company {
     @Column(name= "company_id")
     private Long id;
 
-    @Column(name= "company_name")
+    @Column(name= "company_name" , length = 36)
     private String name;
 
     @Column(name= "company_location")
     private Address location;
 
-    @Column(name="company_tel")
+
+    @Column(name="company_tel", length = 13)
     private String tel;
 
     @Column(name= "company_description")
