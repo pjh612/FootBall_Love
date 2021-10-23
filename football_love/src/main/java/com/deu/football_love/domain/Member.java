@@ -28,6 +28,12 @@ public class Member {
 	@Column(name = "member_pwd", length = 150)
 	private String pwd;
 
+	@Column(name = "member_nickname", length = 20)
+	private String nickname;
+
+	@Column(name = "member_name", length = 20)
+	private String name;
+
 	@Column(name = "member_birth")
 	private LocalDate birth;
 
