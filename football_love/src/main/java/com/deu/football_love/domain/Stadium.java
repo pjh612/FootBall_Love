@@ -1,6 +1,8 @@
 package com.deu.football_love.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Stadium {
@@ -22,4 +24,7 @@ public class Stadium {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_id", referencedColumnName="company_id")
     private Company company;
+
+    @OneToMany(mappedBy = "stadium")
+    private List<Matches> matches = new ArrayList<>();
 }
