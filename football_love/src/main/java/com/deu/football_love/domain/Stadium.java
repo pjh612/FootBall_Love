@@ -19,7 +19,7 @@ public class Stadium {
     @Column(name="stadium_cost")
     private Long cost;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_id", referencedColumnName="company_id")
     private Company company;
 }
