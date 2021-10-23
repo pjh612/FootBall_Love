@@ -24,9 +24,6 @@ public class Company {
     @Column(name= "company_description")
     private String description;
 
-    @Column(name= "company_type")
-    private String type;
-
     @OneToMany(mappedBy = "id")
     private List<Stadium> stadiums = new ArrayList<>();
 }
