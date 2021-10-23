@@ -2,24 +2,25 @@ package com.deu.football_love.domain;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Matches {
-
     @Id
     @GeneratedValue
-    @Column(name="match_id")
+    @Column(name = "matches_id")
     private Long id;
 
-    @Column(name= "match_createdate")
-    private LocalDateTime createDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+    private Team team;
 
-    @OneToMany(mappedBy = "teamA")
-    private List<MatchTeam> teamAs = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stadium_id", referencedColumnName = "stadium_id")
+    private Stadium stadium;
 
-    @OneToMany(mappedBy = "teamB")
-    private List<MatchTeam> teamBs = new ArrayList<>();
+    @Column(name = "matches_reservation_time")
+    private LocalDateTime reservation_time;
 
+    @Column(name="matches_approval")
+    private Boolean approval;
 }
