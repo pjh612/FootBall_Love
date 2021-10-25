@@ -47,11 +47,35 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
+	@Override
+	public boolean isDuplicationEmail(String email) {
+		int cnt = memberRepository.isDuplicationEmail(email);
+		if (cnt == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Member findMember(String id) {
-		return memberRepository.selectMember(id,"123");
+		return memberRepository.selectMember(id);
+	}
+
+	@Override
+	public Member modify(Member member) {
+		return memberRepository.updateMember(member);
+	}
+
+	@Override
+	public boolean withdraw(String id) {
+		return memberRepository.updateWithdraw(id);
+	}
+
+	@Override
+	public String checkMemberAuthority(String id) {
+		return memberRepository.selectMemberAuthority(id);
 	}
 
 }
