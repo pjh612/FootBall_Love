@@ -5,14 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +20,12 @@ public class Member {
 
 	@Column(name = "member_pwd", length = 150)
 	private String pwd;
+
+	@Column(name = "member_nickname", length = 20)
+	private String nickname;
+
+	@Column(name = "member_name", length = 20)
+	private String name;
 
 	@Column(name = "member_birth")
 	private LocalDate birth;
@@ -52,6 +51,12 @@ public class Member {
 
 	@OneToMany(mappedBy = "member")
 	private List<TeamMember> teamMembers = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member")
+	private List<ParticipationMember> participationMembers = new ArrayList<>();
+
+	@OneToOne(mappedBy = "member")
+	private WithdrawalMember withdrawalMember;
 
 
 }
