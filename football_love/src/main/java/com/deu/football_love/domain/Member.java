@@ -35,7 +35,7 @@ public class Member {
 	private Address address;
 
 	@Column(name = "member_email")
-	private String Email;
+	private String email;
 
 	@Column(name = "member_phone")
 	private String phone;
@@ -57,6 +57,13 @@ public class Member {
 
 	@OneToOne(mappedBy = "member")
 	private WithdrawalMember withdrawalMember;
-
-
+  
+  public void setMember(Member member) {
+		this.id = member.getId();
+		this.pwd = member.getPwd();
+		this.birth = member.getBirth();
+		this.address = member.getAddress();
+		this.email = member.getEmail();
+		this.phone = member.getPhone();
+	}
 }

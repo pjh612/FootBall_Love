@@ -8,4 +8,12 @@ public interface MemberRepository {
 	Member selectMember(String id);
 	
 	int isDuplicationId(String id);
+	
+	int isDuplicationEmail(String email);
+	
+	Member updateMember(Member member);
+	
+	boolean updateWithdraw(String id);
+	
+	String selectMemberAuthority(String id);
 }
