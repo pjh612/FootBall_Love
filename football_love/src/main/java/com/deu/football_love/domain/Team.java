@@ -27,10 +27,16 @@ public class Team {
     @Column(name="team_createdate")
     private LocalDate createDate;
 
-
-    @OneToMany(mappedBy = "match")
-    private List<MatchTeam> matches = new ArrayList<>();
-
     @OneToMany(mappedBy = "team")
     private List<TeamMember> teamMembers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<Matches> matches = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<MatchApplication> matchApplications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<ParticipationMember> participationMembers = new ArrayList<>();
+
 }

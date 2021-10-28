@@ -1,6 +1,7 @@
 package com.deu.football_love.domain;
 
 import com.deu.football_love.domain.type.BoardType;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Setter
+@NoArgsConstructor
 public class Board {
 
     @Id
