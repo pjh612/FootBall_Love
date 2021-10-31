@@ -15,13 +15,13 @@ public class BoardController {
 
     private final BoardServiceImpl boardService;
     @PostMapping("/add")
-    public ResponseEntity add(String boardName, BoardType boardType, Long teamId)
+    public ResponseEntity add(String boardName, BoardType boardType, String teamName)
     {
        if(boardName == null || boardType == null || (boardType != BoardType.GENERAL
-               && boardType!= BoardType.NOTICE && boardType != BoardType.PHOTO)  || teamId == null)
+               && boardType!= BoardType.NOTICE && boardType != BoardType.PHOTO)  || teamName == null)
            return new ResponseEntity(HttpStatus.BAD_REQUEST);
        Board board = new Board(boardName,boardType);
-       boardService.newBoard(board,teamId);
+       boardService.newBoard(board,teamName);
        return new ResponseEntity(HttpStatus.OK);
     }
 

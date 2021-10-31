@@ -15,8 +15,8 @@ public class BoardServiceImpl implements BoardService {
     private final TeamRepository teamRepository;
 
     @Override
-    public Board newBoard(Board board, Long id) {
-        board.setTeam(teamRepository.selectTeam(id));
+    public Board newBoard(Board board, String teamName) {
+        board.setTeam(teamRepository.selectTeam(teamName));
        return boardRepository.insertNewBoard(board);
     }
 
