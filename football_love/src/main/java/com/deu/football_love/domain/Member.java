@@ -55,6 +55,9 @@ public class Member {
 	@OneToMany(mappedBy = "member")
 	private List<ParticipationMember> participationMembers = new ArrayList<>();
 
+	@OneToMany(mappedBy = "member")
+	private List<ApplicationJoinTeam> applicationJoinTeams = new ArrayList<>();
+
 	@OneToOne(mappedBy = "member")
 	private WithdrawalMember withdrawalMember;
   
