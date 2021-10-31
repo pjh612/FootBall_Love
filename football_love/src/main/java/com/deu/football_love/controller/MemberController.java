@@ -87,7 +87,7 @@ public class MemberController {
 	}
 
 	@ApiOperation(value = "회원탈퇴 요청", notes = "id와 회원을 확인해 회원탈퇴 요청을 한다.")
-	@PutMapping("/{id}")
+	@PutMapping("/withdrawals/{id}")
 	public ResponseEntity withdrawMember(@PathVariable String id, HttpSession session) {
 		Member sessionMember = (Member) session.getAttribute(SESSION_MEMBER);
 		if (sessionMember == null) {
