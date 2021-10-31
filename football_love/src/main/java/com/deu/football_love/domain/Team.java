@@ -14,10 +14,6 @@ import java.util.List;
 public class Team {
 
     @Id
-    @Column(name = "team_id")
-    @GeneratedValue
-    private Long id;
-
     @Column(name = "team_name")
     private String name;
 
@@ -39,4 +35,6 @@ public class Team {
     @OneToMany(mappedBy = "team")
     private List<ParticipationMember> participationMembers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "team")
+    private List<ApplicationJoinTeam> applicationJoinTeams = new ArrayList<>();
 }
