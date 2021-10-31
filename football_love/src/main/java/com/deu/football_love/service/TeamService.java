@@ -1,13 +1,21 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.domain.Member;
-import com.deu.football_love.domain.Team;
-import com.deu.football_love.domain.TeamAdmin;
-import com.deu.football_love.domain.TeamMember;
+import com.deu.football_love.domain.*;
+import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.dto.TeamDto;
+
+import java.util.List;
 
 public interface TeamService {
 
+    TeamDto getTeamInfo(Team team);
     void createNewTeam(TeamAdmin teamAdmin, Team newTeam);
     Team findTeam(String teamName);
-    void joinTeam(TeamMember newTeamMember);
+    ApplicationJoinTeam findApplication(String teamName, String memberId);
+    void applyToTeam(ApplicationJoinTeam application);
+    void acceptApplication(ApplicationJoinTeam application, TeamMember newTeamMember);
+    AuthorityType authorityCheck(String teamName, String memberId);
+    void withdrawal(String teamName, String memberId);
+    void disbandmentTeam(Team team);
+    List<TeamMember> findTeamMember(String teamName, String memberId);
 }
