@@ -15,7 +15,7 @@ public class ParticipationMember {
     private Matches match;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_name")
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)

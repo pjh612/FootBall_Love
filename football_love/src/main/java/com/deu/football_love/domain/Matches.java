@@ -11,7 +11,7 @@ public class Matches {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+    @JoinColumn(name = "team_name", referencedColumnName = "team_name")
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)

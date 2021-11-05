@@ -1,5 +1,6 @@
 package com.deu.football_love.repository;
 
+import com.deu.football_love.domain.ApplicationJoinTeam;
 import com.deu.football_love.domain.Team;
 import com.deu.football_love.domain.TeamAdmin;
 import com.deu.football_love.domain.TeamMember;
@@ -16,27 +17,87 @@ public class TeamRepositoryImpl implements TeamRepository {
 
     private final EntityManager em;
 
+    @Override
     public void insertTeam(TeamAdmin teamAdmin, Team team)
     {
         em.persist(teamAdmin);
         em.persist(team);
     }
-    public Team selectTeam(Long id)
+
+    @Override
+    public Team selectTeam(String teamName)
     {
-        return em.find(Team.class, id);
+        return em.find(Team.class, teamName);
     }
 
-    public Team selectTeamByName(String teamName)
+    @Override
+    public List<TeamMember> selectTeamMember(String teamName, String memberId)
     {
-        List<Team> team = em.createQuery("SELECT t FROM Team t WHERE t.name = :teamName", Team.class).setParameter("teamName", teamName).getResultList();
-        if(team.size() == 1)
-            return team.get(0);
+        if (memberId != null) {
+            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.name =:teamName AND tm.member.id =:memberId", TeamMember.class)
+                    .setParameter("teamName", teamName)
+                    .setParameter("memberId", memberId)
+                    .getResultList();
+        }
+        else {
+            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.name =:teamName", TeamMember.class)
+                    .setParameter("teamName", teamName)
+                    .getResultList();
+        }
+
+    }
+
+    @Override
+    public List<TeamAdmin> selectTeamAdmin(String teamName, String memberId)
+    {
+        if(memberId != null) {
+            return em.createQuery("SELECT ta FROM TeamAdmin ta WHERE ta.team.name =:teamName AND ta.member.id =:memberId", TeamAdmin.class)
+                    .setParameter("teamName", teamName)
+                    .setParameter("memberId", memberId)
+                    .getResultList();
+        }
         else
-            return null;
+        {
+            return em.createQuery("SELECT ta FROM TeamAdmin ta WHERE ta.team.name =:teamName", TeamAdmin.class)
+                    .setParameter("teamName", teamName)
+                    .getResultList();
+        }
+
+    }
+
+    @Override
+    public ApplicationJoinTeam selectApplication(String teamName, String memberId) {
+        return em.createQuery("SELECT a FROM ApplicationJoinTeam a WHERE a.team.name =:teamName AND a.member.id=:memberId", ApplicationJoinTeam.class)
+                .setParameter("teamName", teamName)
+                .setParameter("memberId", memberId).getResultList().get(0);
+    }
+    @Override
+    public void insertNewApplication(ApplicationJoinTeam application) {
+        em.persist(application);
     }
 
     @Override
     public void insertNewTeamMember(TeamMember newTeamMember) {
         em.persist(newTeamMember);
+    }
+
+    @Override
+    public void deleteApplication(ApplicationJoinTeam application) {
+        em.remove(application);
+    }
+
+    @Override
+    public void deleteTeamMember(String teamName, String memberId)
+    {
+        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.name =:teamName AND tm.member.id=:memberId", TeamMember.class)
+                .setParameter("teamName", teamName)
+                .setParameter("memberId", memberId)
+                .getResultList();
+    }
+
+    @Override
+    public void deleteTeam(Team team)
+    {
+        em.remove(team);
     }
 }
