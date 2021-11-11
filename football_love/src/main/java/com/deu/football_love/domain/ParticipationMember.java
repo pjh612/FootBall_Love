@@ -2,7 +2,10 @@ package com.deu.football_love.domain;
 
 import javax.persistence.*;
 
+import lombok.Getter;
+
 @Entity
+@Getter
 public class ParticipationMember {
 
 
