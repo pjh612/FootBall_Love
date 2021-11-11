@@ -2,10 +2,9 @@ package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.ApplicationJoinTeam;
 import com.deu.football_love.domain.Team;
-import com.deu.football_love.domain.TeamAdmin;
 import com.deu.football_love.domain.TeamMember;
-import com.deu.football_love.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,14 +12,14 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class TeamRepositoryImpl implements TeamRepository {
 
     private final EntityManager em;
 
     @Override
-    public void insertTeam(TeamAdmin teamAdmin, Team team)
+    public void insertTeam(Team team)
     {
-        em.persist(teamAdmin);
         em.persist(team);
     }
 
@@ -41,24 +40,6 @@ public class TeamRepositoryImpl implements TeamRepository {
         }
         else {
             return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.name =:teamName", TeamMember.class)
-                    .setParameter("teamName", teamName)
-                    .getResultList();
-        }
-
-    }
-
-    @Override
-    public List<TeamAdmin> selectTeamAdmin(String teamName, String memberId)
-    {
-        if(memberId != null) {
-            return em.createQuery("SELECT ta FROM TeamAdmin ta WHERE ta.team.name =:teamName AND ta.member.id =:memberId", TeamAdmin.class)
-                    .setParameter("teamName", teamName)
-                    .setParameter("memberId", memberId)
-                    .getResultList();
-        }
-        else
-        {
-            return em.createQuery("SELECT ta FROM TeamAdmin ta WHERE ta.team.name =:teamName", TeamAdmin.class)
                     .setParameter("teamName", teamName)
                     .getResultList();
         }
@@ -89,10 +70,10 @@ public class TeamRepositoryImpl implements TeamRepository {
     @Override
     public void deleteTeamMember(String teamName, String memberId)
     {
-        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.name =:teamName AND tm.member.id=:memberId", TeamMember.class)
+        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.name =:teamName AND tm.member.id=:memberId")
                 .setParameter("teamName", teamName)
                 .setParameter("memberId", memberId)
-                .getResultList();
+                .executeUpdate();
     }
 
     @Override
