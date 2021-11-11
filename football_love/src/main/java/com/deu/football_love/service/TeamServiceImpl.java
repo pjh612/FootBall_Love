@@ -23,8 +23,8 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public void createNewTeam(TeamAdmin admin, Team newTeam) {
-        teamRepository.insertTeam(admin,newTeam);
+    public void createNewTeam(Team team) {
+        teamRepository.insertTeam(team);
     }
 
     @Override
