@@ -17,13 +17,10 @@ public class Team {
     @Column(name = "team_name")
     private String name;
 
-    @OneToMany(mappedBy = "team")
-    private List<TeamAdmin> teamAdmins = new ArrayList<>();
-
     @Column(name="team_createdate")
     private LocalDate createDate;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<TeamMember> teamMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "team")
