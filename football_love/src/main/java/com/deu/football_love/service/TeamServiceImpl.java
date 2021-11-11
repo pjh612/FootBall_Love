@@ -23,8 +23,8 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public void createNewTeam(TeamAdmin admin, Team newTeam) {
-        teamRepository.insertTeam(admin,newTeam);
+    public void createNewTeam(Team team) {
+        teamRepository.insertTeam(team);
     }
 
     @Override
@@ -59,14 +59,7 @@ public class TeamServiceImpl implements TeamService{
 
         if(teamMembers.size() == 0)
             return AuthorityType.NONE;
-        else
-        {
-            List<TeamAdmin> teamAdmins = teamRepository.selectTeamAdmin(teamName, memberId);
-            if (teamAdmins.size() == 0)
-                return AuthorityType.MEMBER;
-            else
-                return AuthorityType.ADMIN;
-        }
+        return teamMembers.get(0).getAuthority();
     }
 
     @Override
@@ -84,6 +77,12 @@ public class TeamServiceImpl implements TeamService{
     public void disbandmentTeam(Team team)
     {
         teamRepository.deleteTeam(team);
+    }
+
+    @Override
+    public void updateAuthority(TeamMember member, AuthorityType authorityType)
+    {
+        member.setAuthority(authorityType);
     }
 
 }

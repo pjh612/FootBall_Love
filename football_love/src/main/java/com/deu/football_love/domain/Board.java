@@ -1,6 +1,7 @@
 package com.deu.football_love.domain;
 
 import com.deu.football_love.domain.type.BoardType;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Setter
+@Getter
 @NoArgsConstructor
 public class Board {
 

@@ -9,7 +9,7 @@ import java.util.List;
 public interface TeamService {
 
     TeamDto getTeamInfo(Team team);
-    void createNewTeam(TeamAdmin teamAdmin, Team newTeam);
+    void createNewTeam(Team team);
     Team findTeam(String teamName);
     ApplicationJoinTeam findApplication(String teamName, String memberId);
     void applyToTeam(ApplicationJoinTeam application);
@@ -18,4 +18,5 @@ public interface TeamService {
     void withdrawal(String teamName, String memberId);
     void disbandmentTeam(Team team);
     List<TeamMember> findTeamMember(String teamName, String memberId);
+    void updateAuthority(TeamMember member, AuthorityType authorityType);
 }
