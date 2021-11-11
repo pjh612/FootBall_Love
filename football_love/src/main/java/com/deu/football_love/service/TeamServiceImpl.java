@@ -59,14 +59,7 @@ public class TeamServiceImpl implements TeamService{
 
         if(teamMembers.size() == 0)
             return AuthorityType.NONE;
-        else
-        {
-            List<TeamAdmin> teamAdmins = teamRepository.selectTeamAdmin(teamName, memberId);
-            if (teamAdmins.size() == 0)
-                return AuthorityType.MEMBER;
-            else
-                return AuthorityType.ADMIN;
-        }
+        return teamMembers.get(0).getAuthority();
     }
 
     @Override
