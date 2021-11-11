@@ -79,4 +79,10 @@ public class TeamServiceImpl implements TeamService{
         teamRepository.deleteTeam(team);
     }
 
+    @Override
+    public void updateAuthority(TeamMember member, AuthorityType authorityType)
+    {
+        member.setAuthority(authorityType);
+    }
+
 }
