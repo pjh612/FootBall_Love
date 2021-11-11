@@ -1,9 +1,13 @@
 package com.deu.football_love.domain;
 
 import javax.persistence.*;
+
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class Post {
 
     @Column(name= "post_id")
