@@ -9,6 +9,9 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.WithdrawalMember;
+import com.deu.football_love.dto.MemberDto;
+import com.deu.football_love.repository.sql.MemberSql;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,16 +19,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 
-	private static final String COUNT_ID = "SELECT COUNT(*)>0 FROM MEMBER WHERE member_id = ?";
-	
-	private static final String COUNT_EMAIL = "SELECT COUNT(*)>0 FROM MEMBER WHERE member_email = ?";
-
 	private final EntityManager em;
 
 	@Override
-	public Member insertMember(Member member) {
+	public void insertMember(Member member) {
 		em.persist(member);
-		return member;
 	}
 
 	@Override
@@ -35,37 +33,44 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 	@Override
 	public int isDuplicationId(String id) {
-		Query query = em.createNativeQuery(COUNT_ID).setParameter(1, id);
+		Query query = em.createNativeQuery(MemberSql.COUNT_ID).setParameter(1, id);
 		List<BigInteger> list = query.getResultList();
 		return list.get(0).intValue();
 	}
 
 	@Override
-	public Member updateMember(Member updatedMember) {
+	public Member updateMember(MemberDto updatedMember) {
 		String id = updatedMember.getId();
-		Member member = em.find(Member.class,id);
-		member.setMember(updatedMember);
+		Member member = em.find(Member.class, id);
 		return member;
 	}
 
 	@Override
-	public boolean updateWithdraw(String id) {
-		//TODO develop
-		return false;
-	}
-
-	@Override
-	public String selectMemberAuthority(String id) {
-		//TODO develop
+	public void updateWithdraw(String id) {
 		Member member = em.find(Member.class, id);
-		return null;
+		WithdrawalMember state = new WithdrawalMember();
+		em.persist(state);
+		state.setMember(member);
 	}
 
 	@Override
-	public int isDuplicationEmail(String email) {
-		Query query = em.createNativeQuery(COUNT_EMAIL).setParameter(1, email);
+	public int chkWithDraw(String id) {
+		Query query = em.createNativeQuery(MemberSql.COUNT_WITHDRAW).setParameter(1, id);
 		List<BigInteger> list = query.getResultList();
 		return list.get(0).intValue();
 	}
 
+	@Override
+	public String selectMemberAuthority(String memberId, String teamId) {
+		Query query = em.createNativeQuery(MemberSql.GET_MEMBER_AUTH).setParameter(1, memberId).setParameter(2, teamId);
+		List<String> list = query.getResultList();
+		return list.get(0);
+	}
+
+	@Override
+	public int isDuplicationEmail(String email) {
+		Query query = em.createNativeQuery(MemberSql.COUNT_EMAIL).setParameter(1, email);
+		List<BigInteger> list = query.getResultList();
+		return list.get(0).intValue();
+	}
 }

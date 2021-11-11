@@ -1,21 +1,21 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.domain.Member;
+import com.deu.football_love.dto.MemberDto;
 
 public interface MemberService {
 	boolean isDuplicationId(String id);
-	
+
 	boolean isDuplicationEmail(String email);
 
-	Member login(String id, String password);
+	MemberDto login(String id, String password);
 
-	Member join(Member member);
+	MemberDto join(MemberDto memberDto);
 
-	Member findMember(String id);
-	
-	Member modify(Member member);
-	
+	MemberDto findMember(String id);
+
+	MemberDto modify(MemberDto memberDto);
+
 	boolean withdraw(String id);
-	
-	String checkMemberAuthority(String id);
+
+	String checkMemberAuthority(String memberId, String teamId);
 }
