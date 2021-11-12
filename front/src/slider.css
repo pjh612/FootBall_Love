@@ -1,0 +1,10 @@
+.parent-div {
+  background-color: #fafafa;
+  margin: 0 auto;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+.mySlides {
+  display: none;
+}
