@@ -20,7 +20,7 @@ public class Team {
     @Column(name="team_createdate")
     private LocalDate createDate;
 
-    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "team" ,cascade = CascadeType.ALL)
     private List<TeamMember> teamMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "team")
