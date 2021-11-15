@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class WritePostRequest {
-
-
     private String Author;
     private Long boardId;
     private LocalDateTime createDate;
