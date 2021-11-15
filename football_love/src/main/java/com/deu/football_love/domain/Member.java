@@ -46,7 +46,7 @@ public class Member {
 	@OneToMany(mappedBy = "author")
 	private List<Post> posts = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member" , cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+	@OneToMany(mappedBy = "member" )
 	private List<TeamMember> teamMembers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member")
