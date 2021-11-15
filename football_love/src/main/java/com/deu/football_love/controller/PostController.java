@@ -1,16 +1,11 @@
 package com.deu.football_love.controller;
 
 import com.deu.football_love.domain.Board;
-import com.deu.football_love.domain.Member;
-import com.deu.football_love.domain.Post;
-import com.deu.football_love.dto.UpdatePostRequest;
-import com.deu.football_love.dto.WritePostRequest;
-import com.deu.football_love.dto.WritePostResponse;
+import com.deu.football_love.dto.*;
 import com.deu.football_love.service.BoardService;
 import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.PostService;
 import com.deu.football_love.service.TeamService;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +30,10 @@ public class PostController {
                                     , WritePostRequest writePostRequest, HttpSession session)
     {
         Board board = new Board();// board 조회
-        Member sessionMember = memberService.findMember(((Member) session.getAttribute("memberInfo")).getId());
+        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
         if (sessionMember == null || board == null || teamService.findTeamMember(teamName, sessionMember.getId()).size() == 0)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        Post newPost = new Post(sessionMember, board, writePostRequest.getCreateDate()
-                , writePostRequest.getModifyDate(), writePostRequest.getTitle(), writePostRequest.getContent());
-        WritePostResponse writePostResponse = postService.writePost(newPost);
+        WritePostResponse writePostResponse = postService.writePost(writePostRequest);
         return new ResponseEntity(writePostResponse, HttpStatus.OK);
     }
 
@@ -48,17 +41,17 @@ public class PostController {
      * 게시글 삭제
      */
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity deletePost(@PathVariable Long postId, WritePostRequest writePostRequest, HttpSession session)
+    public ResponseEntity deletePost(@PathVariable Long postId, DeletePostRequest request, HttpSession session)
     {
-        Member sessionMember = memberService.findMember(((Member) session.getAttribute("memberInfo")).getId());
-        Post findPost = postService.findPost(postId);
+        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
+        PostDto findPost = postService.findPost(postId);
 
         if (findPost == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        if (sessionMember == null || sessionMember.getId() != findPost.getAuthor().getId())
+        if (sessionMember == null || sessionMember.getId() != findPost.getAuthorId())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        postService.deletePost(findPost);
-        return new ResponseEntity(HttpStatus.OK);
+        DeletePostResponse response = postService.deletePost(findPost.getId());
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     /**
@@ -67,14 +60,14 @@ public class PostController {
     @PutMapping("/post/{postId}")
     public ResponseEntity modifyPost(@PathVariable Long postId, UpdatePostRequest request, HttpSession session)
     {
-        Member sessionMember = memberService.findMember(((Member) session.getAttribute("memberInfo")).getId());
-        Post findPost = postService.findPost(postId);
+        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
+        PostDto findPost = postService.findPost(postId);
 
         if (findPost == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        if (sessionMember == null || sessionMember.getId() != findPost.getAuthor().getId())
+        if (sessionMember == null || sessionMember.getId() != findPost.getAuthorId())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        postService.modifyPost(findPost, request);
+        postService.modifyPost(postId, request);
         return new ResponseEntity(HttpStatus.OK);
     }
 
