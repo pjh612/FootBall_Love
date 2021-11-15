@@ -3,7 +3,6 @@ import Navbar2 from "./Navbar2";
 import Carousel from "./Carousel";
 
 function App() {
-  console.log(Navbar2);
   return (
     <div>
       <Navbar></Navbar>
