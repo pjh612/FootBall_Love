@@ -1,10 +1,13 @@
 package com.deu.football_love.domain;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 public class Stadium {
 
     @Id
