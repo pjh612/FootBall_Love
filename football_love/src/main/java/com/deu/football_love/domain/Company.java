@@ -1,10 +1,15 @@
 package com.deu.football_love.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Company {
 
     @Id
@@ -27,4 +32,11 @@ public class Company {
 
     @OneToMany(mappedBy = "id")
     private List<Stadium> stadiums = new ArrayList<>();
+
+    public Company(String name, Address location, String tel, String description) {
+        this.name = name;
+        this.location = location;
+        this.tel = tel;
+        this.description = description;
+    }
 }
