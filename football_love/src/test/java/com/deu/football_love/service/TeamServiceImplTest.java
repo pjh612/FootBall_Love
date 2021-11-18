@@ -1,10 +1,10 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.domain.ApplicationJoinTeam;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.Team;
 import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.dto.MemberDto;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.TeamRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -44,23 +42,41 @@ public class TeamServiceImplTest {
     @BeforeEach
     public void init()
     {
+/*
+        Member memberA = new Member();
+        Member memberB = new Member();
+        memberA.setId("memberA");
+        memberA.setName("jinhyungPark");
+        memberA.setPwd(passwordEncoder.encode("1234"));
+        memberB.setId("memberB");
+        memberB.setName("jinhyungLee");
+        memberB.setPwd(passwordEncoder.encode("1234"));
+        MemberDto memberADto = new MemberDto(memberA);
+        MemberDto memberBDto = new MemberDto(memberB);
+        memberService.join(memberADto);
+        memberService.join(memberBDto);
+        teamService.createNewTeam(memberADto, "teamA");
+*/
 
     }
 
     @Test
     public void 팀_생성_테스트() {
         Member memberA = new Member();
+        Member memberB = new Member();
         memberA.setId("memberA");
         memberA.setName("jinhyungPark");
         memberA.setPwd(passwordEncoder.encode("1234"));
-        memberService.join(memberA);
-        Team newTeam = new Team();
-        newTeam.setCreateDate(LocalDate.now());
-        newTeam.setName("teamA");
-        TeamMember leader = new TeamMember(newTeam, memberA, AuthorityType.LEADER);
-        newTeam.getTeamMembers().add(leader);
-        teamService.createNewTeam(newTeam);
+        memberB.setId("memberB");
+        memberB.setName("jinhyungLee");
+        memberB.setPwd(passwordEncoder.encode("1234"));
+        MemberDto memberADto = new MemberDto(memberA);
+        MemberDto memberBDto = new MemberDto(memberB);
+        memberService.join(memberADto);
+        memberService.join(memberBDto);
+        teamService.createNewTeam(memberADto, "teamA");
 
+        assertNotNull( teamService.findTeam("teamA"));
         assertEquals(1, teamService.findTeamMember("teamA","memberA").size());
     }
 
@@ -68,35 +84,29 @@ public class TeamServiceImplTest {
      * 회원이 삭제되면 TeamMember도 삭제되는지 확인하는 테스트
      */
     @Test
-    @Rollback(false)
     public void 회원_탈퇴_테스트() {
         Member memberA = new Member();
+        Member memberB = new Member();
         memberA.setId("memberA");
         memberA.setName("jinhyungPark");
         memberA.setPwd(passwordEncoder.encode("1234"));
-        memberService.join(memberA);
+        memberB.setId("memberB");
+        memberB.setName("jinhyungLee");
+        memberB.setPwd(passwordEncoder.encode("1234"));
+        MemberDto memberADto = new MemberDto(memberA);
+        MemberDto memberBDto = new MemberDto(memberB);
+        memberService.join(memberADto);
+        memberService.join(memberBDto);
+        teamService.createNewTeam(memberADto, "teamA");
 
-        Team newTeam = new Team();
-        newTeam.setCreateDate(LocalDate.now());
-        newTeam.setName("teamA");
-        TeamMember newTeamMember = new TeamMember(newTeam, memberA, AuthorityType.LEADER);
-        newTeam.getTeamMembers().add(newTeamMember);
-        teamService.createNewTeam(newTeam);
-        //em.flush();
-        //log.info("teamMember = {}",teamMember);
-        //TeamMember teamMember = teamService.findTeamMember("teamA", "memberA").get(0);
-        //em.remove(teamMember);
-
-        //em.flush();
-        Member findMember = memberService.findMember("memberA");
-        findMember.getTeamMembers().forEach(teamMember -> {em.remove(teamMember);});
-        em.remove(findMember);
-        //assertNotNull(teamService.findTeam("teamA"));
-        //assertEquals(0,teamService.findTeamMember("teamA","memberA").size());
+        //List<TeamMember> teamMembers = teamRepository.selectTeamMember("teamA", "memberA");
+        teamService.withdrawal("teamA","memberA");
+        log.info("teamA = {}",teamService.findTeam("teamA"));
+        assertNotNull(teamService.findTeam("teamA"));
+        assertEquals(0,teamService.findTeamMember("teamA","memberA").size());
     }
 
     @Test
-    @Rollback(false)
     public void 회원_팀탈퇴_테스트() {
         Member memberA = new Member();
         Member memberB = new Member();
@@ -106,26 +116,22 @@ public class TeamServiceImplTest {
         memberB.setId("memberB");
         memberB.setName("jinhyungLee");
         memberB.setPwd(passwordEncoder.encode("1234"));
-        memberService.join(memberA);
-        memberService.join(memberB);
+        MemberDto memberADto = new MemberDto(memberA);
+        MemberDto memberBDto = new MemberDto(memberB);
+        memberService.join(memberADto);
+        memberService.join(memberBDto);
 
-        Team newTeam = new Team();
-        newTeam.setCreateDate(LocalDate.now());
-        newTeam.setName("teamA");
-        TeamMember leader = new TeamMember(newTeam, memberA, AuthorityType.LEADER);
-        TeamMember teamMemberB = new TeamMember(newTeam, memberB, AuthorityType.MEMBER);
-        newTeam.getTeamMembers().add(leader);
-        newTeam.getTeamMembers().add(teamMemberB);
+        teamService.createNewTeam(memberADto, "teamA");
+        em.flush();
+        Team teamA = teamRepository.selectTeam("teamA");
+        TeamMember teamMemberB = new TeamMember(teamA, memberB, AuthorityType.MEMBER);
 
-        teamService.createNewTeam(newTeam);
+        teamRepository.insertNewTeamMember(teamMemberB);
         teamService.withdrawal("teamA", "memberA");
-        List<TeamMember> findTeamMemberA = teamRepository.selectTeamMember("teamA", "memberA");
-        List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember("teamA", "memberB");
+      List<TeamMember> findTeamMemberA = teamRepository.selectTeamMember("teamA", "memberA");
+      List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember("teamA", "memberB");
 
-        teamService.findTeamMember("teamA",null).forEach( member ->{
-            log.info("member = {}",member.getMember().getId());
-        });
-        //assertEquals(1, teamRepository.selectTeamMember("teamA", null).size());
+        assertEquals(1, teamRepository.selectTeamMember("teamA", null).size());
         assertEquals(0, findTeamMemberA.size());
         assertEquals(1, findTeamMemberB.size());
         assertNotNull(teamRepository.selectTeam("teamA"));
@@ -138,29 +144,23 @@ public class TeamServiceImplTest {
         Member memberB = new Member();
         memberA.setId("memberA");
         memberA.setName("jinhyungPark");
+        memberA.setPwd(passwordEncoder.encode("1234"));
         memberB.setId("memberB");
-        memberB.setName("jinhyungPark");
-        em.persist(memberA);
-        em.persist(memberB);
+        memberB.setName("jinhyungLee");
+        memberB.setPwd(passwordEncoder.encode("1234"));
+        MemberDto memberADto = new MemberDto(memberA);
+        MemberDto memberBDto = new MemberDto(memberB);
+        memberService.join(memberADto);
+        memberService.join(memberBDto);
 
-        Team newTeam = new Team();
-        newTeam.setCreateDate(LocalDate.now());
-        newTeam.setName("teamA");
-
-        TeamMember teamMemberA = new TeamMember(newTeam, memberA, AuthorityType.LEADER);
-        em.persist(teamMemberA);
-        TeamMember teamMemberB = new TeamMember(newTeam, memberB, AuthorityType.LEADER);
-        em.persist(teamMemberB);
-
-        memberA.getTeamMembers().add(teamMemberA);
-        memberA.getTeamMembers().add(teamMemberB);
-        newTeam.getTeamMembers().add(teamMemberA);
-        newTeam.getTeamMembers().add(teamMemberB);
-
+        teamService.createNewTeam(memberADto, "teamA");
+        em.flush();
         Team teamA = teamRepository.selectTeam("teamA");
-        teamRepository.deleteTeam(teamA);
+        TeamMember teamMemberB = new TeamMember(teamA, memberB, AuthorityType.MEMBER);
 
-        assertEquals(0, teamRepository.selectTeamMember("teamA", null).size());
+        teamService.disbandmentTeam("teamA");
+
+//        assertEquals(0, teamRepository.selectTeamMember("teamA", null).size());
         assertNull(teamRepository.selectTeam("teamA"));
         assertNotNull(memberRepository.selectMember("memberA"));
         assertNotNull(memberRepository.selectMember("memberB"));

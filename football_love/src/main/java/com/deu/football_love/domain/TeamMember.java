@@ -2,7 +2,6 @@ package com.deu.football_love.domain;
 
 import com.deu.football_love.domain.type.AuthorityType;
 import lombok.Data;
-import lombok.Getter;
 
 import javax.persistence.*;
 
@@ -28,7 +27,7 @@ public class TeamMember {
 
     private AuthorityType authority;
 
-    public TeamMember(Team team, Member member,AuthorityType authority) {
+    public TeamMember(Team team, Member member, AuthorityType authority) {
         this.team = team;
         this.member = member;
         this.authority = authority;

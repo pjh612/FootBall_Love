@@ -6,8 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -40,7 +38,7 @@ public class Post {
     @Column(name= "post_content")
     private String content;
 
-    protected Post() {
+    public Post() {
     }
 
     public Post(Member author, Board board, LocalDateTime createDate, LocalDateTime modifyDate, String title, String content) {
@@ -51,6 +49,7 @@ public class Post {
         this.title = title;
         this.content = content;
     }
+
 
     public void update(UpdatePostRequest request)
     {

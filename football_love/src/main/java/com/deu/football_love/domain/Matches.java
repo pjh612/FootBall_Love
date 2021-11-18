@@ -1,9 +1,13 @@
 package com.deu.football_love.domain;
 
+import lombok.Data;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Data
 public class Matches {
     @Id
     @GeneratedValue
@@ -19,7 +23,7 @@ public class Matches {
     private Stadium stadium;
 
     @Column(name = "matches_reservation_time")
-    private LocalDateTime reservation_time;
+    private LocalDateTime reservationTime;
 
     @Column(name="matches_approval")
     private Boolean approval;

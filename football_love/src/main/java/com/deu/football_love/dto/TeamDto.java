@@ -1,10 +1,13 @@
 package com.deu.football_love.dto;
 
 import com.deu.football_love.domain.*;
+import lombok.Getter;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class TeamDto {
 
     private String name;

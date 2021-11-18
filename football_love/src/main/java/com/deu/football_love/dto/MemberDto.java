@@ -32,8 +32,6 @@ public class MemberDto {
 	
 	private List<Long> postId;
 	
-	private List<Long> adminsId;
-	
 	private List<Long> teamMembersId;
 	
 	private List<Long> participationMembersId;
@@ -49,9 +47,9 @@ public class MemberDto {
 		this.address = member.getAddress();
 		this.email = member.getEmail();
 		this.phone = member.getPhone();
+		if(member.getWithdrawalMember() != null)
 		this.withdrawalMemberId = member.getWithdrawalMember().getId();
 		member.getPosts().forEach(post -> postId.add(post.getId()));
-		member.getAdmins().forEach(admin -> adminsId.add(admin.getId()));
 		member.getTeamMembers().forEach(teamMember -> postId.add(teamMember.getId()));
 		member.getParticipationMembers().forEach(participation -> postId.add(participation.getId()));
 	}

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.dto.MemberDto;
 import com.deu.football_love.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,8 @@ public class MemberTest {
 		member.setName("jinhpark");
 		String encodePassword = passwordEncoder.encode("1234");
 		member.setPwd(encodePassword);
-		memberService.join(member);
+		MemberDto memberDto = new MemberDto(member);
+		memberService.join(memberDto);
 		assertEquals(member, memberService.findMember("pjh612"));
 	}
 }
