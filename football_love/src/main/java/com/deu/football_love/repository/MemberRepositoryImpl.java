@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.WithdrawalMember;
-import com.deu.football_love.dto.MemberDto;
+import com.deu.football_love.dto.JoinRequest;
+import com.deu.football_love.dto.MemberResponse;
 import com.deu.football_love.repository.sql.MemberSql;
 
 import lombok.RequiredArgsConstructor;
@@ -39,8 +40,8 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 
 	@Override
-	public Member updateMember(MemberDto updatedMember) {
-		String id = updatedMember.getId();
+	public Member updateMember(JoinRequest joinRequest) {
+		String id = joinRequest.getId();
 		Member member = em.find(Member.class, id);
 		return member;
 	}
