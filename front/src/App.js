@@ -1,6 +1,7 @@
 import Navbar from "./Navbar";
 import Navbar2 from "./Navbar2";
 import Carousel from "./Carousel";
+import MainContainer from "./MainContainer";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <Navbar></Navbar>
       <Navbar2></Navbar2>
       <Carousel></Carousel>
+      <MainContainer></MainContainer>
     </div>
   );
 }

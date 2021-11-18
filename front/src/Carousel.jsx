@@ -10,6 +10,7 @@ const CarouselContainer = styled.div`
 
 const ParentDiv = styled.div`
     overflow: hidden;
+    height: 366px;
     
 `;
 
@@ -34,7 +35,7 @@ const RightButton = styled.button`
 const Block1 = styled.div`
     position: absolute;
     width: 420px;
-    height: 400px;
+    height: 366px;
     background-color:#fafafa;
     z-index: 5;
     border-bottom: 1px solid #ddd;
@@ -43,7 +44,7 @@ const Block2 = styled.div`
     position:absolute;
     right: 0px;
     width: 420px;
-    height: 400px;
+    height: 366px;
     background-color: #fafafa;
     z-index: 5;
     border-bottom: 1px solid #ddd;
@@ -57,17 +58,17 @@ export default function Carousel() {
         setFn(fnfn);
     }, [])
 
-    const imgsrc = ['img/football.jpg', 'img/football2.jpg'];
+    const imgsrc = ['img/football.jpg', 'img/football2.jpg', 'img/football3.jpg', 'img/football4.jpg','img/football5.jpg'];
     const imgStyle = {
         width: 600,
-        height: 400,
+        height: 366,
     }
     const imgDivStyle = {
         position: 'absolute',
         left: '420px',
         display: 'flex',
         transfrom: 'translate3d(0,0,0)',
-        transition: 'transform 0.3s',
+        transition: 'transform 0.6s',
     }
 
     return(
