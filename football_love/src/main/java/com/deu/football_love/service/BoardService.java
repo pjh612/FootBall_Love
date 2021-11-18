@@ -1,8 +1,9 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.domain.Board;
+import com.deu.football_love.dto.BoardRequest;
 
 public interface BoardService {
-    Board newBoard(Board board,String teamName);
-    boolean deleteBoard(Long id);
+	boolean add(BoardRequest boardRequest);
+
+	void delete(Long boardId);
 }

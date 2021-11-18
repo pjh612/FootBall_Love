@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deu.football_love.domain.Member;
-import com.deu.football_love.dto.MemberDto;
+import com.deu.football_love.dto.JoinRequest;
+import com.deu.football_love.dto.LoginRequest;
+import com.deu.football_love.dto.MemberResponse;
 import com.deu.football_love.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,34 +21,35 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public MemberDto login(String id, String password) {
-		String encodedPassword = passwordEncoder.encode(password);
-		Member member = memberRepository.selectMember(id);
-		if (member != null && member.getId().equals(id) && member.getPwd().equals(encodedPassword)) {
-			return new MemberDto(member);
+	public MemberResponse login(LoginRequest loginRequest) {
+		String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
+		Member member = memberRepository.selectMember(loginRequest.getId());
+		if (member != null && member.getId().equals(loginRequest.getId()) && member.getPwd().equals(encodedPassword)) {
+			return new MemberResponse(member);
 		}
 		throw new IllegalArgumentException();
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public MemberDto join(MemberDto memberDto) {
-		String password = memberDto.getPwd();
+	public MemberResponse join(JoinRequest joinRequest) {
+		String password = joinRequest.getPwd();
 		String encodedPassword = passwordEncoder.encode(password);
-		memberDto.setPwd(encodedPassword);
+		joinRequest.setPwd(encodedPassword);
 
 		Member member = new Member();
-		member.setAddress(memberDto.getAddress());
-		member.setBirth(memberDto.getBirth());
-		member.setEmail(memberDto.getEmail());
-		member.setId(memberDto.getId());
-		member.setPwd(memberDto.getPwd());
-		member.setNickname(memberDto.getNickname());
-		member.setName(memberDto.getName());
-		member.setPhone(memberDto.getPhone());
+		member.setAddress(joinRequest.getAddress());
+		member.setBirth(joinRequest.getBirth());
+		member.setEmail(joinRequest.getEmail());
+		member.setId(joinRequest.getId());
+		member.setPwd(joinRequest.getPwd());
+		member.setNickname(joinRequest.getNickname());
+		member.setName(joinRequest.getName());
+		member.setPhone(joinRequest.getPhone());
 
 		memberRepository.insertMember(member);
-		return memberDto;
+		MemberResponse memberResponse = new MemberResponse(member);
+		return memberResponse;
 	}
 
 	@Override
@@ -72,16 +75,16 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public MemberDto findMember(String id) {
+	public MemberResponse findMember(String id) {
 		Member member = memberRepository.selectMember(id);
-		return new MemberDto(member);
+		return new MemberResponse(member);
 	}
 
 	@Override
 	@Transactional(readOnly = false)
-	public MemberDto modify(MemberDto memberDto) {
-		Member updatedMember = memberRepository.updateMember(memberDto);
-		return new MemberDto(updatedMember);
+	public MemberResponse modify(JoinRequest joinRequest) {
+		Member updatedMember = memberRepository.updateMember(joinRequest);
+		return new MemberResponse(updatedMember);
 	}
 
 	@Override
@@ -97,8 +100,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public String checkMemberAuthority(String memberId, String teamId) {
-		return memberRepository.selectMemberAuthority(memberId, teamId);
+	public String checkMemberAuthority(String memberId, String teamName) {
+		return memberRepository.selectMemberAuthority(memberId, teamName);
 	}
 
 }

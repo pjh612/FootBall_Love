@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deu.football_love.domain.Member;
-import com.deu.football_love.dto.MemberDto;
+import com.deu.football_love.dto.JoinRequest;
+import com.deu.football_love.dto.LoginRequest;
+import com.deu.football_love.dto.MemberResponse;
 import com.deu.football_love.service.MemberService;
 
 import io.swagger.annotations.ApiOperation;
@@ -26,32 +28,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
-	private static final String SESSION_MEMBER = "";
+	private static final String SESSION_MEMBER = "memberInfo";
 	private final MemberService memberService;
 
 	@ApiOperation(value = "회원가입 요청")
 	@PostMapping("/{id}")
-	public ResponseEntity<MemberDto> join(@PathVariable String id, @RequestBody MemberDto member) {
-		MemberDto joinMember = memberService.join(member);
+	public ResponseEntity<MemberResponse> join(@PathVariable String id, @RequestBody JoinRequest joinRequest) {
+		MemberResponse joinMember = memberService.join(joinRequest);
 		if (joinMember == null) {
-			return new ResponseEntity<MemberDto>(HttpStatus.CONFLICT);
+			return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
 		} else {
-			return new ResponseEntity<MemberDto>(joinMember, HttpStatus.OK);
+			return new ResponseEntity<MemberResponse>(joinMember, HttpStatus.OK);
 		}
 	}
 
 	@ApiOperation(value = "로그인 요청")
 	@PostMapping("/login/{id}")
-	public ResponseEntity<MemberDto> login(@PathVariable String id, @RequestBody String password,
+	public ResponseEntity<MemberResponse> login(@RequestBody LoginRequest loginRequest,
 			HttpServletRequest request) {
-		MemberDto member = memberService.login(id, password);
+		MemberResponse member = memberService.login(loginRequest);
 		HttpSession session = request.getSession();
 		if (member == null) {
 			session.invalidate();
-			return new ResponseEntity<MemberDto>(HttpStatus.CONFLICT);
+			return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
 		} else {
-			session.setAttribute("memberInfo", member);
-			return new ResponseEntity<MemberDto>(member, HttpStatus.OK);
+			session.setAttribute(SESSION_MEMBER, member);
+			return new ResponseEntity<MemberResponse>(member, HttpStatus.OK);
 		}
 	}
 
@@ -77,20 +79,20 @@ public class MemberController {
 
 	@ApiOperation(value = "회원정보 수정요청")
 	@PutMapping("/{id}")
-	public ResponseEntity<MemberDto> modify(@RequestBody MemberDto member, HttpSession session) {
-		MemberDto sessionMember = (MemberDto) session.getAttribute(SESSION_MEMBER);
+	public ResponseEntity<MemberResponse> modify(@RequestBody JoinRequest joinRequest, HttpSession session) {
+		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SESSION_MEMBER);
 		if (sessionMember == null) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
 
-		MemberDto modifiedMember = memberService.modify(member);
-		return new ResponseEntity<MemberDto>(modifiedMember, HttpStatus.OK);
+		MemberResponse modifiedMember = memberService.modify(joinRequest);
+		return new ResponseEntity<MemberResponse>(modifiedMember, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "회원탈퇴 요청", notes = "id와 회원을 확인해 회원탈퇴 요청을 한다.")
 	@PutMapping("/withdrawals/{id}")
 	public ResponseEntity withdrawMember(@PathVariable String id, HttpSession session) {
-		MemberDto sessionMember = (MemberDto) session.getAttribute(SESSION_MEMBER);
+		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SESSION_MEMBER);
 		if (sessionMember == null) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
@@ -104,15 +106,15 @@ public class MemberController {
 	}
 
 	@ApiOperation(value = "회원 권한확인 요청")
-	@GetMapping("/{memberId}/authority/team/{teamId}")
-	public ResponseEntity<String> checkMemberAuthority(@PathVariable("memberId") String memberId,
-			@PathVariable("teamId") String teamId, HttpSession session) {
+	@GetMapping("/{memberId}/authority")
+	public ResponseEntity<String> checkMemberAuthority(@RequestParam("memberId") String memberId,
+			@RequestParam("teamName") String teamName, HttpSession session) {
 		Member sessionMember = (Member) session.getAttribute(SESSION_MEMBER);
 		if (sessionMember == null) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
 
-		String authority = memberService.checkMemberAuthority(memberId,teamId);
+		String authority = memberService.checkMemberAuthority(memberId,teamName);
 		if (authority == null) {
 			return new ResponseEntity(HttpStatus.CONFLICT);
 		} else {

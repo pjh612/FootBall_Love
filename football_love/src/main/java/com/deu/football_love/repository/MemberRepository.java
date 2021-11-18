@@ -1,7 +1,7 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.Member;
-import com.deu.football_love.dto.MemberDto;
+import com.deu.football_love.dto.JoinRequest;
 
 public interface MemberRepository {
 	void insertMember(Member member);
@@ -12,7 +12,7 @@ public interface MemberRepository {
 
 	int isDuplicationEmail(String email);
 
-	Member updateMember(MemberDto memberDto);
+	Member updateMember(JoinRequest joinRequest);
 
 	void updateWithdraw(String id);
 

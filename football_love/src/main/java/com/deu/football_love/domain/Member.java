@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -57,13 +59,5 @@ public class Member {
 
 	@OneToOne(mappedBy = "member")
 	private WithdrawalMember withdrawalMember;
-  
-  public void setMember(Member member) {
-		this.id = member.getId();
-		this.pwd = member.getPwd();
-		this.birth = member.getBirth();
-		this.address = member.getAddress();
-		this.email = member.getEmail();
-		this.phone = member.getPhone();
-	}
+
 }
