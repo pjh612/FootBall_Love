@@ -1,15 +1,16 @@
 /* Black Han Sans Font IMPORT */
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
-
+/* Naum Gothic 400 */
+@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
 #root,
 .screen,
 html,
 body {
   width: 100vw;
-  height: 100vh;
+  height: 160vh;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
   /* background-image: url(https://meadlight.com/assets/images/texture.jpg); */
 }
 
