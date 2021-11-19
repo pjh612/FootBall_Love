@@ -1,7 +1,9 @@
 package com.deu.football_love.dto;
 
 import com.deu.football_love.domain.Stadium;
+import lombok.Getter;
 
+@Getter
 public class StadiumDto {
     private Long id;
     private String type;
