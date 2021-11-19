@@ -1,5 +1,6 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.domain.Board;
 import com.deu.football_love.dto.*;
 import com.deu.football_love.service.BoardService;
@@ -26,7 +27,7 @@ public class PostController {
      * 게시글 생성
      */
     @PostMapping("/team/{teamName}/board/{boardId}/post")
-    public ResponseEntity writePost(@PathVariable String teamName, @PathVariable Long boardId
+    public ResponseEntity writePost(@PathVariable Long teamId, @PathVariable Long boardId
                                     , WritePostRequest writePostRequest, HttpSession session)
     {
         Board board = new Board();// board 조회

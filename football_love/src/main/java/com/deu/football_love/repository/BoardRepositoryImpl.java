@@ -35,8 +35,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	@Override
-	public int countBoardByType(String teamName, BoardType boardType) {
-		Query query = em.createNativeQuery(BoardSql.FIND_BOARD_BY_TYPE).setParameter(1, teamName).setParameter(2,
+	public int countBoardByType(Long teamId, BoardType boardType) {
+		Query query = em.createNativeQuery(BoardSql.FIND_BOARD_BY_TYPE).setParameter(1, teamId).setParameter(2,
 				boardType);
 		List<BigInteger> list = query.getResultList();
 		return list.get(0).intValue();

@@ -1,5 +1,6 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.domain.*;
 import com.deu.football_love.domain.type.AuthorityType;
 import com.deu.football_love.dto.*;
@@ -19,26 +20,25 @@ import java.util.List;
 @RestController
 @Slf4j
 public class TeamController {
-
     private final MemberService memberService;
     private final TeamService teamService;
 
     /**
      * 팀 정보 조회
      **/
-    @GetMapping("/{teamName}")
-    public ResponseEntity get(@PathVariable String teamName){
+    @GetMapping("/{teamId}")
+    public ResponseEntity get(@PathVariable Long teamId){
 
-        return ResponseEntity.ok().body(teamService.getTeamInfo(teamName));
+        return ResponseEntity.ok().body(teamService.getTeamInfo(teamId));
     }
 
     /**
      * 팀 이름 중복 체크
      **/
-    @PostMapping("/duplication/{teamName}")
-    public ResponseEntity duplicationCheck(@PathVariable String teamName)
+    @PostMapping("/duplication/{teamId}")
+    public ResponseEntity duplicationCheck(@PathVariable Long teamId)
     {
-        TeamDto findTeam = teamService.findTeam(teamName);
+        TeamDto findTeam = teamService.findTeam(teamId);
         if(findTeam == null)
             return new ResponseEntity(HttpStatus.OK);
         else
@@ -51,10 +51,10 @@ public class TeamController {
     @PostMapping
     public ResponseEntity add(@RequestBody CreateTeamRequest request, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
         if (sessionMember == null)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        CreateTeamResponse response = teamService.createNewTeam(sessionMember, request.getName());
+        CreateTeamResponse response = teamService.createNewTeam(sessionMember.getId(), request.getName());
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);
@@ -63,32 +63,32 @@ public class TeamController {
     /**
      * 팀 가입 신청
      **/
-    @PostMapping("/join_requestion/{teamName}")
-    public ResponseEntity apply(@PathVariable String teamName, JoinApplyRequest request, HttpSession session)
+    @PostMapping("/join_requestion/{teamId}")
+    public ResponseEntity apply(@PathVariable Long teamId, JoinApplyRequest request, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
         if (sessionMember == null)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        teamService.applyToTeam(teamName,sessionMember.getName(), request.getMessage());
+        teamService.applyToTeam(teamId,sessionMember.getName(), request.getMessage());
         return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
      *  팀 가입 수락
      */
-    @PostMapping("/join_acception/{teamName}/{memberId]")
-    public ResponseEntity join(@PathVariable String teamName, @PathVariable String memberId, HttpSession session)
+    @PostMapping("/join_acception/{teamId}/{memberId]")
+    public ResponseEntity join(@PathVariable Long teamId, @PathVariable String memberId, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
-        AuthorityType authorityType = teamService.authorityCheck(teamName, sessionMember.getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
+        AuthorityType authorityType = teamService.authorityCheck(teamId, sessionMember.getId());
         if (authorityType != AuthorityType.LEADER && authorityType != AuthorityType.LEADER)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         /*if(findTeam == null || newMember == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);*/
-        ApplicationJoinTeamDto findApplication = teamService.findApplication(teamName, memberId);
+        ApplicationJoinTeamDto findApplication = teamService.findApplication(teamId, memberId);
         if (findApplication == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        AcceptApplicationResponse response = teamService.acceptApplication(teamName, memberId);
+        AcceptApplicationResponse response = teamService.acceptApplication(teamId, memberId);
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);
@@ -97,54 +97,54 @@ public class TeamController {
     /**
      * 팀 멤버 탈퇴
      */
-    @DeleteMapping("/{teamName}/member/{memberId}")
-    public ResponseEntity withdrawal(@PathVariable String teamName, @PathVariable String memberId, HttpSession session)
+    @DeleteMapping("/{teamId}/member/{memberId}")
+    public ResponseEntity withdrawal(@PathVariable Long teamId, @PathVariable String memberId, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
-        TeamDto findTeam = teamService.findTeam(teamName);
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
+        TeamDto findTeam = teamService.findTeam(teamId);
 
-        if(findTeam == null || teamService.authorityCheck(teamName, memberId) != AuthorityType.MEMBER)
+        if(findTeam == null || teamService.authorityCheck(teamId, memberId) != AuthorityType.MEMBER)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         if (!memberId.equals(sessionMember.getId())) // 관리자에 의해 강퇴
         {
-            AuthorityType authorityType = teamService.authorityCheck(teamName, sessionMember.getId());
+            AuthorityType authorityType = teamService.authorityCheck(teamId, sessionMember.getId());
             if (authorityType != AuthorityType.ADMIN)
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
-        teamService.withdrawal(findTeam.getName(), memberId);
+        teamService.withdrawal(findTeam.getId(), memberId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
      * 팀 해체
      */
-    @DeleteMapping("/{teamName}")
-    public ResponseEntity disbandment(@PathVariable String teamName, HttpSession session)
+    @DeleteMapping("/{teamId}")
+    public ResponseEntity disbandment(@PathVariable Long teamId, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
-        TeamDto findTeam = teamService.findTeam(teamName);
-        List<TeamMemberDto> findTeamMember = teamService.findTeamMember(teamName, sessionMember.getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
+        TeamDto findTeam = teamService.findTeam(teamId);
+        List<TeamMemberDto> findTeamMember = teamService.findTeamMember(teamId, sessionMember.getId());
         if (findTeamMember.size() == 0 || findTeamMember.get(0).getAuthority() == AuthorityType.MEMBER)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        DisbandmentTeamResponse response = teamService.disbandmentTeam(findTeam.getName());
+        DisbandmentTeamResponse response = teamService.disbandmentTeam(findTeam.getId());
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
     /**
      *  팀 멤버 권한 수정
      */
-    @PatchMapping("/{teamName}/member/{memberId}")
-    public ResponseEntity updateAuthority(@PathVariable String teamName, @PathVariable String memberId, @RequestBody AuthorityType authorityType, HttpSession session)
+    @PatchMapping("/{teamId}/member/{memberId}")
+    public ResponseEntity updateAuthority(@PathVariable Long teamId, @PathVariable String memberId, @RequestBody AuthorityType authorityType, HttpSession session)
     {
         //어드민인지 확인
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
-        AuthorityType myAuthorityType = teamService.authorityCheck(teamName, sessionMember.getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
+        AuthorityType myAuthorityType = teamService.authorityCheck(teamId, sessionMember.getId());
         if(myAuthorityType != AuthorityType.ADMIN && myAuthorityType != AuthorityType.LEADER)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
         //존재하는 팀원인지 확인
-        UpdateAuthorityResponse response = teamService.updateAuthority(teamName, memberId, authorityType);
+        UpdateAuthorityResponse response = teamService.updateAuthority(teamId, memberId, authorityType);
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);

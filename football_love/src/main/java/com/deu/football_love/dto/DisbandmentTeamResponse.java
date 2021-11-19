@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class DisbandmentTeamResponse {
-    private String teamName;
+    private Long teamId;
 
-    public DisbandmentTeamResponse(String teamName) {
-        this.teamName = teamName;
+    public DisbandmentTeamResponse(Long teamId) {
+        this.teamId = teamId;
     }
 }

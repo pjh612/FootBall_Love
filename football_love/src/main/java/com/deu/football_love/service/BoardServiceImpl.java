@@ -20,15 +20,15 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public boolean add(BoardRequest boardRequest) {
-		if(boardRepository.countBoardByType(boardRequest.getTeamName(), boardRequest.getBoardType())>0) {
+		if(boardRepository.countBoardByType(boardRequest.getTeamId(), boardRequest.getBoardType())>0) {
 			return false;
 		}
 		Board board = new Board();
 		board.setBoardName(boardRequest.getBoardName());
 		board.setBoardType(boardRequest.getBoardType());
 		
-		String teamName = boardRequest.getTeamName();
-		Team team = teamRepository.selectTeam(teamName);
+		Long teamId = boardRequest.getTeamId();
+		Team team = teamRepository.selectTeam(teamId);
 		board.setTeam(team);
 		if (board.getTeam() == null) {
 			return false;

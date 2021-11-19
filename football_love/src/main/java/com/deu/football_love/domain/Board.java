@@ -30,7 +30,7 @@ public class Board {
     private List<Post> posts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_name", referencedColumnName ="team_name")
+    @JoinColumn(name = "team_id", referencedColumnName ="team_id")
     private Team team;
 
     public Board(String boardName, BoardType boardType) {
