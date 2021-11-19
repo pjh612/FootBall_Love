@@ -65,4 +65,6 @@ public class Member {
 	@OneToOne(mappedBy = "member")
 	private WithdrawalMember withdrawalMember;
 
+	@OneToOne(mappedBy = "member")
+	private Company company;
 }

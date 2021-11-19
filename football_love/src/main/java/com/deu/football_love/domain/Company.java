@@ -23,12 +23,15 @@ public class Company {
     @Column(name= "company_location")
     private Address location;
 
-
     @Column(name="company_tel", length = 13)
     private String tel;
 
     @Column(name= "company_description")
     private String description;
+
+    @OneToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "member_id")
+    private Member owner;
 
     @OneToMany(mappedBy = "id")
     private List<Stadium> stadiums = new ArrayList<>();
