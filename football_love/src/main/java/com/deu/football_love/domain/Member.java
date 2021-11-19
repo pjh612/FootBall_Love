@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.deu.football_love.domain.type.MemberType;
 import org.springframework.data.annotation.CreatedDate;
 
 import lombok.Getter;
@@ -16,6 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Member {
+
 	@Id
 	@Column(name = "member_id", length = 20)
 	private String id;
@@ -44,6 +46,9 @@ public class Member {
 
 	@Column(name = "member_creatdate")
 	private LocalDateTime createDate;
+
+	@Column(name = "member_type")
+	private MemberType memberType;
 
 	@OneToMany(mappedBy = "author")
 	private List<Post> posts = new ArrayList<>();
