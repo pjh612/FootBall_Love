@@ -3,6 +3,7 @@ package com.deu.football_love.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.deu.football_love.controller.consts.SessionConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
-	private static final String SESSION_MEMBER = "memberInfo";
 	private final MemberService memberService;
 
 	@ApiOperation(value = "회원가입 요청")
@@ -52,7 +52,7 @@ public class MemberController {
 			session.invalidate();
 			return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
 		} else {
-			session.setAttribute(SESSION_MEMBER, member);
+			session.setAttribute(SessionConst.SESSION_MEMBER, member);
 			return new ResponseEntity<MemberResponse>(member, HttpStatus.OK);
 		}
 	}
@@ -80,7 +80,7 @@ public class MemberController {
 	@ApiOperation(value = "회원정보 수정요청")
 	@PutMapping("/{id}")
 	public ResponseEntity<MemberResponse> modify(@RequestBody JoinRequest joinRequest, HttpSession session) {
-		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SESSION_MEMBER);
+		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER);
 		if (sessionMember == null) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
@@ -92,7 +92,7 @@ public class MemberController {
 	@ApiOperation(value = "회원탈퇴 요청", notes = "id와 회원을 확인해 회원탈퇴 요청을 한다.")
 	@PutMapping("/withdrawals/{id}")
 	public ResponseEntity withdrawMember(@PathVariable String id, HttpSession session) {
-		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SESSION_MEMBER);
+		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER);
 		if (sessionMember == null) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
@@ -109,7 +109,7 @@ public class MemberController {
 	@GetMapping("/{memberId}/authority")
 	public ResponseEntity<String> checkMemberAuthority(@RequestParam("memberId") String memberId,
 			@RequestParam("teamName") String teamName, HttpSession session) {
-		Member sessionMember = (Member) session.getAttribute(SESSION_MEMBER);
+		Member sessionMember = (Member) session.getAttribute(SessionConst.SESSION_MEMBER);
 		if (sessionMember == null) {
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
