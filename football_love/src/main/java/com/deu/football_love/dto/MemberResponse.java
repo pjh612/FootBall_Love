@@ -3,7 +3,6 @@ package com.deu.football_love.dto;
 import com.deu.football_love.domain.Member;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
