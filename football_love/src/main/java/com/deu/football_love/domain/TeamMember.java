@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "TeamMember", uniqueConstraints = {@UniqueConstraint(
-        name = "TEAM_MEMBER_UNIQUE", columnNames = {"team_id", "member_id"}
+        name = "TEAM_MEMBER_UNIQUE", columnNames = {"team_id", "member_number"}
 )})
 public class TeamMember {
 
@@ -22,7 +22,7 @@ public class TeamMember {
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_number")
     private Member member;
 
     private AuthorityType authority;
