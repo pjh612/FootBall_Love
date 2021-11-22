@@ -28,8 +28,18 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 
 	@Override
-	public Member selectMember(String id) {
-		return em.find(Member.class, id);
+	public Member selectMember(Long number) {
+		return em.find(Member.class, number);
+	}
+
+	@Override
+	public Member selectMemberById(String id) {
+		List<Member> result = em.createQuery("select m from Member m where m.id = :id", Member.class)
+				.setParameter("id", id)
+				.getResultList();
+		if (result == null)
+			return null;
+		return result.get(0);
 	}
 
 	@Override

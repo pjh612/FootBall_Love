@@ -13,7 +13,9 @@ public interface MemberService {
 
 	MemberResponse join(JoinRequest joinRequest);
 
-	MemberResponse findMember(String id);
+	MemberResponse findMember(Long number);
+
+	MemberResponse findMemberById(String id);
 
 	MemberResponse modify(JoinRequest joinRequest);
 

@@ -15,7 +15,7 @@ public interface TeamRepository {
     TeamMember insertNewTeamMember(TeamMember newTeamMember);
     ApplicationJoinTeam selectApplication(Long teamId, String memberId);
     void deleteApplication(ApplicationJoinTeam application);
-    void deleteTeamMember(Long teamId, String memberId);
-    List<TeamMember> selectTeamMember(Long teamId, String memberId);
+    void deleteTeamMember(Long teamId, Long memberNumber);
+    List<TeamMember> selectTeamMember(Long teamId, Long memberNumber);
     void deleteTeam(Team team);
 }

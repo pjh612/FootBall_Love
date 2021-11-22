@@ -22,7 +22,7 @@ public class PostServiceImpl implements PostService{
     @Transactional(readOnly = false)
     public WritePostResponse writePost(WritePostRequest request) {
         Post newPost = new Post();
-        Member findMember = memberRepository.selectMember(request.getAuthor());
+        Member findMember = memberRepository.selectMemberById(request.getAuthor());
         newPost.setContent(request.getContent());
         newPost.setTitle(request.getTitle());
         newPost.setAuthor(findMember);
