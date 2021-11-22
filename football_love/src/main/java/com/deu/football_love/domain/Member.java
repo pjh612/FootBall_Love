@@ -18,7 +18,10 @@ import lombok.Setter;
 @Setter
 public class Member {
 
-	@Id
+	@Id @GeneratedValue
+	@Column(name ="member_number")
+	private Long number;
+
 	@Column(name = "member_id", length = 20)
 	private String id;
 
@@ -65,6 +68,6 @@ public class Member {
 	@OneToOne(mappedBy = "member")
 	private WithdrawalMember withdrawalMember;
 
-	@OneToOne(mappedBy = "member")
+	@OneToOne(mappedBy = "owner")
 	private Company company;
 }

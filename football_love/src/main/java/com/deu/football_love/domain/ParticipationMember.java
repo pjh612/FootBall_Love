@@ -22,6 +22,6 @@ public class ParticipationMember {
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "participation_member_id", referencedColumnName = "member_id")
+    @JoinColumn(name = "participation_member_number", referencedColumnName = "member_number")
     private Member member;
 }

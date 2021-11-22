@@ -30,14 +30,15 @@ public class Company {
     private String description;
 
     @OneToOne
-    @JoinColumn(name = "owner_id", referencedColumnName = "member_id")
+    @JoinColumn(name = "owner_number", referencedColumnName = "member_number")
     private Member owner;
 
     @OneToMany(mappedBy = "id")
     private List<Stadium> stadiums = new ArrayList<>();
 
-    public Company(String name, Address location, String tel, String description) {
+    public Company(String name, Member owner, Address location, String tel, String description) {
         this.name = name;
+        this.owner = owner;
         this.location = location;
         this.tel = tel;
         this.description = description;

@@ -23,7 +23,7 @@ public class WithdrawalMember {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "member_id", referencedColumnName = "member_id")
+    @JoinColumn(name = "member_number", referencedColumnName = "member_number")
     private Member member;
 
     @Column(name= "withdrawal_date")
