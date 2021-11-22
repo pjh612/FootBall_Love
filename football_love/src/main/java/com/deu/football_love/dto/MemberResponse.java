@@ -9,6 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberResponse {
+
+	private Long number;
+
 	private String id;
 
 	private String nickname;
@@ -18,6 +21,7 @@ public class MemberResponse {
 	private String email;
 
 	public MemberResponse(Member member) {
+		this.number = member.getNumber();
 		this.id = member.getId();
 		this.nickname = member.getNickname();
 		this.name = member.getName();
