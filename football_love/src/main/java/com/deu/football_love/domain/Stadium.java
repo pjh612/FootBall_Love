@@ -1,6 +1,8 @@
 package com.deu.football_love.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Stadium {
 
     @Id
@@ -30,4 +33,11 @@ public class Stadium {
 
     @OneToMany(mappedBy = "stadium")
     private List<Matches> matches = new ArrayList<>();
+
+    public Stadium(String type, String size, Long cost, Company company) {
+        this.type = type;
+        this.size = size;
+        this.cost = cost;
+        this.company = company;
+    }
 }

@@ -9,4 +9,3 @@ public class WithdrawalCompanyResponse {
         this.companyName = companyName;
     }
 }
-+1

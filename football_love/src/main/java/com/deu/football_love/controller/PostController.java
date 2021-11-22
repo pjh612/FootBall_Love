@@ -1,5 +1,6 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.domain.Board;
 import com.deu.football_love.dto.*;
 import com.deu.football_love.service.BoardService;
@@ -26,12 +27,12 @@ public class PostController {
      * 게시글 생성
      */
     @PostMapping("/team/{teamName}/board/{boardId}/post")
-    public ResponseEntity writePost(@PathVariable String teamName, @PathVariable Long boardId
+    public ResponseEntity writePost(@PathVariable Long teamId, @PathVariable Long boardId
                                     , WritePostRequest writePostRequest, HttpSession session)
     {
         Board board = new Board();// board 조회
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
-        if (sessionMember == null || board == null || teamService.findTeamMember(teamName, sessionMember.getId()).size() == 0)
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
+        if (sessionMember == null || board == null || teamService.findTeamMember(teamId, sessionMember.getId()).size() == 0)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);
         return new ResponseEntity(writePostResponse, HttpStatus.OK);
@@ -43,7 +44,7 @@ public class PostController {
     @DeleteMapping("/post/{postId}")
     public ResponseEntity deletePost(@PathVariable Long postId, DeletePostRequest request, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
         PostDto findPost = postService.findPost(postId);
 
         if (findPost == null)
@@ -60,7 +61,7 @@ public class PostController {
     @PutMapping("/post/{postId}")
     public ResponseEntity modifyPost(@PathVariable Long postId, UpdatePostRequest request, HttpSession session)
     {
-        MemberDto sessionMember = memberService.findMember(((MemberDto) session.getAttribute("memberInfo")).getId());
+        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
         PostDto findPost = postService.findPost(postId);
 
         if (findPost == null)

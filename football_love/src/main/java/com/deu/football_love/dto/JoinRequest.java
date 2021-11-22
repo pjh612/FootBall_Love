@@ -26,4 +26,14 @@ public class JoinRequest {
 
 	private String phone;
 
+	public JoinRequest(String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone) {
+		this.id = id;
+		this.pwd = pwd;
+		this.nickname = nickname;
+		this.name = name;
+		this.birth = birth;
+		this.address = address;
+		this.email = email;
+		this.phone = phone;
+	}
 }

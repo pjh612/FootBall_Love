@@ -9,12 +9,13 @@ import java.util.List;
 public interface TeamRepository {
 
     void insertTeam(Team team);
-    Team selectTeam(String teamName);
+    Team selectTeam(Long teamId);
+    Team selectTeamByName(String teamName);
     void insertNewApplication(ApplicationJoinTeam application);
-    void insertNewTeamMember(TeamMember newTeamMember);
-    ApplicationJoinTeam selectApplication(String teamName, String memberId);
+    TeamMember insertNewTeamMember(TeamMember newTeamMember);
+    ApplicationJoinTeam selectApplication(Long teamId, String memberId);
     void deleteApplication(ApplicationJoinTeam application);
-    void deleteTeamMember(String teamName, String memberId);
-    List<TeamMember> selectTeamMember(String teamName, String memberId);
+    void deleteTeamMember(Long teamId, String memberId);
+    List<TeamMember> selectTeamMember(Long teamId, String memberId);
     void deleteTeam(Team team);
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CreateMatchRequest {
-    private String teamName;
+    private Long teamId;
     private Long stadiumId;
     private LocalDateTime reservation_time;
 }

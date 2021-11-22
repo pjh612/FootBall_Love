@@ -13,7 +13,12 @@ import java.util.List;
 @Setter
 public class Team {
 
+
     @Id
+    @GeneratedValue
+    @Column(name = "team_id")
+    private Long id;
+
     @Column(name = "team_name")
     private String name;
 

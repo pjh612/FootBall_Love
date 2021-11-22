@@ -9,11 +9,11 @@ import lombok.Getter;
 public class BoardRequest {
 	private String boardName;
 	private BoardType boardType;
-	private String teamName;
+	private Long teamId;
 	
 	public BoardRequest(Board board) {
 		this.boardName = board.getBoardName();
 		this.boardType = board.getBoardType();
-		this.teamName = board.getTeam().getName();
+		this.teamId = board.getTeam().getId();
 	}
 }

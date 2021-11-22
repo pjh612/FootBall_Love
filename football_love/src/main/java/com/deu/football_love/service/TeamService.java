@@ -8,15 +8,16 @@ import java.util.List;
 
 public interface TeamService {
 
-    TeamDto getTeamInfo(String teamName);
-    CreateTeamResponse createNewTeam(MemberDto member, String teamName);
-    TeamDto findTeam(String teamName);
-    ApplicationJoinTeamDto findApplication(String teamName, String memberId);
-    void applyToTeam(String teamName, String memberId, String message);
-    AcceptApplicationResponse acceptApplication(String teamName, String memberId);
-    AuthorityType authorityCheck(String teamName, String memberId);
-    void withdrawal(String teamName, String memberId);
-    DisbandmentTeamResponse disbandmentTeam(String teamName);
-    List<TeamMemberDto> findTeamMember(String teamName, String memberId);
-    UpdateAuthorityResponse updateAuthority(String teamName, String memberId, AuthorityType authorityType);
+    TeamDto getTeamInfo(Long teamId);
+    CreateTeamResponse createNewTeam(String creator, String teamName);
+    TeamDto findTeam(Long teamId);
+    TeamDto findTeamByName(String teamName);
+    ApplicationJoinTeamDto findApplication(Long teamId, String memberId);
+    void applyToTeam(Long teamId, String memberId, String message);
+    AcceptApplicationResponse acceptApplication(Long teamId, String memberId);
+    AuthorityType authorityCheck(Long teamId, String memberId);
+    void withdrawal(Long teamId, String memberId);
+    DisbandmentTeamResponse disbandmentTeam(Long teamId);
+    List<TeamMemberDto> findTeamMember(Long teamId, String memberId);
+    UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, AuthorityType authorityType);
 }

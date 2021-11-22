@@ -2,11 +2,11 @@ package com.deu.football_love.dto;
 
 
 public class AcceptApplicationResponse {
-    private String teamName;
+    private Long teamId;
     private String memberId;
 
-    public AcceptApplicationResponse(String teamName, String memberId) {
-        this.teamName = teamName;
+    public AcceptApplicationResponse(Long teamId, String memberId) {
+        this.teamId = teamId;
         this.memberId = memberId;
     }
 }

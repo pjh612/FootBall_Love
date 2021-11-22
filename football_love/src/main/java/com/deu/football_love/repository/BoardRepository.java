@@ -9,5 +9,5 @@ public interface BoardRepository {
 
 	void deleteBoard(Long boardId);
 
-	int countBoardByType(String teamName, BoardType boardType);
+	int countBoardByType(Long teamId, BoardType boardType);
 }

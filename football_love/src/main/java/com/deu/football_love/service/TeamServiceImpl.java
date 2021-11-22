@@ -23,19 +23,19 @@ public class TeamServiceImpl implements TeamService{
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public TeamDto getTeamInfo(String teamName)
+    public TeamDto getTeamInfo(Long teamId)
     {
-        Team team = teamRepository.selectTeam(teamName);
+        Team team = teamRepository.selectTeam(teamId);
         if (team == null)
             return null;
         return TeamDto.from(team);
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public CreateTeamResponse createNewTeam(MemberDto member, String teamName) {
+    @Transactional
+    public CreateTeamResponse createNewTeam(String creator, String teamName) {
         Team team = new Team();
-        Member findMember = memberRepository.selectMember(member.getId());
+        Member findMember = memberRepository.selectMember(creator);
         if (findMember == null)
             return null;
         TeamMember teamMember = new TeamMember(team, findMember, AuthorityType.LEADER);
@@ -46,14 +46,14 @@ public class TeamServiceImpl implements TeamService{
         team.getTeamMembers().add(teamMember);
         teamRepository.insertTeam(team);
         teamRepository.insertNewTeamMember(teamMember);
-        return new CreateTeamResponse(teamName);
+        return new CreateTeamResponse(teamMember.getId());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public TeamDto findTeam(String teamName)
+    public TeamDto findTeam(Long teamId)
     {
-        Team team = teamRepository.selectTeam(teamName);
+        Team team = teamRepository.selectTeam(teamId);
         if (team == null)
             return null;
         return TeamDto.from(team);
@@ -61,18 +61,27 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional(readOnly = true)
-    public ApplicationJoinTeamDto findApplication(String teamName, String memberId) {
-        ApplicationJoinTeam application = teamRepository.selectApplication(teamName, memberId);
+    public TeamDto findTeamByName(String teamName)
+    {
+        Team team = teamRepository.selectTeamByName(teamName);
+        if (team == null)
+            return null;
+        return TeamDto.from(team);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ApplicationJoinTeamDto findApplication(Long teamId, String memberId) {
+        ApplicationJoinTeam application = teamRepository.selectApplication(teamId, memberId);
         if (application == null)
             return null;
         return new ApplicationJoinTeamDto(application);
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public void applyToTeam(String teamName, String memberId, String message) {
+    public void applyToTeam(Long teamId, String memberId, String message) {
 
-        Team findTeam = teamRepository.selectTeam(teamName);
+        Team findTeam = teamRepository.selectTeam(teamId);
         Member findMember = memberRepository.selectMember(memberId);
         ApplicationJoinTeam application = new ApplicationJoinTeam(findTeam, findMember, message);
         findTeam.getApplicationJoinTeams().add(application);
@@ -80,10 +89,10 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public AcceptApplicationResponse acceptApplication(String teamName, String memberId) {
-        ApplicationJoinTeam findApplication = teamRepository.selectApplication(teamName, memberId);
-        Team findTeam = teamRepository.selectTeam(teamName);
+    @Transactional
+    public AcceptApplicationResponse acceptApplication(Long teamId, String memberId) {
+        ApplicationJoinTeam findApplication = teamRepository.selectApplication(teamId, memberId);
+        Team findTeam = teamRepository.selectTeam(teamId);
         Member findMember = memberRepository.selectMember(memberId);
         if (findApplication == null || findTeam == null || findMember == null)
             return null;
@@ -91,7 +100,7 @@ public class TeamServiceImpl implements TeamService{
         TeamMember newTeamMember = new TeamMember(findTeam, findMember, AuthorityType.MEMBER);
         findTeam.getTeamMembers().add(newTeamMember);
         teamRepository.insertNewTeamMember(newTeamMember);
-        return new AcceptApplicationResponse(teamName, memberId);
+        return new AcceptApplicationResponse(teamId, memberId);
     }
 
     /**
@@ -100,9 +109,9 @@ public class TeamServiceImpl implements TeamService{
      */
     @Override
     @Transactional(readOnly = true)
-    public AuthorityType authorityCheck(String teamName, String memberId)
+    public AuthorityType authorityCheck(Long teamId, String memberId)
     {
-        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamName, memberId);
+        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamId, memberId);
 
         if(teamMembers.size() == 0)
             return AuthorityType.NONE;
@@ -111,9 +120,9 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<TeamMemberDto> findTeamMember(String teamName, String memberId)
+    public List<TeamMemberDto> findTeamMember(Long teamId, String memberId)
     {
-        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamName, memberId);
+        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamId, memberId);
         List<TeamMemberDto> collect = teamMembers.stream().map(tm -> new TeamMemberDto(tm))
                 .collect(Collectors.toList());
         return collect;
@@ -121,34 +130,34 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     @Transactional(readOnly = false)
-    public void withdrawal(String teamName, String memberId)
+    public void withdrawal(Long teamId, String memberId)
     {
-        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamName, memberId);
+        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamId, memberId);
         if(teamMembers.size() != 0) {
-            teamRepository.deleteTeamMember(teamName, memberId);
+            teamRepository.deleteTeamMember(teamId, memberId);
         }
     }
 
     @Override
     @Transactional(readOnly = false)
-    public DisbandmentTeamResponse disbandmentTeam(String teamName)
+    public DisbandmentTeamResponse disbandmentTeam(Long teamId)
     {
-        Team team = teamRepository.selectTeam(teamName);
+        Team team = teamRepository.selectTeam(teamId);
         if (team == null)
             return null;
         teamRepository.deleteTeam(team);
-        return new DisbandmentTeamResponse(teamName);
+        return new DisbandmentTeamResponse(teamId);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public UpdateAuthorityResponse updateAuthority(String teamName, String memberId, AuthorityType authorityType)
+    public UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, AuthorityType authorityType)
     {
-        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamName, memberId);
+        List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamId, memberId);
         if (teamMembers.size() == 0)
             return null;
         teamMembers.get(0).setAuthority(authorityType);
-        return new UpdateAuthorityResponse(teamName, memberId, authorityType);
+        return new UpdateAuthorityResponse(teamId, memberId, authorityType);
     }
 
 }

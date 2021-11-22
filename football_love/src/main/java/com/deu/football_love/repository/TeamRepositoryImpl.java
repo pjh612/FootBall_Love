@@ -24,32 +24,42 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public Team selectTeam(String teamName)
+    public Team selectTeam(Long teamId)
     {
-        return em.find(Team.class, teamName);
+        return em.find(Team.class, teamId);
     }
 
     @Override
-    public List<TeamMember> selectTeamMember(String teamName, String memberId)
+    public Team selectTeamByName(String teamName)
+    {
+        List<Team> findTeam = em.createQuery("select t from Team t where t.name = :teamName", Team.class)
+                .setParameter("teamName", teamName)
+                .getResultList();
+        if (findTeam.size() == 0)
+            return null;
+        return findTeam.get(0);
+    }
+    @Override
+    public List<TeamMember> selectTeamMember(Long teamId, String memberId)
     {
         if (memberId != null) {
-            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.name =:teamName AND tm.member.id =:memberId", TeamMember.class)
-                    .setParameter("teamName", teamName)
+            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.id =:teamId AND tm.member.id =:memberId", TeamMember.class)
+                    .setParameter("teamId", teamId)
                     .setParameter("memberId", memberId)
                     .getResultList();
         }
         else {
-            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.name =:teamName", TeamMember.class)
-                    .setParameter("teamName", teamName)
+            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.id =:teamId", TeamMember.class)
+                    .setParameter("teamId", teamId)
                     .getResultList();
         }
 
     }
 
     @Override
-    public ApplicationJoinTeam selectApplication(String teamName, String memberId) {
-        return em.createQuery("SELECT a FROM ApplicationJoinTeam a WHERE a.team.name =:teamName AND a.member.id=:memberId", ApplicationJoinTeam.class)
-                .setParameter("teamName", teamName)
+    public ApplicationJoinTeam selectApplication(Long teamId, String memberId) {
+        return em.createQuery("SELECT a FROM ApplicationJoinTeam a WHERE a.team.id = :teamId AND a.member.id=:memberId", ApplicationJoinTeam.class)
+                .setParameter("teamId", teamId)
                 .setParameter("memberId", memberId).getResultList().get(0);
     }
     @Override
@@ -58,8 +68,9 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public void insertNewTeamMember(TeamMember newTeamMember) {
+    public TeamMember insertNewTeamMember(TeamMember newTeamMember) {
         em.persist(newTeamMember);
+        return newTeamMember;
     }
 
     @Override
@@ -68,10 +79,10 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public void deleteTeamMember(String teamName, String memberId)
+    public void deleteTeamMember(Long teamId, String memberId)
     {
-        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.name =:teamName AND tm.member.id=:memberId")
-                .setParameter("teamName", teamName)
+        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.id =:teamId AND tm.member.id=:memberId")
+                .setParameter("teamId", teamId)
                 .setParameter("memberId", memberId)
                 .executeUpdate();
     }
