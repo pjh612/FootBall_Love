@@ -42,4 +42,9 @@ public class BoardRepositoryImpl implements BoardRepository {
 		return list.get(0).intValue();
 	}
 
+	@Override
+	public Board selectBoardById(Long boardId) {
+		return em.find(Board.class, boardId);
+	}
+
 }

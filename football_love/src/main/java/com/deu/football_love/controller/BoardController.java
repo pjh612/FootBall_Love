@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deu.football_love.dto.BoardRequest;
+import com.deu.football_love.dto.BoardDto;
 import com.deu.football_love.service.BoardServiceImpl;
 
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class BoardController {
 	private final BoardServiceImpl boardService;
 
 	@PostMapping("/team/{teamName}/board")
-	public ResponseEntity add(@PathVariable("teamName") String teamName, @RequestBody BoardRequest boardRequest) {
-		if(boardService.add(boardRequest)) {
+	public ResponseEntity add(@PathVariable("teamName") String teamName, @RequestBody BoardDto boardDto) {
+		if(boardService.add(boardDto)) {
 			return new ResponseEntity(HttpStatus.OK);
 		}else {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);

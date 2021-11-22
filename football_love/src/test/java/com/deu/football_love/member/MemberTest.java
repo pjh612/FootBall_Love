@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.deu.football_love.domain.Address;
+import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.JoinRequest;
 import com.deu.football_love.dto.LoginRequest;
 import com.deu.football_love.dto.MemberResponse;
@@ -122,7 +123,7 @@ public class MemberTest {
 	public void 멤버_그룹권한확인() {
 		String memberId = "dbtlwns";
 		String teamName = "FC Flow";
-		assertEquals(memberService.checkMemberAuthority(memberId, teamName), "ADMIN");
+		assertEquals(memberService.checkMemberAuthority(memberId, teamName), MemberType.ADMIN);
 	}
 
 	@DisplayName("회원탈퇴 true일때 성공")
