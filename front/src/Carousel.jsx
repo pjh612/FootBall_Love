@@ -1,6 +1,6 @@
-import React,{useEffect, useState} from "react";
+import React,{useEffect} from "react";
 import styled from "styled-components";
-import slider from "./slider.js";
+import {slider}from "./utils.js";
 
 const CarouselContainer = styled.div`
     background-color : #fafafa;
@@ -38,14 +38,12 @@ const Block2 = styled.div`
 
 export default function Carousel() {
     
-    const [fn, setFn] = useState({});
     const imgsrc = ['img/football.jpg', 'img/football2.jpg', 'img/football3.jpg', 'img/football4.jpg','img/football5.jpg'];
 
     useEffect(() => {
         const fnfn = slider(imgsrc.length);
-        setFn(fnfn);
         fnfn.autoSlide();
-    },[])
+    },[imgsrc.length])
 
     
     const imgStyle = {
@@ -60,6 +58,7 @@ export default function Carousel() {
         display: 'flex',
         transfrom: 'translate3d(0,0,0)',
         transition: 'transform 0.6s',
+        
     }
 
     return(
