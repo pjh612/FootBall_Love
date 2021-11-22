@@ -1,4 +1,4 @@
-export default function slider(totalImgNum) {
+export function slider(totalImgNum) {
   let index = 0;
   const DivElem = document.getElementsByClassName("img-div")[0];
 
@@ -34,7 +34,7 @@ export default function slider(totalImgNum) {
       const interval = setInterval(() => {
         this.clickNext();
         stopper += 1;
-        if (stopper % 2 == 0) {
+        if (stopper % 2 === 0) {
           console.log("stopper is working!");
           clearInterval(interval);
           setTimeout(() => {
