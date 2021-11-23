@@ -67,11 +67,10 @@ export default function Carousel() {
                <Block1></Block1>
                <Block2></Block2>
                <div className="img-div" style={imgDivStyle}>
-                   {imgsrc.map((src) => {
-              return <img alt="footBall related img" src={src} style={imgStyle}></img>;
+                   {imgsrc.map((src,index) => {
+              return <img alt="footBall related img" src={src} key={index} style={imgStyle}></img>;
             })}
-                </div>
-               
+                </div> 
            </ParentDiv>
         </CarouselContainer>
     )
