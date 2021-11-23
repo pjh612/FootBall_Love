@@ -4,7 +4,6 @@ export function slider(totalImgNum) {
 
   const fn = {
     clickBefore: function () {
-      console.log("Before click function is working.!");
       if (index === 0) {
         index = totalImgNum - 1;
         DivElem.style.transform = `translate3d(-${940 * index}px, 0, 0)`;
@@ -18,8 +17,6 @@ export function slider(totalImgNum) {
     },
 
     clickNext: function () {
-      console.log("Next click function is working.!");
-
       if (index === totalImgNum - 1) {
         index = 0;
         DivElem.style.transform = `translate3d(0px, 0, 0)`;
