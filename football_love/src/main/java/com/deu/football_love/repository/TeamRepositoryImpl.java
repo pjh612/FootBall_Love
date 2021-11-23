@@ -40,12 +40,12 @@ public class TeamRepositoryImpl implements TeamRepository {
         return findTeam.get(0);
     }
     @Override
-    public List<TeamMember> selectTeamMember(Long teamId, String memberId)
+    public List<TeamMember> selectTeamMember(Long teamId, Long memberNumber)
     {
-        if (memberId != null) {
-            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.id =:teamId AND tm.member.id =:memberId", TeamMember.class)
+        if (memberNumber != null) {
+            return em.createQuery("SELECT tm FROM TeamMember tm WHERE tm.team.id =:teamId AND tm.member.number =:memberNumber", TeamMember.class)
                     .setParameter("teamId", teamId)
-                    .setParameter("memberId", memberId)
+                    .setParameter("memberNumber", memberNumber)
                     .getResultList();
         }
         else {
@@ -79,11 +79,11 @@ public class TeamRepositoryImpl implements TeamRepository {
     }
 
     @Override
-    public void deleteTeamMember(Long teamId, String memberId)
+    public void deleteTeamMember(Long teamId, Long memberNumber)
     {
-        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.id =:teamId AND tm.member.id=:memberId")
+        em.createQuery("DELETE FROM TeamMember tm WHERE tm.team.id =:teamId AND tm.member.number=:memberNumber")
                 .setParameter("teamId", teamId)
-                .setParameter("memberId", memberId)
+                .setParameter("memberNumber", memberNumber)
                 .executeUpdate();
     }
 

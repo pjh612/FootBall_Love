@@ -6,7 +6,9 @@ import com.deu.football_love.dto.JoinRequest;
 public interface MemberRepository {
 	void insertMember(Member member);
 
-	Member selectMember(String id);
+	Member selectMember(Long id);
+
+	Member selectMemberById(String id);
 
 	int isDuplicationId(String id);
 

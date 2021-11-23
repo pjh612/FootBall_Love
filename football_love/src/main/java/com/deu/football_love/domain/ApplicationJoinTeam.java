@@ -1,7 +1,6 @@
 package com.deu.football_love.domain;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -18,7 +17,7 @@ public class ApplicationJoinTeam {
     private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_number")
     private Member member;
 
     private String message;

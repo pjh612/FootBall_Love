@@ -15,9 +15,10 @@ public interface TeamService {
     ApplicationJoinTeamDto findApplication(Long teamId, String memberId);
     void applyToTeam(Long teamId, String memberId, String message);
     AcceptApplicationResponse acceptApplication(Long teamId, String memberId);
-    AuthorityType authorityCheck(Long teamId, String memberId);
+    AuthorityType authorityCheck(Long teamId, Long memberNumber);
     void withdrawal(Long teamId, String memberId);
     DisbandmentTeamResponse disbandmentTeam(Long teamId);
-    List<TeamMemberDto> findTeamMember(Long teamId, String memberId);
+    List<TeamMemberDto> findTeamMember(Long teamId, Long memberNumber);
+    List<TeamMemberDto> findTeamMemberByMemberId(Long teamId, String memberId);
     UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, AuthorityType authorityType);
 }

@@ -23,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional(readOnly = true)
 	public MemberResponse login(LoginRequest loginRequest) {
 		String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
-		Member member = memberRepository.selectMember(loginRequest.getId());
+		Member member = memberRepository.selectMemberById(loginRequest.getId());
 		if (member != null && member.getId().equals(loginRequest.getId()) && member.getPwd().equals(encodedPassword)) {
 			return new MemberResponse(member);
 		}
@@ -75,8 +75,15 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public MemberResponse findMember(String id) {
-		Member member = memberRepository.selectMember(id);
+	public MemberResponse findMember(Long number) {
+		Member member = memberRepository.selectMember(number);
+		return new MemberResponse(member);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public MemberResponse findMemberById(String id) {
+		Member member = memberRepository.selectMemberById(id);
 		return new MemberResponse(member);
 	}
 

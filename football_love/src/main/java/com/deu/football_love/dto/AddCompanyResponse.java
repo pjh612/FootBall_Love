@@ -8,13 +8,15 @@ import lombok.Getter;
 public class AddCompanyResponse {
     private Long companyId;
     private String companyName;
+    private Long owner;
     private Address location;
     private String tel;
     private String description;
 
-    public AddCompanyResponse(Long id, String name, Address location, String tel, String description) {
+    public AddCompanyResponse(Long id, String name, Long owner, Address location, String tel, String description) {
         this.companyId = id;
-        this.companyName =name;
+        this.companyName = name;
+        this.owner = owner;
         this.location = location;
         this.tel = tel;
         this.description = description;
@@ -22,6 +24,6 @@ public class AddCompanyResponse {
 
     public static AddCompanyResponse from(Company company)
     {
-        return new AddCompanyResponse(company.getId(), company.getName(), company.getLocation(),company.getTel(), company.getDescription());
+        return new AddCompanyResponse(company.getId(), company.getName(), company.getOwner().getNumber(), company.getLocation(),company.getTel(), company.getDescription());
     }
 }

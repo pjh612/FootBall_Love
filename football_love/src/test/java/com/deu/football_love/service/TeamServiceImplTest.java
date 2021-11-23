@@ -2,7 +2,9 @@ package com.deu.football_love.service;
 
 import com.deu.football_love.domain.*;
 import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.JoinRequest;
+import com.deu.football_love.dto.MemberResponse;
 import com.deu.football_love.dto.TeamDto;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.TeamRepository;
@@ -43,8 +45,8 @@ public class TeamServiceImplTest {
     public void init()
     {
 
-       JoinRequest memberADto = new JoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark",LocalDate.now(),new Address("busan","guemgangro","46233"),"pjh_jn@naver.com","01012341234");
-        JoinRequest memberBDto = new JoinRequest("memberB", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark",LocalDate.now(),new Address("busan","guemgangro","46233"),"pjh_jn@naver.com","01012341234");
+       JoinRequest memberADto = new JoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark",LocalDate.now(),new Address("busan","guemgangro","46233"),"pjh_jn@naver.com","01012341234", MemberType.NORMAL);
+        JoinRequest memberBDto = new JoinRequest("memberB", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark",LocalDate.now(),new Address("busan","guemgangro","46233"),"pjh_jn@naver.com","01012341234", MemberType.NORMAL);
         memberService.join(memberADto);
         memberService.join(memberBDto);
         teamService.createNewTeam(memberADto.getId(), "teamA");
@@ -55,8 +57,9 @@ public class TeamServiceImplTest {
     public void 팀_생성_테스트() {
 
         TeamDto findTeam = teamService.findTeamByName("teamA");
-        assertNotNull( findTeam);
-        assertEquals(1, teamService.findTeamMember(findTeam.getId(),"memberA").size());
+        MemberResponse memberA = memberService.findMemberById("memberA");
+        assertNotNull(findTeam);
+        assertEquals(1, teamService.findTeamMember(findTeam.getId(),memberA.getNumber()).size());
     }
 
     /**
@@ -65,28 +68,33 @@ public class TeamServiceImplTest {
     @Test
     public void 회원_탈퇴_테스트() {
         TeamDto findTeam = teamService.findTeamByName("teamA");
+
+        MemberResponse memberA = memberService.findMemberById("memberA");
         teamService.withdrawal(findTeam.getId(),"memberA");
 
         assertNotNull(findTeam);
-        assertEquals(0,teamService.findTeamMember(findTeam.getId(), "memberA").size());
+        assertEquals(0,teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
     }
 
     @Test
     public void 회원_팀탈퇴_테스트() {
         Team teamA = teamRepository.selectTeamByName("teamA");
-        Member memberB = memberRepository.selectMember("memberB");
+        Member memberB = memberRepository.selectMemberById("memberB");
         TeamMember teamMemberB = new TeamMember(teamA, memberB, AuthorityType.MEMBER);
 
         teamRepository.insertNewTeamMember(teamMemberB);
         teamService.withdrawal(teamA.getId(), "memberA");
-      List<TeamMember> findTeamMemberA = teamRepository.selectTeamMember(teamA.getId(), "memberA");
-      List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember(teamA.getId(), "memberB");
+
+        MemberResponse findMemberA = memberService.findMemberById("memberA");
+        MemberResponse findMemberB = memberService.findMemberById("memberB");
+        List<TeamMember> findTeamMemberA = teamRepository.selectTeamMember(teamA.getId(), findMemberA.getNumber());
+      List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember(teamA.getId(), findMemberB.getNumber());
 
         assertEquals(1, teamRepository.selectTeamMember(teamA.getId(), null).size());
         assertEquals(0, findTeamMemberA.size());
         assertEquals(1, findTeamMemberB.size());
         assertNotNull(teamRepository.selectTeam(teamA.getId()));
-        assertNotNull(memberRepository.selectMember("memberA"));
+        assertNotNull(memberRepository.selectMemberById("memberA"));
     }
 
     @Test
@@ -98,10 +106,12 @@ public class TeamServiceImplTest {
         teamService.acceptApplication(findTeam.getId(),"memberB");
         teamService.disbandmentTeam(findTeam.getId());
 
+        MemberResponse memberA = memberService.findMemberById("memberA");
+        MemberResponse memberB = memberService.findMemberById("memberB");
         assertNull(teamRepository.selectTeam(findTeam.getId()));
-        assertEquals(teamRepository.selectTeamMember(findTeam.getId(),"memberA").size(),0);
-        assertEquals(teamRepository.selectTeamMember(findTeam.getId(),"memberB").size() ,0);
-        assertNotNull(memberRepository.selectMember("memberA"));
-        assertNotNull(memberRepository.selectMember("memberB"));
+        assertEquals(teamRepository.selectTeamMember(findTeam.getId(),memberA.getNumber()).size(),0);
+        assertEquals(teamRepository.selectTeamMember(findTeam.getId(),memberB.getNumber()).size() ,0);
+        assertNotNull(memberRepository.selectMemberById("memberA"));
+        assertNotNull(memberRepository.selectMemberById("memberB"));
     }
 }
