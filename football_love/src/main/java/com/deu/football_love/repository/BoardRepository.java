@@ -10,4 +10,6 @@ public interface BoardRepository {
 	void deleteBoard(Long boardId);
 
 	int countBoardByType(Long teamId, BoardType boardType);
+	
+	Board selectBoardById(Long boardId);
 }
