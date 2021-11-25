@@ -8,7 +8,7 @@ display: block;
 const DateNav = styled.div`
     padding: 20px 0;
     position: sticky;
-    z-index: 2;
+    z-index: 2000;
     top:0;
     // background-color: red;
 `;
@@ -65,6 +65,7 @@ const DateWrap = styled.li`
     text-align: center;
     background-color: rgb(53,52,165);
     color:white;
+    cursor: pointer;
     // color: black;
     `;
 
@@ -171,7 +172,7 @@ export default function DateCarousel(props) {
             let date = utils.parseDate(i);
             let today = utils.getToday(i);
             components.push(
-            <DateWrap key={i - 400}>
+            <DateWrap key={i - 400}> 
                 <P key={i}>{date}</P>
                 <Span key={i + 500}>{today}</Span>
                 </DateWrap>)

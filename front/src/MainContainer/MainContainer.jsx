@@ -1,6 +1,7 @@
 
 import React,{ useState} from "react";
 import DateCarousel from './DateCarousel';
+import Filter from './Filter';
 
 
 export default function MainContainer() {
@@ -10,6 +11,9 @@ export default function MainContainer() {
     });
 
     return(
+        <div>
        <DateCarousel dateBtnInfo={dateBtnInfo} setDateBtnInfo={setDateBtnInfo}></DateCarousel>
+       <Filter></Filter>
+       </div>
     )
 }
