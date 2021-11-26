@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import React,{useState, useEffect} from "react";
+import React,{useState, useEffect, useRef} from "react";
+import {ReactComponent as RightArrow} from "../assets/rightArrow.svg";
+import {ReactComponent as LeftArrow} from "../assets/leftArrow.svg";
+
 
 const Container =  styled.div`
 display: block;
@@ -84,32 +87,28 @@ const Span = styled.span`
     font-family: 'Nanum Gothic', sans-serif;
 `;
 
-const BeforeButton = styled.button`
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    display:inline-block;
-`;
-
-const NextButton = styled.button`
-width: 20px;
-    height: 20px;
-    cursor: pointer;
-    display:inline-block;
-`;
-
 export default function DateCarousel(props) {
     const [dateComponents, setDateComponents] = useState(null);
     const dateBtnInfo = props.dateBtnInfo;
     const setDateBtnInfo = props.setDateBtnInfo;
 
+
+    const leftArrowColor = useRef("rgba(53,64,165,0.4)")
+    const rightArrowColor = useRef("rgba(53,64,165,1)")
+    
+
     const event = {
         nextClick : function() {
-            console.log(dateBtnInfo.btnIdx);
-        if ((dateBtnInfo.total - dateBtnInfo.btnIdx) === 7) {
+        if (dateBtnInfo.btnIdx === 6) {
             return ;
         }
         else {
+            if (dateBtnInfo.btnIdx === 5) {
+                rightArrowColor.current = "rgba(53,64,165,0.4)";
+            } else {
+                rightArrowColor.current = "rgba(53,64,165,1)"
+            }
+            leftArrowColor.current = "rgba(53,64,165,1)"
             setDateBtnInfo((prevState) => ({
                 total: prevState.total,
                 btnIdx: prevState.btnIdx + 1,
@@ -118,8 +117,15 @@ export default function DateCarousel(props) {
         },
         beforeClick : function() {
             if ((dateBtnInfo.btnIdx === 0)) {
+                leftArrowColor.current = "rgba(53,64,165,0.4)";
+                setDateBtnInfo((prevState) => ({
+                    total: prevState.total,
+                    btnIdx: prevState.btnIdx,
+                }));
                 return ;
             } else {
+                leftArrowColor.current = "rgba(53,64,165,1)"
+                rightArrowColor.current = "rgba(53,64,165,1)"
                 setDateBtnInfo((prevState) => ({
                     total: prevState.total,
                     btnIdx: prevState.btnIdx - 1,
@@ -185,13 +191,13 @@ export default function DateCarousel(props) {
             <DateNav>
                 <TabWrap>
                         <SwipeTabUl>
-                        <BeforeButton onClick={() => event.beforeClick()}></BeforeButton>
+                        <LeftArrow style={{cursor: "pointer"}} fill={leftArrowColor.current} onClick={() => event.beforeClick()}></LeftArrow>
                             <SlickList>
                                 <SlickTrack idx={dateBtnInfo.btnIdx}>                
                                     {dateComponents ? dateComponents : null}
                                 </SlickTrack>
                             </SlickList>
-                            <NextButton onClick={() => event.nextClick()}></NextButton>
+                            <RightArrow style={{cursor: "pointer"}} fill={rightArrowColor.current} onClick={() => event.nextClick()}></RightArrow>
                         </SwipeTabUl>
                 </TabWrap>
             </DateNav>
