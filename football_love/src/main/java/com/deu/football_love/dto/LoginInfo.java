@@ -10,5 +10,6 @@ import lombok.ToString;
 public class LoginInfo {
    private String result;
    private String message;
-   private String token;
+   private String accessToken;
+   private String refreshToken;
 }

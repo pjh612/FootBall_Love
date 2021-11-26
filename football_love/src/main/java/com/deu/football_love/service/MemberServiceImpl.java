@@ -45,7 +45,8 @@ public class MemberServiceImpl implements MemberService {
 		if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(loginRequest.getPwd(),member.getPwd())) {
 			List<String> roleList = Arrays.asList(member.getMemberType().name());
 			loginInfo.setResult("success");
-			loginInfo.setToken(jwtTokenProvider.createToken(member.getId(), roleList));
+			loginInfo.setAccessToken(jwtTokenProvider.createToken(member.getId(), roleList, true));
+			loginInfo.setRefreshToken(jwtTokenProvider.createToken(member.getId(), roleList, false));
 		}
 		else
 		{

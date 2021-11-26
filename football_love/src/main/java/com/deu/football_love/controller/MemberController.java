@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.dto.*;
+import com.deu.football_love.service.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 	private final MemberService memberService;
 	private final JwtTokenProvider jwtTokenProvider;
-	private final RedisTemplate redisTemplate;
+	private final RedisService redisService;
 
 	@ApiOperation(value = "회원가입 요청")
 	@PostMapping
@@ -72,6 +73,7 @@ public class MemberController {
 		if (response.getResult().equals("fail")) {
 			return new ResponseEntity<LoginInfo>(HttpStatus.CONFLICT);
 		} else {
+			redisService.setDataExpire(response.getRefreshToken(),response.getAccessToken(),JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
 			return new ResponseEntity<LoginInfo>(response, HttpStatus.OK);
 		}
 	}
