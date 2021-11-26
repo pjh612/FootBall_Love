@@ -9,6 +9,8 @@ import java.time.LocalDate;
 
 import javax.persistence.EntityManager;
 
+import com.deu.football_love.domain.type.TeamMemberType;
+import com.deu.football_love.dto.UpdateMemberRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,18 +47,7 @@ public class MemberTest {
 
 	@Test
 	public void 멤버_가입() {
-		JoinRequest request = new JoinRequest();
-		request.setId("dbtlwns");
-		request.setName("유시준");
-		request.setNickname("금꽁치");
-		request.setPhone("010-6779-3476");
-		String password = "1234";
-		request.setPwd(password);
-		Address address = new Address("1", "2", "3");
-		request.setAddress(address);
-		LocalDate date = LocalDate.of(1995, 5, 2);
-		request.setBirth(date);
-		request.setEmail("simba0502@naver.com");
+		JoinRequest request = new JoinRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
 		MemberResponse memberResponse = memberService.join(request);
 		assertAll(() -> assertEquals(request.getId(), memberResponse.getId()),
 				() -> assertEquals(request.getNickname(), memberResponse.getNickname()),
@@ -77,7 +68,7 @@ public class MemberTest {
 	@Test
 	public void 멤버_찾기() {
 		String id = "dbtlwns";
-		MemberResponse memberResponse = memberService.findMember(id);
+		MemberResponse memberResponse = memberService.findMemberById(id);
 		assertAll(() -> assertEquals("dbtlwns", memberResponse.getId()),
 				() -> assertEquals("금꽁치", memberResponse.getNickname()),
 				() -> assertEquals("유시준", memberResponse.getName()),
@@ -86,19 +77,8 @@ public class MemberTest {
 
 	@Test
 	public void 멤버_수정() {
-		JoinRequest request = new JoinRequest();
-		request.setName("유시준");
-		request.setNickname("금꽁치1");
-		request.setPhone("010-6779-3476");
-		String password = "1234";
-		String encodedPassword = passwordEncoder.encode(password);
-		request.setPwd(encodedPassword);
-		Address address = new Address("1", "2", "3");
-		request.setAddress(address);
-		LocalDate date = LocalDate.of(1995, 5, 2);
-		request.setBirth(date);
-		request.setEmail("simba0502@naver.com");
-		MemberResponse memberResponse = memberService.modify(request);
+		UpdateMemberRequest request = new UpdateMemberRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
+		MemberResponse memberResponse = memberService.modifyByMemberId(request.getId(), request);
 		assertAll(() -> assertEquals("dbtlwns", memberResponse.getId()),
 				() -> assertEquals("금꽁치", memberResponse.getNickname()),
 				() -> assertEquals("유시준", memberResponse.getName()),
@@ -123,7 +103,7 @@ public class MemberTest {
 	public void 멤버_그룹권한확인() {
 		String memberId = "dbtlwns";
 		String teamName = "FC Flow";
-		assertEquals(memberService.checkMemberAuthority(memberId, teamName), MemberType.ADMIN);
+		assertEquals(memberService.checkMemberAuthority(memberId, teamName), TeamMemberType.ADMIN);
 	}
 
 	@DisplayName("회원탈퇴 true일때 성공")

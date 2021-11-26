@@ -1,9 +1,11 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.domain.*;
 import com.deu.football_love.domain.type.AuthorityType;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.JoinRequest;
+import com.deu.football_love.dto.LoginRequest;
 import com.deu.football_love.dto.MemberResponse;
 import com.deu.football_love.dto.TeamDto;
 import com.deu.football_love.repository.MemberRepository;
@@ -13,12 +15,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -41,6 +50,17 @@ public class TeamServiceImplTest {
     @Autowired
     EntityManager em;
 
+    protected MockHttpSession session;
+    protected MockHttpServletRequest request;
+
+    @Bean
+    public AuditorAware<Long> auditorProvider()
+    {
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+
+        return () -> Optional.of(((MemberResponse) attr.getRequest().getSession().getAttribute(SessionConst.SESSION_MEMBER)).getNumber());
+    }
+
     @BeforeEach
     public void init()
     {
@@ -51,6 +71,20 @@ public class TeamServiceImplTest {
         memberService.join(memberBDto);
         teamService.createNewTeam(memberADto.getId(), "teamA");
 
+    }
+
+    @Test
+    public void auditor_test()
+    {
+
+        MemberResponse member = memberService.login(new LoginRequest("memberA", "1234"));
+        session.setAttribute(SessionConst.SESSION_MEMBER, member);
+        TeamDto teamA = teamService.findTeamByName("teamA");
+
+        System.out.println("teamA.getCreatedBy() = " + teamA.getCreatedBy());
+        System.out.println("teamA.getLastModifiedBy() = " + teamA.getLastModifiedBy());
+        System.out.println("teamA.getCreatedDate() = " + teamA.getCreatedDate());
+        System.out.println("teamA.getLastModifiedDate() = " + teamA.getLastModifiedDate());
     }
 
     @Test

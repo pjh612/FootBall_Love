@@ -1,8 +1,7 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.dto.JoinRequest;
-import com.deu.football_love.dto.LoginRequest;
-import com.deu.football_love.dto.MemberResponse;
+import com.deu.football_love.dto.*;
+import org.junit.Test;
 
 public interface MemberService {
 	boolean isDuplicationId(String id);
@@ -17,9 +16,15 @@ public interface MemberService {
 
 	MemberResponse findMemberById(String id);
 
-	MemberResponse modify(JoinRequest joinRequest);
+	MemberResponse modifyByMemberNumber(Long memberNum, UpdateMemberRequest request);
+
+	MemberResponse modifyByMemberId(String memberId, UpdateMemberRequest request);
 
 	boolean withdraw(String id);
 
 	String checkMemberAuthority(String memberId, String teamName);
+
+	LoginMemberResponse findMemberById_jwt(String id);
+	//Jwt Test
+	LoginInfo login_jwt(LoginRequest loginRequest);
 }

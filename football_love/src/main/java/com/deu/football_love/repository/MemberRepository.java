@@ -4,7 +4,7 @@ import com.deu.football_love.domain.Member;
 import com.deu.football_love.dto.JoinRequest;
 
 public interface MemberRepository {
-	void insertMember(Member member);
+	Long insertMember(Member member);
 
 	Member selectMember(Long id);
 
@@ -14,7 +14,7 @@ public interface MemberRepository {
 
 	int isDuplicationEmail(String email);
 
-	Member updateMember(JoinRequest joinRequest);
+	//Member updateMember(JoinRequest joinRequest);
 
 	void updateWithdraw(String id);
 

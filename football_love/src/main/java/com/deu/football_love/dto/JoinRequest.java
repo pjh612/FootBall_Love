@@ -7,9 +7,11 @@ import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.MemberType;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class JoinRequest {
 	private String id;
 
@@ -28,6 +30,9 @@ public class JoinRequest {
 	private String phone;
 
 	private MemberType type;
+
+	protected JoinRequest() {
+	}
 
 	public JoinRequest(String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType type) {
 		this.id = id;

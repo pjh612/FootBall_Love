@@ -23,8 +23,9 @@ public class MemberRepositoryImpl implements MemberRepository {
 	private final EntityManager em;
 
 	@Override
-	public void insertMember(Member member) {
+	public Long insertMember(Member member) {
 		em.persist(member);
+		return member.getNumber();
 	}
 
 	@Override
@@ -47,13 +48,6 @@ public class MemberRepositoryImpl implements MemberRepository {
 		Query query = em.createNativeQuery(MemberSql.COUNT_ID).setParameter(1, id);
 		List<BigInteger> list = query.getResultList();
 		return list.get(0).intValue();
-	}
-
-	@Override
-	public Member updateMember(JoinRequest joinRequest) {
-		String id = joinRequest.getId();
-		Member member = em.find(Member.class, id);
-		return member;
 	}
 
 	@Override

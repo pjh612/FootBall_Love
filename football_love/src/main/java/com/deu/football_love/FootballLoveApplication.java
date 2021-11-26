@@ -8,8 +8,5 @@ public class FootballLoveApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FootballLoveApplication.class, args);
-
 	}
-
-
 }

@@ -3,7 +3,11 @@ package com.deu.football_love.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.controller.consts.SessionConst;
+import com.deu.football_love.dto.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deu.football_love.domain.Member;
-import com.deu.football_love.dto.JoinRequest;
-import com.deu.football_love.dto.LoginRequest;
-import com.deu.football_love.dto.MemberResponse;
 import com.deu.football_love.service.MemberService;
 
 import io.swagger.annotations.ApiOperation;
@@ -27,13 +28,18 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/member")
 public class MemberController {
 	private final MemberService memberService;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final RedisTemplate redisTemplate;
 
 	@ApiOperation(value = "회원가입 요청")
-	@PostMapping("/{id}")
-	public ResponseEntity<MemberResponse> join(@PathVariable String id, @RequestBody JoinRequest joinRequest) {
+	@PostMapping
+	public ResponseEntity<MemberResponse> join(@RequestBody JoinRequest joinRequest) {
+		System.out.println("joinRequest.getId() = " + joinRequest.getId());
+		//log.info("joinRequest = {}",joinRequest);
 		MemberResponse joinMember = memberService.join(joinRequest);
 		if (joinMember == null) {
 			return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
@@ -57,6 +63,26 @@ public class MemberController {
 		}
 	}
 
+	@ApiOperation(value = "로그인 요청")
+	@PostMapping("/login_jwt/{id}")
+	public ResponseEntity<LoginInfo> login_jwt(@RequestBody LoginRequest loginRequest,
+												HttpServletRequest request) {
+		LoginInfo response = memberService.login_jwt(loginRequest);
+		log.info("login response = {}", response);
+		if (response.getResult().equals("fail")) {
+			return new ResponseEntity<LoginInfo>(HttpStatus.CONFLICT);
+		} else {
+			return new ResponseEntity<LoginInfo>(response, HttpStatus.OK);
+		}
+	}
+
+	@ApiOperation(value = "로그아웃 요청")
+	@PostMapping("/logout_jwt")
+	public ResponseEntity<LoginInfo> logout_jwt(@RequestBody LoginRequest loginRequest,
+											   HttpServletRequest request) {
+		return null;
+	}
+
 	@ApiOperation(value = "아이디 중복확인 요청")
 	@GetMapping("/duplication/id")
 	public ResponseEntity isDuplicaitonId(@RequestParam String id) {
@@ -78,14 +104,9 @@ public class MemberController {
 	}
 
 	@ApiOperation(value = "회원정보 수정요청")
-	@PutMapping("/{id}")
-	public ResponseEntity<MemberResponse> modify(@RequestBody JoinRequest joinRequest, HttpSession session) {
-		MemberResponse sessionMember = (MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER);
-		if (sessionMember == null) {
-			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-		}
-
-		MemberResponse modifiedMember = memberService.modify(joinRequest);
+	@PutMapping("/{memberId}")
+	public ResponseEntity<MemberResponse> modify(@PathVariable String memberId, @RequestBody UpdateMemberRequest request, HttpSession session) {
+		MemberResponse modifiedMember = memberService.modifyByMemberId(memberId, request);
 		return new ResponseEntity<MemberResponse>(modifiedMember, HttpStatus.OK);
 	}
 
@@ -122,8 +143,8 @@ public class MemberController {
 		}
 	}
 
-	@ExceptionHandler(Exception.class)
+	/*@ExceptionHandler(Exception.class)
 	public ResponseEntity serverException() {
 		return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	}*/
 }

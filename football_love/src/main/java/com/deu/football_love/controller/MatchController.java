@@ -26,8 +26,8 @@ public class MatchController {
     @PostMapping
     public ResponseEntity add(HttpSession session, CreateMatchRequest request)
     {
-        MemberResponse sessionMember = memberService.findMember(((MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER)).getId());
-        AuthorityType authorityType = teamService.authorityCheck(request.getTeamId(), sessionMember.getId());
+        MemberResponse sessionMember = (MemberResponse)session.getAttribute(SessionConst.SESSION_MEMBER);
+        AuthorityType authorityType = teamService.authorityCheck(request.getTeamId(), sessionMember.getNumber());
         if (sessionMember == null || (authorityType != AuthorityType.ADMIN && authorityType != AuthorityType.LEADER))
         {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);

@@ -8,15 +8,19 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.deu.football_love.domain.type.MemberType;
+import com.deu.football_love.dto.BaseDto;
+import com.deu.football_love.dto.UpdateMemberRequest;
 import org.springframework.data.annotation.CreatedDate;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Getter
 @Setter
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id @GeneratedValue
 	@Column(name ="member_number")
@@ -70,4 +74,16 @@ public class Member {
 
 	@OneToOne(mappedBy = "owner")
 	private Company company;
+
+
+	public void updateMember(UpdateMemberRequest request)
+	{
+		pwd = request.getPwd();
+		email = request.getEmail();
+		name = request.getName();
+		nickname = request.getNickname();
+		birth = request.getBirth();
+		address = request.getAddress();
+		phone = request.getPhone();
+	}
 }

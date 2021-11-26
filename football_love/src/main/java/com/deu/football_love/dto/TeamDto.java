@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class TeamDto {
+public class TeamDto extends BaseDto {
 
     private Long id;
     private String name;
@@ -22,6 +22,17 @@ public class TeamDto {
         this.name = name;
         this.createDate = createDate;
         teamMembers.forEach(teamMember ->{this.teamMembers.add(teamMember.getMember().getId());});
+    }
+
+    public TeamDto(Team team) {
+        this.id = team.getId();
+        this.name = team.getName();
+        this.createDate = team.getCreateDate();
+        team.getTeamMembers().forEach(teamMember ->{this.teamMembers.add(teamMember.getMember().getId());});
+      /*  setCreatedDate(team.getCreatedDate());
+        setLastModifiedDate(team.getLastModifiedDate());
+        setCreatedBy(team.getCreatedBy());
+        setLastModifiedBy(team.getLastModifiedBy());*/
     }
 
     public static TeamDto from(Team team)
