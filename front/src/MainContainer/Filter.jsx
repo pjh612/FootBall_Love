@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import DeadlineFilter from "./DeadlineFilter";
+
 
 const MainFilter = styled.div`
 `;
@@ -32,6 +34,7 @@ export default function Filter() {
     })()
 
     return(
+        <div>
     <MainFilter>
         <MainMatchFilter>
             <Ul>
@@ -39,6 +42,8 @@ export default function Filter() {
             </Ul>
         </MainMatchFilter>
     </MainFilter>
+    <DeadlineFilter></DeadlineFilter>
+    </div>
     )
 
 }
