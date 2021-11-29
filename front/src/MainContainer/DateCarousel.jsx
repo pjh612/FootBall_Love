@@ -92,10 +92,8 @@ export default function DateCarousel(props) {
     const dateBtnInfo = props.dateBtnInfo;
     const setDateBtnInfo = props.setDateBtnInfo;
 
-
     const leftArrowColor = useRef("rgba(53,64,165,0.4)")
     const rightArrowColor = useRef("rgba(53,64,165,1)")
-    
 
     const event = {
         nextClick : function() {
@@ -117,14 +115,13 @@ export default function DateCarousel(props) {
         },
         beforeClick : function() {
             if ((dateBtnInfo.btnIdx === 0)) {
-                leftArrowColor.current = "rgba(53,64,165,0.4)";
-                setDateBtnInfo((prevState) => ({
-                    total: prevState.total,
-                    btnIdx: prevState.btnIdx,
-                }));
                 return ;
             } else {
-                leftArrowColor.current = "rgba(53,64,165,1)"
+                if (dateBtnInfo.btnIdx === 1) {
+                    leftArrowColor.current = "rgba(53,64,165,0.4)";
+                } else {
+                    leftArrowColor.current = "rgba(53,64,165,1)"
+                }
                 rightArrowColor.current = "rgba(53,64,165,1)"
                 setDateBtnInfo((prevState) => ({
                     total: prevState.total,
