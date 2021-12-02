@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
+import LoginModal from './AuthComponents/LoginModal';
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -99,6 +100,13 @@ display: inline-block;
 
 
 export default function Navbar() {
+    const [openLoginModal, setOpenLoginModal] = useState(false);
+    const openModal = () => {
+        setOpenLoginModal(true);
+    }
+    const closeModal = () => {
+        setOpenLoginModal(false);
+    }
     return(<NavbarContainer>
         <NavBarContainerCenter>
             <NavBarContainerLogo>
@@ -106,7 +114,8 @@ export default function Navbar() {
             </NavBarContainerLogo>
             <NavBarContainerUser>
                 <GoIn>
-                    <Login>로그인</Login>
+                    <Login onClick={() => openModal()}>로그인</Login>
+                    {openLoginModal && <LoginModal CloseModal={closeModal}></LoginModal>}
                     <And>또는</And>
                     <Join>회원가입</Join>
                 </GoIn>

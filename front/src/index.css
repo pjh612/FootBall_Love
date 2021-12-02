@@ -8,10 +8,9 @@
 html,
 body {
   width: 100vw;
-  height: 160vh;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow: auto;
   /* background-image: url(https://meadlight.com/assets/images/texture.jpg); */
 }
 
