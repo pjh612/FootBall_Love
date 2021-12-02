@@ -1,7 +1,8 @@
 import Navbar from "./Navbar";
-import Navbar2 from "./Navbar2";
-import Carousel from "./Carousel";
+import Navbar2 from "./MainContainer/Navbar2";
+import Carousel from "./MainContainer/Carousel";
 import MainContainer from "./MainContainer/MainContainer";
+
 function App() {
   return (
     <div>
