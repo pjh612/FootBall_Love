@@ -9,11 +9,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class BoardDto {
+	private Long boardId;
 	private String boardName;
 	private BoardType boardType;
 	private Long teamId;
 	
 	public BoardDto(Board board) {
+		this.boardId = board.getId();
 		this.boardName = board.getBoardName();
 		this.boardType = board.getBoardType();
 		this.teamId = board.getTeam().getId();
