@@ -1,16 +1,20 @@
 import Navbar from "./Navbar";
-import Navbar2 from "./MainContainer/Navbar2";
-import Carousel from "./MainContainer/Carousel";
-import MainContainer from "./MainContainer/MainContainer";
+import LandingPage from './MainContainer/LandingPage';
+import JoinPage from './AuthComponents/JoinPage';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 
 function App() {
   return (
+    <BrowserRouter>
     <div>
       <Navbar></Navbar>
-      <Navbar2></Navbar2>
-      <Carousel></Carousel>
-      <MainContainer></MainContainer>
+      {/* Routes 내부는 url 에 따라 표현되는 컴포넌트가 달라짐 */}
+      <Routes>
+        <Route path="/" element={<LandingPage/>} />
+        <Route path="/join" element={<JoinPage/>}/>
+      </Routes>
     </div>
+    </BrowserRouter>
   );
 }
 

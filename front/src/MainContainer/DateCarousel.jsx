@@ -66,10 +66,9 @@ const DateWrap = styled.li`
     min-height: 1px;
     width: 132px;
     text-align: center;
-    background-color: rgb(53,52,165);
-    color:white;
+    // background-color: rgb(53,52,165);
+    color:  ${props => props.color};
     cursor: pointer;
-    // color: black;
     `;
 
 const P = styled.p`
@@ -132,10 +131,10 @@ export default function DateCarousel(props) {
     }
 
     useEffect(() => {
-        setDateComponents(makeDateBlock())
+        setDateComponents(makeDateBlock(13))
     }, [])
 
-    function makeDateBlock() {
+    function makeDateBlock(blockNums) {
         let week = ['일', '월', '화', '수', '목', '금', '토'];
         let thirtyOne = [1,0,1,0,1,0,1,1,0,1,0,1]; 
         let todayIdx = new Date().getDay();
@@ -171,11 +170,19 @@ export default function DateCarousel(props) {
 
         }
 
-        for(let i = 0; i < 13; i++) {
+        for(let i = 0; i < blockNums; i++) {
             let date = utils.parseDate(i);
             let today = utils.getToday(i);
+            let fontColor = 'black';
+            console.log(today);
+            if (today === "일") {
+                fontColor = 'red';
+            }
+            if (today === "토") {
+                fontColor = 'rgb(53,52,165)'; // blue
+            }
             components.push(
-            <DateWrap key={i - 400}> 
+            <DateWrap color={fontColor} key={i - 400}> 
                 <P key={i}>{date}</P>
                 <Span key={i + 500}>{today}</Span>
                 </DateWrap>)

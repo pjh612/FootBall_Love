@@ -10,7 +10,8 @@ body {
   width: 100vw;
   margin: 0;
   padding: 0;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   /* background-image: url(https://meadlight.com/assets/images/texture.jpg); */
 }
 
