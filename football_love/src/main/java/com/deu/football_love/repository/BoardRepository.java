@@ -7,9 +7,11 @@ public interface BoardRepository {
 
 	Board insertBoard(Board board);
 
-	void deleteBoard(Long boardId);
+	void deleteBoard(Board board);
 
 	int countBoardByType(Long teamId, BoardType boardType);
 	
 	Board selectBoardById(Long boardId);
+
+	Board selectBoardByTeamIdAndBoardName(String boardName, Long teamId);
 }
