@@ -14,7 +14,7 @@ import javax.persistence.MappedSuperclass;
 @Setter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity extends BaseTimeEntity{
+public class BaseEntity extends BaseTimeEntity {
     @CreatedBy
     @Column(updatable = true)
     private Long createdBy;
