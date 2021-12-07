@@ -1,12 +1,14 @@
 package com.deu.football_love.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-public class ApplicationJoinTeam {
+@Setter
+public class ApplicationJoinTeam extends BaseEntity {
 
     @Id
     @GeneratedValue
