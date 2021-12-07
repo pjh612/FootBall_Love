@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,4 +24,10 @@ public class PostRepositoryImpl implements PostRepository{
 
     @Override
     public Post selectPost(Long postId) { return em.find(Post.class, postId);}
+
+    public List<Post> selectAllPostsByBoardId(Long boardId) {
+        return em.createQuery("SELECT p FROM Post p WHERE p.board.id = :boardId")
+                .setParameter("boardId", boardId)
+                .getResultList();
+    }
 }
