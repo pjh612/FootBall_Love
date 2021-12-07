@@ -1,13 +1,11 @@
 package com.deu.football_love.audit;
 
-import com.deu.football_love.config.JwtTokenProvider;
-import com.deu.football_love.dto.LoginMemberResponse;
+import com.deu.football_love.dto.auth.LoginInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -23,12 +21,11 @@ public class MemberAuditorAware implements AuditorAware<Long> {
         if (authentication == null || !authentication.isAuthenticated()) {
             return null;
         }
-        if(authentication.getPrincipal().equals("anonymousUser")) {
-            LoginMemberResponse loginInfo = new LoginMemberResponse();
-            log.info("anonymous authority");
+        if (authentication.getPrincipal().equals("anonymousUser")) {
+            LoginInfo loginInfo = new LoginInfo();
             return Optional.of(-1L);
         }
-        LoginMemberResponse loginInfo =(LoginMemberResponse) authentication.getPrincipal();
+        LoginInfo loginInfo = (LoginInfo) authentication.getPrincipal();
         return Optional.of(loginInfo.getNumber());
     }
 }

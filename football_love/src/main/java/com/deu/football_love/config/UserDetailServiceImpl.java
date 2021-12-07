@@ -1,8 +1,7 @@
 package com.deu.football_love.config;
 
-import com.deu.football_love.dto.LoginMemberResponse;
+import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.repository.MemberRepository;
-import com.deu.football_love.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +16,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new LoginMemberResponse(memberRepository.selectMemberById(username));
+        return new LoginInfo(memberRepository.selectMemberById(username));
     }
 }

@@ -1,7 +1,12 @@
 package com.deu.football_love.service;
 
 import com.deu.football_love.config.JwtTokenProvider;
-import com.deu.football_love.dto.*;
+import com.deu.football_love.dto.auth.TokenInfo;
+import com.deu.football_love.dto.auth.LoginInfo;
+import com.deu.football_love.dto.auth.LoginRequest;
+import com.deu.football_love.dto.member.MemberJoinRequest;
+import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.UpdateMemberRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,29 +40,21 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public LoginInfo login_jwt(LoginRequest loginRequest) {
-		String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
-
+	public TokenInfo login_jwt(LoginRequest loginRequest) {
 		Member member = memberRepository.selectMemberById(loginRequest.getId());
-		LoginInfo loginInfo = new LoginInfo();
-		System.out.println(member.getId()+", "+loginRequest.getId());
-		System.out.println(member.getPwd()+", "+encodedPassword +", "+passwordEncoder.matches(loginRequest.getPwd(),member.getPwd()));
 		if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(loginRequest.getPwd(),member.getPwd())) {
 			List<String> roleList = Arrays.asList(member.getMemberType().name());
-			loginInfo.setResult("success");
-			loginInfo.setAccessToken(jwtTokenProvider.createToken(member.getId(), roleList, true));
-			loginInfo.setRefreshToken(jwtTokenProvider.createToken(member.getId(), roleList, false));
+			String accessToken = jwtTokenProvider.createAccessToken(member.getId(), roleList);
+			String refreshToken = jwtTokenProvider.createRefreshToken();
+			return new TokenInfo("success", "create token success", accessToken, refreshToken);
 		}
 		else
-		{
-			loginInfo.setResult("fail");
-		}
-		return loginInfo;
+			return new TokenInfo("fail", "create token fail", null, null);
 	}
 
 	@Override
 	@Transactional
-	public MemberResponse join(JoinRequest joinRequest) {
+	public MemberResponse join(MemberJoinRequest joinRequest) {
 		String password = joinRequest.getPwd();
 		String encodedPassword = passwordEncoder.encode(password);
 		joinRequest.setPwd(encodedPassword);
@@ -119,9 +116,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public LoginMemberResponse findMemberById_jwt(String id) {
+	public LoginInfo findMemberById_jwt(String id) {
 		Member member = memberRepository.selectMemberById(id);
-		return new LoginMemberResponse(member);
+		return new LoginInfo(member);
 	}
 
 	@Override
@@ -154,10 +151,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean withdraw(String id) {
-		int withDrawCnt = memberRepository.chkWithDraw(id);
-		if (withDrawCnt > 0) {
-			return false;
-		}
+		Long withDrawCnt = memberRepository.chkWithDraw(id);
 		memberRepository.updateWithdraw(id);
 		return true;
 	}

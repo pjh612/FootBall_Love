@@ -1,30 +1,35 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.dto.*;
-import org.junit.Test;
+import com.deu.football_love.dto.auth.TokenInfo;
+import com.deu.football_love.dto.auth.LoginInfo;
+import com.deu.football_love.dto.auth.LoginRequest;
+import com.deu.football_love.dto.member.MemberJoinRequest;
+import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.UpdateMemberRequest;
 
 public interface MemberService {
-	boolean isDuplicationId(String id);
+    boolean isDuplicationId(String id);
 
-	boolean isDuplicationEmail(String email);
+    boolean isDuplicationEmail(String email);
 
-	MemberResponse login(LoginRequest loginRequest);
+    MemberResponse login(LoginRequest loginRequest);
 
-	MemberResponse join(JoinRequest joinRequest);
+    MemberResponse join(MemberJoinRequest joinRequest);
 
-	MemberResponse findMember(Long number);
+    MemberResponse findMember(Long number);
 
-	MemberResponse findMemberById(String id);
+    MemberResponse findMemberById(String id);
 
-	MemberResponse modifyByMemberNumber(Long memberNum, UpdateMemberRequest request);
+    MemberResponse modifyByMemberNumber(Long memberNum, UpdateMemberRequest request);
 
-	MemberResponse modifyByMemberId(String memberId, UpdateMemberRequest request);
+    MemberResponse modifyByMemberId(String memberId, UpdateMemberRequest request);
 
-	boolean withdraw(String id);
+    boolean withdraw(String id);
 
-	String checkMemberAuthority(String memberId, String teamName);
+    String checkMemberAuthority(String memberId, String teamName);
 
-	LoginMemberResponse findMemberById_jwt(String id);
-	//Jwt Test
-	LoginInfo login_jwt(LoginRequest loginRequest);
+    LoginInfo findMemberById_jwt(String id);
+
+    //Jwt Test
+    TokenInfo login_jwt(LoginRequest loginRequest);
 }

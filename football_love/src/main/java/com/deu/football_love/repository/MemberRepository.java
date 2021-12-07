@@ -1,7 +1,6 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.Member;
-import com.deu.football_love.dto.JoinRequest;
 
 public interface MemberRepository {
 	Long insertMember(Member member);
@@ -16,9 +15,9 @@ public interface MemberRepository {
 
 	//Member updateMember(JoinRequest joinRequest);
 
-	void updateWithdraw(String id);
+	void updateWithdraw(String memberId);
 
-	int chkWithDraw(String id);
+	Long chkWithDraw(String id);
 
 	String selectMemberAuthority(String memberId, String teamId);
 }

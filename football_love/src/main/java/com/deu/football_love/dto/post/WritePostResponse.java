@@ -1,21 +1,27 @@
 package com.deu.football_love.dto.post;
 
 import com.deu.football_love.domain.Post;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-
+@Getter
+@ToString
 public class WritePostResponse {
-    private String Author;
+    private Long postId;
+    private Long authorNumber;
+    private String authorId;
     private Long boardId;
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
     private String title;
     private String content;
 
-    public WritePostResponse(String author, Long boardId, LocalDateTime createDate, LocalDateTime modifyDate, String title, String content) {
-        Author = author;
+    public WritePostResponse(Long postId, Long authorNumber, String authorId, Long boardId, LocalDateTime createDate, LocalDateTime modifyDate, String title, String content) {
+        this.postId = postId;
+        this.authorNumber = authorNumber;
+        this.authorId = authorId;
         this.boardId = boardId;
         this.createDate = createDate;
         this.modifyDate = modifyDate;
@@ -23,9 +29,8 @@ public class WritePostResponse {
         this.content = content;
     }
 
-    public static WritePostResponse from(Post post)
-    {
-        return new WritePostResponse(post.getAuthor().getId(), post.getBoard().getId(), post.getCreateDate()
-                , post.getModifyDate(), post.getTitle(), post.getContent());
+    public static WritePostResponse from(Post post) {
+        return new WritePostResponse(post.getId(), post.getAuthor().getNumber(), post.getAuthor().getId(), post.getBoard().getId(), post.getCreatedDate()
+                , post.getLastModifiedDate(), post.getTitle(), post.getContent());
     }
 }

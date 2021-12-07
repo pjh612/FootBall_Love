@@ -36,4 +36,7 @@ public class Team extends BaseEntity {
 
     @OneToMany(mappedBy = "team" )
     private List<ApplicationJoinTeam> applicationJoinTeams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team")
+    private List<Board> boards = new ArrayList<>();
 }
