@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import LoginModal from './AuthComponents/LoginModal';
+import JoinModal from './AuthComponents/JoinModal';
+import Person from './icon/person.svg';
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -9,6 +11,7 @@ const NavbarContainer = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
+  background: rgba(0,0,0,0.9);
 `;
 
 const NavBarContainerCenter = styled.div`
@@ -24,14 +27,13 @@ const NavBarContainerCenter = styled.div`
 const NavBarContainerLogo = styled.div`
     width: 100px;
     height: 21px;
-    
-    
 `;
 
 const Logo = styled.span`
 line-height: 24px;
 font-family: 'Black Han Sans', sans-serif;
 font-size: 24px;
+color: white;
 cursor: pointer;
 `;
 
@@ -60,7 +62,7 @@ const SlideBarTrigerDiv = styled.div`
 const Login = styled.span`
     width: 36.34px;
     height: 17px;
-    color: #3540A5;
+    color: white;
     font-size: 14px;
     cursor: pointer;
 `;
@@ -68,7 +70,7 @@ const Login = styled.span`
 const And = styled.span`
 width: 20.77px;
 height: 15px;
-color: #999;
+color: rgba(255,255,255,0.8);
 font-size: 12px;
 margin-right: 3px;
 margin-left: 3px;   
@@ -77,21 +79,20 @@ margin-left: 3px;
 const Join = styled.span`
     width: 36.34px;
     height: 17px;
-    color: #3540A5;
+    color: white;
     font-size: 14px;
     cursor: pointer;
 `;
 
 const MoreIconWrap = styled.div`
     display: flex;
-    
     padding: 10px 0;
 `;
 
 const MoreIcon = styled.div`
 width: 4px;
 height: 4px;
-background-color: #222836;
+background-color: white;
 margin: 0 2.9px;
 border-radius: 10px;
 display: inline-block;
@@ -101,12 +102,21 @@ display: inline-block;
 
 export default function Navbar() {
     const [openLoginModal, setOpenLoginModal] = useState(false);
-    const openModal = () => {
+    const [openJoinModal, setOpenJoinModal] = useState(false);
+
+    const openLoginModalFn = () => {
         setOpenLoginModal(true);
     }
-    const closeModal = () => {
+    const closeLoginModal = () => {
         setOpenLoginModal(false);
     }
+    const openJoinModalFn = () => {
+        setOpenJoinModal(true);
+    }
+    const closeJoinModal = () => {
+        setOpenJoinModal(false);
+    }
+
     return(<NavbarContainer>
         <NavBarContainerCenter>
             <NavBarContainerLogo>
@@ -114,10 +124,11 @@ export default function Navbar() {
             </NavBarContainerLogo>
             <NavBarContainerUser>
                 <GoIn>
-                    <Login onClick={() => openModal()}>로그인</Login>
-                    {openLoginModal && <LoginModal CloseModal={closeModal}></LoginModal>}
+                    <Login onClick={() => openLoginModalFn()}>로그인</Login>
+                    {openLoginModal && <LoginModal CloseModal={closeLoginModal}></LoginModal>}
                     <And>또는</And>
-                    <Join>회원가입</Join>
+                    <Join onClick={() => openJoinModalFn()}>회원가입</Join>
+                    {openJoinModal && <JoinModal CloseModal={closeJoinModal}></JoinModal>}
                 </GoIn>
                 <SlideBarTrigerDiv>
                     <MoreIconWrap>
