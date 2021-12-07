@@ -3,7 +3,7 @@ package com.deu.football_love.domain;
 import javax.persistence.*;
 
 @Entity
-public class MatchApplication {
+public class MatchApplication extends BaseEntity {
 
     @Id
     @GeneratedValue

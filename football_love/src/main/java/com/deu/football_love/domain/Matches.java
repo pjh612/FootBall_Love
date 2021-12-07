@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Matches {
+public class Matches extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "matches_id")
@@ -25,6 +25,6 @@ public class Matches {
     @Column(name = "matches_reservation_time")
     private LocalDateTime reservationTime;
 
-    @Column(name="matches_approval")
+    @Column(name = "matches_approval")
     private Boolean approval;
 }

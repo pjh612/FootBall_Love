@@ -5,26 +5,24 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Team extends BaseEntity{
+public class Team extends BaseEntity {
 
     @Id
     @GeneratedValue
     @Column(name = "team_id")
     private Long id;
 
-    @Column(name = "team_name")
+    @Column(name = "team_name", unique = true)
     private String name;
 
-    @Column(name="team_createdate")
-    private LocalDate createDate;
-
-    @OneToMany(mappedBy = "team" ,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team")
     private List<TeamMember> teamMembers = new ArrayList<>();
 
     @OneToMany(mappedBy = "team")
@@ -33,9 +31,9 @@ public class Team extends BaseEntity{
     @OneToMany(mappedBy = "team")
     private List<MatchApplication> matchApplications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team" )
     private List<ParticipationMember> participationMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team" )
     private List<ApplicationJoinTeam> applicationJoinTeams = new ArrayList<>();
 }
