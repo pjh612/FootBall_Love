@@ -23,8 +23,9 @@ public class Member extends BaseEntity {
     @Column(name = "member_number")
     private Long number;
 
-	@Column(name = "member_id", length = 20)
-	private String id;
+
+    @Column(name = "member_id", length = 20, unique = true)
+    private String id;
 
     @Column(name = "member_pwd", length = 150)
     private String pwd;
@@ -42,8 +43,8 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address;
 
-	@Column(name = "member_email")
-	private String email;
+    @Column(name = "member_email", unique = true)
+    private String email;
 
     @Column(name = "member_phone")
     private String phone;
