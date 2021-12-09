@@ -64,7 +64,7 @@ function JoinModal({CloseModal}) {
         <ModalDiv>
             <Span>축구는 <b>풋볼러브</b>에서</Span>
             <KakaoLogin>카카오계정으로 가입하기</KakaoLogin>
-            <FootBallLoveLogin>이메일로 가입할래요</FootBallLoveLogin>
+            <Link to="/join" onClick={() => CloseModal()}><FootBallLoveLogin>이메일로 가입할래요</FootBallLoveLogin></Link>
         </ModalDiv>
         <BackGround onClick={() => CloseModal()}></BackGround>
         </>

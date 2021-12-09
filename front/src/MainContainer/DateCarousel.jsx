@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import React,{useState, useEffect, useRef} from "react";
-import {ReactComponent as RightArrow} from "../assets/rightArrow.svg";
-import {ReactComponent as LeftArrow} from "../assets/leftArrow.svg";
+import {ReactComponent as RightArrow} from "../icon/rightArrow.svg";
+import {ReactComponent as LeftArrow} from "../icon/leftArrow.svg";
 
 
 const Container =  styled.div`
-display: block;
+    display: block;
 `;
 
 const DateNav = styled.div`
@@ -22,8 +22,6 @@ const TabWrap = styled.div`
     margin: 0 auto;
     // background-color: yellow;
 `;
-
-
 
 const SwipeTabUl = styled.ul`
     position: relative;
