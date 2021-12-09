@@ -18,17 +18,15 @@ public class QueryTeamDto extends BaseDto {
 
     private List<String> teamMembers = new ArrayList<>();
 
-    public QueryTeamDto(Long id, String name, LocalDateTime createDate, List<TeamMember> teamMembers) {
+    public QueryTeamDto(Long id, String name, List<TeamMember> teamMembers) {
         this.id = id;
         this.name = name;
-        this.createDate = createDate;
         teamMembers.forEach(teamMember ->{this.teamMembers.add(teamMember.getMember().getId());});
     }
 
     public QueryTeamDto(Team team) {
         this.id = team.getId();
         this.name = team.getName();
-        this.createDate = team.getCreateDate();
         team.getTeamMembers().forEach(teamMember ->{this.teamMembers.add(teamMember.getMember().getId());});
       /*  setCreatedDate(team.getCreatedDate());
         setLastModifiedDate(team.getLastModifiedDate());
@@ -38,7 +36,7 @@ public class QueryTeamDto extends BaseDto {
 
     public static QueryTeamDto from(Team team)
     {
-        return new QueryTeamDto(team.getId(), team.getName(),team.getCreateDate(),team.getTeamMembers());
+        return new QueryTeamDto(team.getId(), team.getName(),team.getTeamMembers());
     }
 
 
