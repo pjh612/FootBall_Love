@@ -39,14 +39,7 @@ public class MemberController {
     private final RedisService redisService;
 
     @GetMapping("/auth")
-    public LoginInfo get(@AuthenticationPrincipal LoginInfo loginInfo, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                System.out.println("cookie name = " + cookie.getName());
-            }
-        }
-        log.info("loginInfo = {} ", loginInfo);
+    public LoginInfo get(@AuthenticationPrincipal LoginInfo loginInfo) {
         return loginInfo;
     }
 
@@ -58,21 +51,6 @@ public class MemberController {
             return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
         } else {
             return new ResponseEntity<MemberResponse>(joinMember, HttpStatus.OK);
-        }
-    }
-
-    @ApiOperation(value = "로그인 요청")
-    @PostMapping("/login/{id}")
-    public ResponseEntity<MemberResponse> login(@RequestBody LoginRequest loginRequest,
-                                                HttpServletRequest request) {
-        MemberResponse member = memberService.login(loginRequest);
-        HttpSession session = request.getSession();
-        if (member == null) {
-            session.invalidate();
-            return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
-        } else {
-            session.setAttribute(SessionConst.SESSION_MEMBER, member);
-            return new ResponseEntity<MemberResponse>(member, HttpStatus.OK);
         }
     }
 
@@ -134,7 +112,6 @@ public class MemberController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
-        System.out.println("remainExpiration = " + remainExpiration);
         log.info("login info = {}", (principal));
         if (remainExpiration >= 1) {
             redisService.del(refreshToken);
