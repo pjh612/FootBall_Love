@@ -87,8 +87,8 @@ public class MemberController {
             data.add(loginRequest.getId());
             data.add(loginResponse.getAccessToken());
             Cookie accessTokenCookie = new Cookie(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken());
-            Cookie refreshTokenCookie = new Cookie(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getAccessToken());
-            //accessTokenCookie.setMaxAge((int) JwtTokenProvider.TOKEN_VALIDATION_SECOND);
+            Cookie refreshTokenCookie = new Cookie(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken());
+            // accessTokenCookie.setMaxAge((int) JwtTokenProvider.TOKEN_VALIDATION_SECOND);
             // accessTokenCookie.setSecure(true);
             // accessTokenCookie.setHttpOnly(true);
             // refreshTokenCookie.setMaxAge((int) JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
@@ -102,19 +102,13 @@ public class MemberController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity refresh(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        String refreshToken = null;
-        String accessToken = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(jwtTokenProvider.REFRESH_TOKEN_NAME))
-                refreshToken = cookie.getValue();
-            if (cookie.getName().equals(jwtTokenProvider.ACCESS_TOKEN_NAME))
-                accessToken = cookie.getValue();
-        }
+    public ResponseEntity refresh(HttpServletResponse response,
+                                  @CookieValue(value = "accessToken") String accessToken
+            , @CookieValue(value = "refreshToken") String refreshToken) {
         if (accessToken == null || refreshToken == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         ValidRefreshTokenResponse result = jwtTokenProvider.validateRefreshToken(accessToken, refreshToken);
+        log.info("validate result = {} ", result);
         if (result.getStatus() == 200) {
             response.addCookie((new Cookie("accessToken", result.getAccessToken())));
             return new ResponseEntity(result, HttpStatus.OK);
@@ -124,7 +118,7 @@ public class MemberController {
 
     @ApiOperation(value = "로그아웃 요청")
     @PostMapping("/logout_jwt")
-    public ResponseEntity<TokenInfo> logout_jwt(HttpServletRequest request, @AuthenticationPrincipal LoginInfo principal,
+    public ResponseEntity<TokenInfo> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
                                                 @CookieValue(value = "accessToken") String accessToken
             , @CookieValue(value = "refreshToken") String refreshToken
     ) {
@@ -136,6 +130,7 @@ public class MemberController {
         Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
         System.out.println("remainExpiration = " + remainExpiration);
         log.info("login info = {}", (principal));
+
         if (remainExpiration >= 1) {
             redisService.del(refreshToken);
             redisService.setStringValue(accessToken, "true", remainExpiration);
