@@ -1,27 +1,23 @@
 import styled from 'styled-components';
+import SubBar from './SubBar';
+import MainDiv from './MainDiv';
 
-const WrapperDiv = styled.div`
+const Div = styled.div`
+    width:100vw;
+    height:93vh;
     overflow: hidden;
     display:flex;
-    justify-content: center;
+    flex-direction : column;
     align-items: center;
-    backgrond : black;
-`;
-
-const MainDiv = styled.div`
-    width: 70vw;
-    height: 100vh;
-    position: absolute;
-    z-index: 10;
-    
 `;
 
 const JoinPage = () => {
     return(
         <>
-            <WrapperDiv>
+            <Div>
+                <SubBar></SubBar>
                 <MainDiv></MainDiv>
-            </WrapperDiv>
+            </Div>
         </>    
     )
 }
