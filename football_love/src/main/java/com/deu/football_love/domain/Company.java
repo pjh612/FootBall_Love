@@ -10,26 +10,26 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Company {
+public class Company extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name= "company_id")
+    @Column(name = "company_id")
     private Long id;
 
-    @Column(name= "company_name" , length = 36)
+    @Column(name = "company_name", length = 36)
     private String name;
 
-    @Column(name= "company_location")
+    @Column(name = "company_location")
     private Address location;
 
-    @Column(name="company_tel", length = 13)
+    @Column(name = "company_tel", length = 13)
     private String tel;
 
-    @Column(name= "company_description")
+    @Column(name = "company_description")
     private String description;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "owner_number", referencedColumnName = "member_number")
     private Member owner;
 

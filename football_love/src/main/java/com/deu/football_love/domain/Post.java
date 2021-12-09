@@ -1,6 +1,6 @@
 package com.deu.football_love.domain;
 
-import com.deu.football_love.dto.UpdatePostRequest;
+import com.deu.football_love.dto.post.UpdatePostRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,50 +11,40 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Post {
+public class Post extends BaseEntity {
 
-    @Column(name= "post_id")
+    @Column(name = "post_id")
     @GeneratedValue
     @Id
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="post_author",referencedColumnName="member_number")
+    @JoinColumn(name = "post_author", referencedColumnName = "member_number")
     private Member author;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="board_id")
+    @JoinColumn(name = "board_id")
     private Board board;
 
-    @Column(name= "post_createdate")
-    private LocalDateTime createDate;
-
-    @Column(name= "post_modifydate")
-    private LocalDateTime modifyDate;
-
-    @Column(name= "post_title")
+    @Column(name = "post_title")
     private String title;
 
-    @Column(name= "post_content")
+    @Column(name = "post_content")
     private String content;
 
     public Post() {
     }
 
-    public Post(Member author, Board board, LocalDateTime createDate, LocalDateTime modifyDate, String title, String content) {
+    public Post(Member author, Board board, String title, String content) {
         this.author = author;
         this.board = board;
-        this.createDate = createDate;
-        this.modifyDate = modifyDate;
         this.title = title;
         this.content = content;
     }
 
 
-    public void update(UpdatePostRequest request)
-    {
+    public void update(UpdatePostRequest request) {
         this.setTitle(request.getTitle());
-        this.setModifyDate(request.getModifyDate());
         this.setContent(request.getContent());
     }
 }

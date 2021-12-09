@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class WithdrawalMember {
+public class WithdrawalMember extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -26,6 +26,6 @@ public class WithdrawalMember {
     @JoinColumn(name = "member_number", referencedColumnName = "member_number")
     private Member member;
 
-    @Column(name= "withdrawal_date")
+    @Column(name = "withdrawal_date")
     private LocalDateTime date;
 }

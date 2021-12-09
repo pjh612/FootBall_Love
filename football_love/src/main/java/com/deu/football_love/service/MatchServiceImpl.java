@@ -3,8 +3,8 @@ package com.deu.football_love.service;
 import com.deu.football_love.domain.Matches;
 import com.deu.football_love.domain.Stadium;
 import com.deu.football_love.domain.Team;
-import com.deu.football_love.dto.CreateMatchResponse;
-import com.deu.football_love.dto.MatchDto;
+import com.deu.football_love.dto.match.CreateMatchResponse;
+import com.deu.football_love.dto.match.QueryMatchDto;
 import com.deu.football_love.repository.MatchRepositoryImpl;
 import com.deu.football_love.repository.StadiumRepositoryImpl;
 import com.deu.football_love.repository.TeamRepository;
@@ -24,18 +24,16 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     @Transactional(readOnly = true)
-    public MatchDto findMatch(Long matchId)
-    {
+    public QueryMatchDto findMatch(Long matchId) {
         Matches findMatch = matchRepository.selectMatch(matchId);
         if (findMatch == null)
             return null;
-        return MatchDto.from(findMatch);
+        return QueryMatchDto.from(findMatch);
     }
 
     @Override
     @Transactional
-    public CreateMatchResponse addMatch(Long teamId, Long stadiumId, LocalDateTime reservationTime)
-    {
+    public CreateMatchResponse addMatch(Long teamId, Long stadiumId, LocalDateTime reservationTime) {
         Team findTeam = teamRepository.selectTeam(teamId);
         Stadium findStadium = stadiumRepository.selectStadium(stadiumId);
 
@@ -47,7 +45,4 @@ public class MatchServiceImpl implements MatchService {
         matchRepository.insertMatch(newMatch);
         return CreateMatchResponse.from(newMatch);
     }
-
-
-
 }

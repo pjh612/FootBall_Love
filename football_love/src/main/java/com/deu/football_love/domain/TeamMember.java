@@ -10,11 +10,11 @@ import javax.persistence.*;
 @Table(name = "TeamMember", uniqueConstraints = {@UniqueConstraint(
         name = "TEAM_MEMBER_UNIQUE", columnNames = {"team_id", "member_number"}
 )})
-public class TeamMember {
+public class TeamMember extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name="team_member_id")
+    @Column(name = "team_member_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
