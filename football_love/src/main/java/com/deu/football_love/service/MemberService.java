@@ -12,8 +12,6 @@ public interface MemberService {
 
     boolean isDuplicationEmail(String email);
 
-    MemberResponse login(LoginRequest loginRequest);
-
     MemberResponse join(MemberJoinRequest joinRequest);
 
     MemberResponse findMember(Long number);
@@ -30,6 +28,5 @@ public interface MemberService {
 
     LoginInfo findMemberById_jwt(String id);
 
-    //Jwt Test
     TokenInfo login_jwt(LoginRequest loginRequest);
 }

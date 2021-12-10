@@ -27,16 +27,6 @@ public class MemberServiceImpl implements MemberService {
 
 	private final PasswordEncoder passwordEncoder;
 	private final JwtTokenProvider jwtTokenProvider;
-	@Override
-	@Transactional(readOnly = true)
-	public MemberResponse login(LoginRequest loginRequest) {
-		String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
-		Member member = memberRepository.selectMemberById(loginRequest.getId());
-		if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(member.getPwd(),encodedPassword)) {
-			return new MemberResponse(member);
-		}
-		throw new IllegalArgumentException();
-	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -75,7 +65,6 @@ public class MemberServiceImpl implements MemberService {
 		member.setLastModifiedBy(number);
 		MemberResponse memberResponse = new MemberResponse(member);
 
-		System.out.println("memberResponse = " + memberResponse);
 		return memberResponse;
 	}
 

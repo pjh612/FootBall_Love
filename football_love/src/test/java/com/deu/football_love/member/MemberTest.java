@@ -11,6 +11,7 @@ import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,15 +24,18 @@ import com.deu.football_love.dto.member.MemberResponse;
 import com.deu.football_love.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @Transactional
-@RequiredArgsConstructor
+@Slf4j
 public class MemberTest {
-	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
-	private final MemberService memberService;
-	
+	@Autowired
+	private MemberService memberService;
+
 	@Test
 	public void member_비밀번호_암호화_테스트() {
 		String password = "123456789";
@@ -49,16 +53,6 @@ public class MemberTest {
 				() -> assertEquals(request.getNickname(), memberResponse.getNickname()),
 				() -> assertEquals(request.getName(), memberResponse.getName()),
 				() -> assertEquals(request.getEmail(), memberResponse.getEmail()));
-	}
-
-	@Test
-	public void 멤버_로그인() {
-		LoginRequest request = new LoginRequest("dbtlwns", "1234");
-		MemberResponse memberResponse = memberService.login(request);
-		assertAll(() -> assertEquals(request.getId(), memberResponse.getId()),
-				() -> assertEquals("금꽁치", memberResponse.getNickname()),
-				() -> assertEquals("유시준", memberResponse.getName()),
-				() -> assertEquals("simba0502@naver.com", memberResponse.getEmail()));
 	}
 
 	@Test
