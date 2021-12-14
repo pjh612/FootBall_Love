@@ -3,6 +3,7 @@ package com.deu.football_love.controller;
 import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.domain.Board;
 import com.deu.football_love.dto.auth.LoginInfo;
+import com.deu.football_love.dto.board.BoardDto;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.*;
 import com.deu.football_love.service.BoardService;
@@ -29,13 +30,11 @@ public class PostController {
     /**
      * 게시글 생성
      */
-    @PostMapping("/team/{teamName}/board/{boardId}/post")
+    @PostMapping("/team/{teamId}/board/{boardId}/post")
     public ResponseEntity writePost(@PathVariable Long teamId, @PathVariable Long boardId
-            , WritePostRequest writePostRequest, HttpSession session) {
-        Board board = new Board();// board 조회
-        QueryMemberDto sessionMember = (QueryMemberDto) session.getAttribute(SessionConst.SESSION_MEMBER);
-        if (sessionMember == null || board == null || teamService.findTeamMemberByMemberId(teamId, sessionMember.getId()).size() == 0)
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            , WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
+        if (teamService.findTeamMemberByMemberId(teamId, loginInfo.getId()).size() == 0)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);
         return new ResponseEntity(writePostResponse, HttpStatus.OK);
     }
@@ -50,7 +49,7 @@ public class PostController {
         if (findPost == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         if (loginInfo.getNumber() != findPost.getAuthorNumber())
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         DeletePostResponse response = postService.deletePost(findPost.getId());
         return new ResponseEntity(response, HttpStatus.OK);
     }
@@ -65,7 +64,7 @@ public class PostController {
         if (findPost == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         if (loginInfo.getNumber() != findPost.getAuthorNumber())
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         postService.modifyPost(postId, request);
         return new ResponseEntity(HttpStatus.OK);
     }

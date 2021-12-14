@@ -3,6 +3,7 @@ package com.deu.football_love.service;
 import com.deu.football_love.domain.Post;
 import com.deu.football_love.dto.board.AddBoardRequest;
 import com.deu.football_love.dto.board.AddBoardResponse;
+import com.deu.football_love.dto.board.DeleteBoardResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,15 +45,17 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void delete(Long boardId) {
+    public DeleteBoardResponse delete(Long boardId) {
         Board findBoard = boardRepository.selectBoardById(boardId);
-
+        if (findBoard == null)
+            return new DeleteBoardResponse(boardId, 400, "존재하지 않는 게시판");
         List<Post> posts = findBoard.getPosts();
         for (Post post : posts) {
             post.setBoard(null);
         }
         posts.clear();
         boardRepository.deleteBoard(findBoard);
+        return new DeleteBoardResponse(boardId, 200, "삭제 완료");
     }
 
     @Override
