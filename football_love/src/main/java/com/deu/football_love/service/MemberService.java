@@ -4,25 +4,29 @@ import com.deu.football_love.dto.auth.TokenInfo;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
 import com.deu.football_love.dto.member.MemberJoinRequest;
-import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
+
+import java.util.List;
 
 public interface MemberService {
     boolean isDuplicationId(String id);
 
     boolean isDuplicationEmail(String email);
 
-    MemberResponse login(LoginRequest loginRequest);
+    QueryMemberDto login(LoginRequest loginRequest);
 
-    MemberResponse join(MemberJoinRequest joinRequest);
+    QueryMemberDto join(MemberJoinRequest joinRequest);
 
-    MemberResponse findMember(Long number);
+    QueryMemberDto findMember(Long number);
 
-    MemberResponse findMemberById(String id);
+    QueryMemberDto findMemberById(String id);
 
-    MemberResponse modifyByMemberNumber(Long memberNum, UpdateMemberRequest request);
+    List<QueryMemberDto> findMemberDto(Long number);
 
-    MemberResponse modifyByMemberId(String memberId, UpdateMemberRequest request);
+    QueryMemberDto modifyByMemberNumber(Long memberNum, UpdateMemberRequest request);
+
+    QueryMemberDto modifyByMemberId(String memberId, UpdateMemberRequest request);
 
     boolean withdraw(String id);
 

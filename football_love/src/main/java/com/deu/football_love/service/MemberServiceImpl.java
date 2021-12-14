@@ -23,20 +23,22 @@ import java.util.List;
 @Service
 @Transactional
 public class MemberServiceImpl implements MemberService {
-	private final MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
+    private final TeamRepository teamRepository;
+    private final PostRepository postRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
-	private final PasswordEncoder passwordEncoder;
-	private final JwtTokenProvider jwtTokenProvider;
-	@Override
-	@Transactional(readOnly = true)
-	public MemberResponse login(LoginRequest loginRequest) {
-		String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
-		Member member = memberRepository.selectMemberById(loginRequest.getId());
-		if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(member.getPwd(),encodedPassword)) {
-			return new MemberResponse(member);
-		}
-		throw new IllegalArgumentException();
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public QueryMemberDto login(LoginRequest loginRequest) {
+        String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
+        Member member = memberRepository.selectMemberById(loginRequest.getId());
+        if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(member.getPwd(), encodedPassword)) {
+            return new QueryMemberDto(member);
+        }
+        throw new IllegalArgumentException();
+    }
 
 	@Override
 	@Transactional(readOnly = true)
@@ -72,8 +74,8 @@ public class MemberServiceImpl implements MemberService {
 		Long number = memberRepository.insertMember(member);
 		member.setCreatedBy(number);
 
-		member.setLastModifiedBy(number);
-		MemberResponse memberResponse = new MemberResponse(member);
+        member.setLastModifiedBy(number);
+        QueryMemberDto memberResponse = new QueryMemberDto(member);
 
 		System.out.println("memberResponse = " + memberResponse);
 		return memberResponse;
@@ -100,19 +102,19 @@ public class MemberServiceImpl implements MemberService {
 		}
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public MemberResponse findMember(Long number) {
-		Member member = memberRepository.selectMember(number);
-		return new MemberResponse(member);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public QueryMemberDto findMember(Long number) {
+        Member member = memberRepository.selectMember(number);
+        return new QueryMemberDto(member);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public MemberResponse findMemberById(String id) {
-		Member member = memberRepository.selectMemberById(id);
-		return new MemberResponse(member);
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public QueryMemberDto findMemberById(String id) {
+        Member member = memberRepository.selectMemberById(id);
+        return new QueryMemberDto(member);
+    }
 
 	@Override
 	@Transactional(readOnly = true)
@@ -121,33 +123,37 @@ public class MemberServiceImpl implements MemberService {
 		return new LoginInfo(member);
 	}
 
-	@Override
-	public MemberResponse modifyByMemberNumber(Long memberNum, UpdateMemberRequest request) {
-		Member findMember = memberRepository.selectMember(memberNum);
-		if (!passwordEncoder.matches(request.getPwd(),findMember.getPwd()))
-			findMember.setPwd(passwordEncoder.encode(request.getPwd()));
-		findMember.setEmail(request.getEmail());
-		findMember.setName(request.getName());
-		findMember.setNickname(request.getNickname());
-		findMember.setBirth(request.getBirth());
-		findMember.setAddress(request.getAddress());
-		findMember.setPhone(request.getPhone());
-		return new MemberResponse(findMember);
-	}
+    public List<QueryMemberDto> findMemberDto(Long number) {
+        return memberRepository.selectQueryMemberDto(number);
+    }
 
-	@Override
-	public MemberResponse modifyByMemberId(String memberId, UpdateMemberRequest request) {
-		Member findMember = memberRepository.selectMemberById(memberId);
-		if (!passwordEncoder.matches(request.getPwd(),findMember.getPwd()))
-			findMember.setPwd(passwordEncoder.encode(request.getPwd()));
-		findMember.setEmail(request.getEmail());
-		findMember.setName(request.getName());
-		findMember.setNickname(request.getNickname());
-		findMember.setBirth(request.getBirth());
-		findMember.setAddress(request.getAddress());
-		findMember.setPhone(request.getPhone());
-		return new MemberResponse(findMember);
-	}
+    @Override
+    public QueryMemberDto modifyByMemberNumber(Long memberNum, UpdateMemberRequest request) {
+        Member findMember = memberRepository.selectMember(memberNum);
+        if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
+            findMember.setPwd(passwordEncoder.encode(request.getPwd()));
+        findMember.setEmail(request.getEmail());
+        findMember.setName(request.getName());
+        findMember.setNickname(request.getNickname());
+        findMember.setBirth(request.getBirth());
+        findMember.setAddress(request.getAddress());
+        findMember.setPhone(request.getPhone());
+        return new QueryMemberDto(findMember);
+    }
+
+    @Override
+    public QueryMemberDto modifyByMemberId(String memberId, UpdateMemberRequest request) {
+        Member findMember = memberRepository.selectMemberById(memberId);
+        if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
+            findMember.setPwd(passwordEncoder.encode(request.getPwd()));
+        findMember.setEmail(request.getEmail());
+        findMember.setName(request.getName());
+        findMember.setNickname(request.getNickname());
+        findMember.setBirth(request.getBirth());
+        findMember.setAddress(request.getAddress());
+        findMember.setPhone(request.getPhone());
+        return new QueryMemberDto(findMember);
+    }
 
 	@Override
 	public boolean withdraw(String id) {
