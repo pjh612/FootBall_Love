@@ -47,4 +47,12 @@ public class Post extends BaseEntity {
         this.setTitle(request.getTitle());
         this.setContent(request.getContent());
     }
+
+    public void deletePost()
+    {
+        author.getPosts().remove(this);
+        this.author = null;
+        board.getPosts().remove(this);
+        this.board = null;
+    }
 }
