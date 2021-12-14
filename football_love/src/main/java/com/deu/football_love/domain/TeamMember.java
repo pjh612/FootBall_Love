@@ -1,6 +1,7 @@
 package com.deu.football_love.domain;
 
-import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.domain.type.TeamMemberType;
+import lombok.AccessLevel;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,9 +26,15 @@ public class TeamMember extends BaseEntity {
     @JoinColumn(name = "member_number")
     private Member member;
 
-    private AuthorityType authority;
+    private TeamMemberType type;
 
-    public TeamMember(Team team, Member member, AuthorityType authority) {
+    public TeamMember(Team team, Member member, TeamMemberType type) {
+        this.team = team;
+        this.member = member;
+        this.type = type;
+    }
+
+    public void addTeamMember(Team team, Member member, TeamMemberType type) {
         this.team = team;
         this.member = member;
         this.authority = authority;

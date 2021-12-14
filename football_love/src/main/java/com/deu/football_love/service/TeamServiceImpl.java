@@ -37,7 +37,7 @@ public class TeamServiceImpl implements TeamService {
         Member findMember = memberRepository.selectMemberById(creator);
         if (findMember == null)
             return null;
-        TeamMember teamMember = new TeamMember(team, findMember, AuthorityType.LEADER);
+        TeamMember teamMember = new TeamMember(team, findMember, TeamMemberType.LEADER);
         team.setName(teamName);
         teamMember.setTeam(team);
         teamMember.setMember(findMember);
@@ -99,7 +99,7 @@ public class TeamServiceImpl implements TeamService {
         findApplication.setMember(null);
         teamRepository.deleteApplication(findApplication);
 
-        TeamMember newTeamMember = new TeamMember(findTeam, findMember, AuthorityType.MEMBER);
+        TeamMember newTeamMember = new TeamMember(findTeam, findMember, TeamMemberType.COMMON);
         findTeam.getTeamMembers().add(newTeamMember);
         teamRepository.insertNewTeamMember(newTeamMember);
 
@@ -111,12 +111,12 @@ public class TeamServiceImpl implements TeamService {
      */
     @Override
     @Transactional(readOnly = true)
-    public AuthorityType authorityCheck(Long teamId, Long memberNumber) {
+    public TeamMemberType authorityCheck(Long teamId, Long memberNumber) {
         List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamId, memberNumber);
 
         if (teamMembers.size() == 0)
-            return AuthorityType.NONE;
-        return teamMembers.get(0).getAuthority();
+            return TeamMemberType.NONE;
+        return teamMembers.get(0).getType();
     }
 
     @Override
@@ -175,13 +175,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, AuthorityType authorityType) {
+    public UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, TeamMemberType authorityType) {
         Member findMember = memberRepository.selectMemberById(memberId);
         List<TeamMember> teamMembers = teamRepository.selectTeamMember(teamId, findMember.getNumber());
         if (teamMembers.size() == 0)
             return null;
-        teamMembers.get(0).setAuthority(authorityType);
+        teamMembers.get(0).setType(authorityType);
         return new UpdateAuthorityResponse(teamId, memberId, authorityType);
     }
 
