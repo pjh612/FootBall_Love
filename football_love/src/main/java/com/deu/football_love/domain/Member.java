@@ -49,9 +49,6 @@ public class Member extends BaseEntity {
     @Column(name = "member_phone")
     private String phone;
 
-    @Column(name = "member_creatdate")
-    private LocalDateTime createDate;
-
     @Column(name = "member_type")
     private MemberType memberType;
 
