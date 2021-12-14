@@ -14,8 +14,6 @@ public interface MemberService {
 
     boolean isDuplicationEmail(String email);
 
-    QueryMemberDto login(LoginRequest loginRequest);
-
     QueryMemberDto join(MemberJoinRequest joinRequest);
 
     QueryMemberDto findMember(Long number);
