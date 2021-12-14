@@ -8,5 +8,6 @@ import java.time.LocalDateTime;
 public class CreateMatchRequest {
     private Long teamId;
     private Long stadiumId;
+    private Long memberNumber;
     private LocalDateTime reservation_time;
 }
