@@ -1,5 +1,6 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.domain.type.TeamMemberType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,7 +91,7 @@ public class MatchController {
 	}
 
 	private boolean checkAuthority(Long teamId, Long memberNumber) {
-		AuthorityType authorityType = teamService.authorityCheck(teamId, memberNumber);
-		return authorityType != AuthorityType.ADMIN && authorityType != AuthorityType.LEADER;
+		TeamMemberType authorityType = teamService.authorityCheck(teamId, memberNumber);
+		return authorityType != TeamMemberType.ADMIN && authorityType != TeamMemberType.LEADER;
 	}
 }
