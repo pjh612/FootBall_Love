@@ -1,13 +1,12 @@
 package com.deu.football_love.repository;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import io.swagger.models.auth.In;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import org.springframework.stereotype.Repository;
 
 import com.deu.football_love.domain.Member;
@@ -29,6 +28,12 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 
 	@Override
+	public void deleteMember(Member member)
+	{
+		em.remove(member);
+	}
+
+	@Override
 	public Member selectMember(Long number) {
 		return em.find(Member.class, number);
 	}
@@ -41,6 +46,17 @@ public class MemberRepositoryImpl implements MemberRepository {
 		if (result == null)
 			return null;
 		return result.get(0);
+	}
+
+	@Override
+	public List<QueryMemberDto> selectQueryMemberDto(Long number) {
+		return em.createQuery("select new com.deu.football_love.dto.member.QueryMemberDto(m)" +
+				" from Member m" +
+				" join m.teamMembers" +
+				" join m.company" +
+				" where m.number = :memberNumber",QueryMemberDto.class)
+				.setParameter("memberNumber", number)
+				.getResultList();
 	}
 
 	@Override

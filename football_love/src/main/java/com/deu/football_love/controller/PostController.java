@@ -3,7 +3,7 @@ package com.deu.football_love.controller;
 import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.domain.Board;
 import com.deu.football_love.dto.auth.LoginInfo;
-import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.*;
 import com.deu.football_love.service.BoardService;
 import com.deu.football_love.service.MemberService;
@@ -33,7 +33,7 @@ public class PostController {
     public ResponseEntity writePost(@PathVariable Long teamId, @PathVariable Long boardId
             , WritePostRequest writePostRequest, HttpSession session) {
         Board board = new Board();// board 조회
-        MemberResponse sessionMember = (MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER);
+        QueryMemberDto sessionMember = (QueryMemberDto) session.getAttribute(SessionConst.SESSION_MEMBER);
         if (sessionMember == null || board == null || teamService.findTeamMemberByMemberId(teamId, sessionMember.getId()).size() == 0)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);

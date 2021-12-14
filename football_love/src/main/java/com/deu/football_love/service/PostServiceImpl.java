@@ -8,6 +8,7 @@ import com.deu.football_love.repository.BoardRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
@@ -33,6 +35,7 @@ public class PostServiceImpl implements PostService {
         newPost.setTitle(request.getTitle());
         newPost.setAuthor(findMember);
         newPost.setBoard(findBoard);
+        findMember.getPosts().add(newPost);
         findBoard.getPosts().add(newPost);
         postRepository.insertPost(newPost);
         return WritePostResponse.from(newPost);

@@ -12,7 +12,7 @@ import com.deu.football_love.dto.auth.TokenInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
 import com.deu.football_love.dto.auth.ValidRefreshTokenResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
-import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
 import com.deu.football_love.service.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,12 +45,12 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입 요청")
     @PostMapping
-    public ResponseEntity<MemberResponse> join(@RequestBody MemberJoinRequest joinRequest) {
-        MemberResponse joinMember = memberService.join(joinRequest);
+    public ResponseEntity<QueryMemberDto> join(@RequestBody MemberJoinRequest joinRequest) {
+        QueryMemberDto joinMember = memberService.join(joinRequest);
         if (joinMember == null) {
-            return new ResponseEntity<MemberResponse>(HttpStatus.CONFLICT);
+            return new ResponseEntity<QueryMemberDto>(HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<MemberResponse>(joinMember, HttpStatus.OK);
+            return new ResponseEntity<QueryMemberDto>(joinMember, HttpStatus.OK);
         }
     }
 
@@ -139,19 +139,18 @@ public class MemberController {
 
     @ApiOperation(value = "회원정보 수정요청")
     @PutMapping("/{memberId}")
-    public ResponseEntity<MemberResponse> modify(@PathVariable String memberId, @RequestBody UpdateMemberRequest request, HttpSession session) {
-        MemberResponse modifiedMember = memberService.modifyByMemberId(memberId, request);
-        return new ResponseEntity<MemberResponse>(modifiedMember, HttpStatus.OK);
+    public ResponseEntity<QueryMemberDto> modify(@PathVariable String memberId, @RequestBody UpdateMemberRequest request, HttpSession session) {
+        QueryMemberDto modifiedMember = memberService.modifyByMemberId(memberId, request);
+        return new ResponseEntity<QueryMemberDto>(modifiedMember, HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원탈퇴 요청", notes = "id와 회원을 확인해 회원탈퇴 요청을 한다.")
     @PutMapping("/withdrawals/{id}")
-    public ResponseEntity withdrawMember(@PathVariable String id, HttpSession session) {
-        MemberResponse sessionMember = (MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER);
-        if (sessionMember == null) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity withdrawMember(@PathVariable String id, @AuthenticationPrincipal LoginInfo loginInfo) {
 
+        QueryMemberDto findMember = memberService.findMemberById(id);
+        if(loginInfo.getNumber() != findMember.getNumber())
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         boolean deleteFlag = memberService.withdraw(id);
         if (deleteFlag) {
             return new ResponseEntity(HttpStatus.OK);

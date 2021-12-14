@@ -5,7 +5,7 @@ import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.company.AddCompanyResponse;
 import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.dto.member.MemberJoinRequest;
-import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.repository.CompanyRepository;
 import com.deu.football_love.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ class CompanyServiceTest {
     @Test
     public void addAndFindCompanyTest() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
         QueryCompanyDto findCompany = companyService.findCompany(newCompany.getCompanyId());
@@ -55,7 +55,7 @@ class CompanyServiceTest {
     @Test
     public void withdrawalCompanyTest() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
         companyService.withdrawalCompany(newCompany.getCompanyId());
@@ -70,11 +70,11 @@ class CompanyServiceTest {
     public void withdrawalCascadeTest()
     {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.BUSINESS);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
         memberService.withdraw("memberA");
-        MemberResponse findMember = memberService.findMember(memberA.getNumber());
+        QueryMemberDto findMember = memberService.findMember(memberA.getNumber());
         em.remove(memberRepository.selectMember(findMember.getNumber()));
         Assertions.assertEquals(1, memberRepository.chkWithDraw("memberA"));
         Assertions.assertNull(companyService.findCompany(newCompany.getCompanyId()));
@@ -89,10 +89,10 @@ class CompanyServiceTest {
         MemberJoinRequest memberBDto = new MemberJoinRequest("memberB", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn2@naver.com", "01012341234", MemberType.NORMAL);
         MemberJoinRequest memberCDto = new MemberJoinRequest("memberC", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn3@naver.com", "01012341234", MemberType.NORMAL);
         MemberJoinRequest memberDDto = new MemberJoinRequest("memberD", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn4@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
-        MemberResponse memberB = memberService.join(memberBDto);
-        MemberResponse memberC = memberService.join(memberCDto);
-        MemberResponse memberD = memberService.join(memberDDto);
+        QueryMemberDto memberA = memberService.join(memberADto);
+        QueryMemberDto memberB = memberService.join(memberBDto);
+        QueryMemberDto memberC = memberService.join(memberCDto);
+        QueryMemberDto memberD = memberService.join(memberDDto);
 
         AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
         AddCompanyResponse companyB = companyService.addCompany("companyA", memberB.getNumber(), new Address("seoul", "hongdaero", "12456"), "01012341234", "서울 홍대로에 위치한 풋살장");

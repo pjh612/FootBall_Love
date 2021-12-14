@@ -1,9 +1,9 @@
 package com.deu.football_love.controller;
 
 import com.deu.football_love.controller.consts.SessionConst;
-import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.match.CreateMatchRequest;
-import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.service.MatchServiceImpl;
 import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
@@ -27,9 +27,9 @@ public class MatchController {
 
     @PostMapping
     public ResponseEntity add(HttpSession session, CreateMatchRequest request) {
-        MemberResponse sessionMember = (MemberResponse) session.getAttribute(SessionConst.SESSION_MEMBER);
-        AuthorityType authorityType = teamService.authorityCheck(request.getTeamId(), sessionMember.getNumber());
-        if (sessionMember == null || (authorityType != AuthorityType.ADMIN && authorityType != AuthorityType.LEADER)) {
+        QueryMemberDto sessionMember = (QueryMemberDto) session.getAttribute(SessionConst.SESSION_MEMBER);
+        TeamMemberType authorityType = teamService.authorityCheck(request.getTeamId(), sessionMember.getNumber());
+        if (sessionMember == null || (authorityType != TeamMemberType.ADMIN && authorityType != TeamMemberType.LEADER)) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
         return null;

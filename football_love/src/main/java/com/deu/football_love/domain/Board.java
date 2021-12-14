@@ -37,4 +37,9 @@ public class Board extends BaseEntity {
         this.boardName = boardName;
         this.boardType = boardType;
     }
+
+    public void deleteBoard() {
+        team.getBoards().remove(this);
+        this.team = null;
+    }
 }

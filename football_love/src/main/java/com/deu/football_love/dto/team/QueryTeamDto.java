@@ -4,7 +4,6 @@ import com.deu.football_love.domain.*;
 import com.deu.football_love.dto.BaseDto;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +12,6 @@ public class QueryTeamDto extends BaseDto {
 
     private Long id;
     private String name;
-
-    private LocalDateTime createDate;
-
     private List<String> teamMembers = new ArrayList<>();
 
     public QueryTeamDto(Long id, String name, List<TeamMember> teamMembers) {

@@ -1,7 +1,7 @@
 package com.deu.football_love.controller;
 
 import com.deu.football_love.config.JwtTokenProvider;
-import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.team.*;
 import com.deu.football_love.service.MemberService;
@@ -71,8 +71,8 @@ public class TeamController {
      */
     @PostMapping("/join_acception/{teamId}/{memberId]")
     public ResponseEntity join(@PathVariable Long teamId, @PathVariable String memberId, @AuthenticationPrincipal  LoginInfo loginInfo) {
-        AuthorityType authorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
-        if (authorityType != AuthorityType.LEADER && authorityType != AuthorityType.LEADER)
+        TeamMemberType authorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
+        if (authorityType != TeamMemberType.LEADER && authorityType != TeamMemberType.LEADER)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         /*if(findTeam == null || newMember == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);*/
@@ -97,8 +97,8 @@ public class TeamController {
 
         if (!memberId.equals(loginInfo.getId())) // 관리자에 의해 강퇴
         {
-            AuthorityType authorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
-            if (authorityType != AuthorityType.ADMIN)
+            TeamMemberType authorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
+            if (authorityType != TeamMemberType.ADMIN)
                 return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
         teamService.withdrawal(findTeam.getId(), memberId);
@@ -112,7 +112,7 @@ public class TeamController {
     public ResponseEntity disbandment(@PathVariable Long teamId, @AuthenticationPrincipal  LoginInfo loginInfo) {
         QueryTeamDto findTeam = teamService.findTeam(teamId);
         List<QueryTeamMemberDto> findTeamMember = teamService.findTeamMember(teamId, loginInfo.getNumber());
-        if (findTeamMember.size() == 0 || findTeamMember.get(0).getAuthority() == AuthorityType.MEMBER)
+        if (findTeamMember.size() == 0 || findTeamMember.get(0).getAuthority() == TeamMemberType.COMMON)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         DisbandmentTeamResponse response = teamService.disbandmentTeam(findTeam.getId());
         return new ResponseEntity(response, HttpStatus.OK);
@@ -122,10 +122,10 @@ public class TeamController {
      * 팀 멤버 권한 수정
      */
     @PatchMapping("/{teamId}/member/{memberId}")
-    public ResponseEntity updateAuthority(@PathVariable Long teamId, @PathVariable String memberId, @RequestBody AuthorityType authorityType, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity updateAuthority(@PathVariable Long teamId, @PathVariable String memberId, @RequestBody TeamMemberType authorityType, @AuthenticationPrincipal  LoginInfo loginInfo) {
         //어드민인지 확인
-        AuthorityType myAuthorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
-        if (myAuthorityType != AuthorityType.ADMIN && myAuthorityType != AuthorityType.LEADER)
+        TeamMemberType myAuthorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
+        if (myAuthorityType != TeamMemberType.ADMIN && myAuthorityType != TeamMemberType.LEADER)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 
         //존재하는 팀원인지 확인
