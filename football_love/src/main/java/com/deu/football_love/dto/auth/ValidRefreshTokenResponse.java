@@ -1,8 +1,10 @@
 package com.deu.football_love.dto.auth;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class ValidRefreshTokenResponse {
     private String userPk;
     private int status;
