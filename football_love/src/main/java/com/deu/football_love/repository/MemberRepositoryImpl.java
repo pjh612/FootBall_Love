@@ -61,8 +61,10 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 	@Override
 	public int isDuplicationId(String id) {
-		Query query = em.createNativeQuery(MemberSql.COUNT_ID).setParameter(1, id);
-		List<BigInteger> list = query.getResultList();
+		List<Long> list = em.createQuery(MemberSql.COUNT_ID,Long.class)
+				.setParameter("id", id)
+				.getResultList();
+		
 		return list.get(0).intValue();
 	}
 
@@ -85,15 +87,18 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 	@Override
 	public String selectMemberAuthority(String memberId, String teamId) {
-		Query query = em.createNativeQuery(MemberSql.GET_MEMBER_AUTH).setParameter(1, memberId).setParameter(2, teamId);
-		List<String> list = query.getResultList();
+		List<String> list = em.createQuery(MemberSql.GET_MEMBER_AUTH,String.class)
+				.setParameter("m_id", memberId)
+				.setParameter("t_id", teamId)
+				.getResultList();
 		return list.get(0);
 	}
 
 	@Override
 	public int isDuplicationEmail(String email) {
-		Query query = em.createNativeQuery(MemberSql.COUNT_EMAIL).setParameter(1, email);
-		List<BigInteger> list = query.getResultList();
+		List<Long> list = em.createQuery(MemberSql.COUNT_EMAIL,Long.class)
+				.setParameter("email", email)
+				.getResultList();
 		return list.get(0).intValue();
 	}
 }

@@ -2,6 +2,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
 /* Naum Gothic 400 */
 @import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
+@font-face {
+  font-family: "SF";
+  src: url("./Font/SF-Pro.ttf") format("truetype");
+}
 
 #root,
 .screen,

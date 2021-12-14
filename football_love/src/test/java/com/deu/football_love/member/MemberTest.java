@@ -13,9 +13,6 @@ import com.deu.football_love.dto.member.UpdateMemberRequest;
 import com.deu.football_love.service.TeamService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,12 +27,13 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 @ExtendWith(MockitoExtension.class)
-
 public class MemberTest {
 
 	@Autowired
@@ -46,6 +44,7 @@ public class MemberTest {
 
 	@Autowired
 	TeamService teamService;
+
 
 	@Test
 	public void member_비밀번호_암호화_테스트() {
@@ -65,21 +64,6 @@ public class MemberTest {
 				() -> assertEquals(request.getName(), memberResponse.getName()),
 				() -> assertEquals(request.getEmail(), memberResponse.getEmail()));
 	}
-
-	/*@Test
-	public void 멤버_로그인() {
-		MemberJoinRequest request = new MemberJoinRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
-		QueryMemberDto joinResponse = memberService.join(request);
-		LoginRequest loginRequest = new LoginRequest("dbtlwns", "1234");
-		memberService.login_jwt(loginRequest);
-
-		login
-		assertAll(() -> assertEquals(request.getId(), loginResponse.getId()),
-				() -> assertEquals("금꽁치", loginResponse.getNickname()),
-				() -> assertEquals("유시준", loginResponse.getName()),
-				() -> assertEquals("simba0502@naver.com", loginResponse.getEmail()));
-	}*/
-
 
 	@Test
 	public void 멤버_찾기() {

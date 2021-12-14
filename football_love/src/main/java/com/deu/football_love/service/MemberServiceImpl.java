@@ -33,17 +33,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public QueryMemberDto login(LoginRequest loginRequest) {
-        String encodedPassword = passwordEncoder.encode(loginRequest.getPwd());
-        Member member = memberRepository.selectMemberById(loginRequest.getId());
-        if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(member.getPwd(), encodedPassword)) {
-            return new QueryMemberDto(member);
-        }
-        throw new IllegalArgumentException();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public TokenInfo login_jwt(LoginRequest loginRequest) {
         Member member = memberRepository.selectMemberById(loginRequest.getId());
         if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
@@ -175,5 +164,4 @@ public class MemberServiceImpl implements MemberService {
     public String checkMemberAuthority(String memberId, String teamName) {
         return memberRepository.selectMemberAuthority(memberId, teamName);
     }
-
 }

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import styled from "styled-components";
 import LoginModal from './AuthComponents/LoginModal';
 import JoinModal from './AuthComponents/JoinModal';
-import Person from './icon/person.svg';
+import {Link} from 'react-router-dom'
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -11,7 +11,7 @@ const NavbarContainer = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.8);
 `;
 
 const NavBarContainerCenter = styled.div`
@@ -33,7 +33,7 @@ const Logo = styled.span`
 line-height: 24px;
 font-family: 'Black Han Sans', sans-serif;
 font-size: 24px;
-color: white;
+color: #f5f5f7;
 cursor: pointer;
 `;
 
@@ -62,7 +62,7 @@ const SlideBarTrigerDiv = styled.div`
 const Login = styled.span`
     width: 36.34px;
     height: 17px;
-    color: white;
+    color: #f5f5f7;
     font-size: 14px;
     cursor: pointer;
 `;
@@ -79,7 +79,7 @@ margin-left: 3px;
 const Join = styled.span`
     width: 36.34px;
     height: 17px;
-    color: white;
+    color: #f5f5f7;
     font-size: 14px;
     cursor: pointer;
 `;
@@ -120,7 +120,7 @@ export default function Navbar() {
     return(<NavbarContainer>
         <NavBarContainerCenter>
             <NavBarContainerLogo>
-                <Logo>풋볼러브</Logo>
+                <Link to='/'><Logo>풋볼러브</Logo></Link>
             </NavBarContainerLogo>
             <NavBarContainerUser>
                 <GoIn>

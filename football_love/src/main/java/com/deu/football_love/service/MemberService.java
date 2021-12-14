@@ -34,6 +34,5 @@ public interface MemberService {
 
     LoginInfo findMemberById_jwt(String id);
 
-    //Jwt Test
     TokenInfo login_jwt(LoginRequest loginRequest);
 }
