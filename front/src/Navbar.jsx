@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LoginModal from './AuthComponents/LoginModal';
 import JoinModal from './AuthComponents/JoinModal';
 import {Link} from 'react-router-dom'
+import Soccer from './icon/soccer.svg';
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -98,7 +99,15 @@ border-radius: 10px;
 display: inline-block;
 `;
 
-
+// const IconBox = styled.div`
+//     width: 10px;
+//     height: 10px;
+//     // margin-top: 5px;
+//     // margin-left: 15px;
+//     // margin-right: 10px;
+//     // margin-bottom: 5px;
+//     background-image : url(${props => props.src ? props.src : null});
+// `;
 
 export default function Navbar() {
     const [openLoginModal, setOpenLoginModal] = useState(false);
@@ -120,7 +129,7 @@ export default function Navbar() {
     return(<NavbarContainer>
         <NavBarContainerCenter>
             <NavBarContainerLogo>
-                <Link to='/'><Logo>풋볼러브</Logo></Link>
+                <Link to='/'  style={{ textDecoration: 'none' }}><Logo>풋볼러브</Logo></Link>
             </NavBarContainerLogo>
             <NavBarContainerUser>
                 <GoIn>

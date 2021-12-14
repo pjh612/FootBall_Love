@@ -18,7 +18,7 @@ const JoinPage = () => {
                 <SubBar></SubBar>
                 <MainDiv></MainDiv>
             </Div>
-        </>    
+        </>
     )
 }
 
