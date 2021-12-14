@@ -22,13 +22,14 @@ public class LoginInfo implements UserDetails {
     public LoginInfo() {
         this.number = -1L;
         this.name = "anonymous";
+        this.password = "secret";
     }
 
     public LoginInfo(Member member) {
         this.number = member.getNumber();
         this.id = member.getId();
         this.name = member.getName();
-        this.password = member.getPwd();
+        //this.password = member.getPwd();
         roles = new ArrayList<GrantedAuthority>();
         roles.add(new SimpleGrantedAuthority(member.getMemberType().name()));
     }
