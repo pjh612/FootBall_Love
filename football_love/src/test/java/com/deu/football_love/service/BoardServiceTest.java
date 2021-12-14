@@ -74,5 +74,4 @@ class BoardServiceTest {
         BoardDto findBoard = boardService.findById(response.getBoardId());
         Assertions.assertNull(findBoard);
     }
-
 }

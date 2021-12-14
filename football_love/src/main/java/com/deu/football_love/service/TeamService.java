@@ -1,6 +1,6 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.team.*;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface TeamService {
 
     AcceptApplicationResponse acceptApplication(Long teamId, String memberId);
 
-    AuthorityType authorityCheck(Long teamId, Long memberNumber);
+    TeamMemberType authorityCheck(Long teamId, Long memberNumber);
 
     void withdrawal(Long teamId, String memberId);
 
@@ -31,5 +31,5 @@ public interface TeamService {
 
     List<QueryTeamMemberDto> findTeamMemberByMemberId(Long teamId, String memberId);
 
-    UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, AuthorityType authorityType);
+    UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, TeamMemberType authorityType);
 }

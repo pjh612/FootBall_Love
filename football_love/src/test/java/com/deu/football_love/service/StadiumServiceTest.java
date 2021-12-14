@@ -5,7 +5,7 @@ import com.deu.football_love.domain.Company;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.company.AddCompanyResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
-import com.deu.football_love.dto.member.MemberResponse;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.stadium.AddStadiumResponse;
 import com.deu.football_love.dto.stadium.QueryStadiumDto;
 import com.deu.football_love.repository.CompanyRepository;
@@ -37,7 +37,7 @@ class StadiumServiceTest {
     @Test
     void addStadium() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
         AddStadiumResponse newStadium = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
 
@@ -51,7 +51,7 @@ class StadiumServiceTest {
     @Test
     void findStadium() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
         AddStadiumResponse newStadium = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
 
@@ -65,7 +65,7 @@ class StadiumServiceTest {
     @Test
     void findAllStadiumById() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
         AddStadiumResponse stadiumA = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
         AddStadiumResponse stadiumB = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 3 : 3", 45000L);
@@ -82,7 +82,7 @@ class StadiumServiceTest {
     @Test
     void removeStadium() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
-        MemberResponse memberA = memberService.join(memberADto);
+        QueryMemberDto memberA = memberService.join(memberADto);
         AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
         AddStadiumResponse newStadium = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
         stadiumService.deleteStadium(newStadium.getId());

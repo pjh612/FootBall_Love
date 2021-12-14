@@ -1,23 +1,30 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.dto.member.QueryMemberDto;
+
+import java.util.List;
 
 public interface MemberRepository {
-	Long insertMember(Member member);
+    Long insertMember(Member member);
 
-	Member selectMember(Long id);
+    void deleteMember(Member member);
 
-	Member selectMemberById(String id);
+    Member selectMember(Long id);
 
-	int isDuplicationId(String id);
+    List<QueryMemberDto> selectQueryMemberDto(Long number);
 
-	int isDuplicationEmail(String email);
+    Member selectMemberById(String id);
 
-	//Member updateMember(JoinRequest joinRequest);
+    int isDuplicationId(String id);
 
-	void updateWithdraw(String memberId);
+    int isDuplicationEmail(String email);
 
-	Long chkWithDraw(String id);
+    //Member updateMember(JoinRequest joinRequest);
 
-	String selectMemberAuthority(String memberId, String teamId);
+    void updateWithdraw(String memberId);
+
+    Long chkWithDraw(String id);
+
+    String selectMemberAuthority(String memberId, String teamId);
 }
