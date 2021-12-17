@@ -39,21 +39,31 @@ const MainDiv = () => {
         id : null, 
         pwd : null,
         nickname : null,
-        city : '서울',
-        street : '중랑구 망우로 173',
-        zipcode: '10234',
+        address:{
+            city : '서울',
+            street : '중랑구 망우로 173',
+            zipcode: '10234'
+        },
         lastName : null, // ok
         name : null, // ok
         brith : null, // ok 
         email : null, // ok
         phone : null, // ok
-        type : 'USER'
+        type : 'NORMAL'
     })
 
     const submitJoinData = (userInfo) => {
         const data = Object.assign({},userInfo);
+        var input = JSON.parse('{"date":{"year":2016,"month":"NOVEMBER","dayOfMonth":15,"monthValue":11,"dayOfWeek":"TUESDAY","era":"CE","dayOfYear":320,"leapYear":true,"chronology":{"id":"ISO","calendarType":"iso8601"}}}');
+            
+        var day = input.date.dayOfMonth;
+        var month = input.date.monthValue - 1; // Month is 0-indexed
+        var year = input.date.year;
+        
+        var date = new Date(Date.UTC(year, month, day));
         data.name = data.lastName + data.name;
         delete data.lastName;
+        data.birth = date;
         sendJoinData(data)
         .then((res) => {
             console.log(res);
