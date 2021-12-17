@@ -10,16 +10,18 @@ const MainMatchFilter = styled.div`
 
 const Ul = styled.ul`
     max-width: 1024px;
+    width: 80vw;
     margin: 0 auto;
     padding: 10px 10px 20px 10px;
     border-bottom: 1px solid #ddd;
     display: flex;
+    justify-content:center;
 `;
 
 const Li = styled.li`
     font-size: 14px;
     color: #222836;
-    padding: 5px 10px 5px 10px;
+    padding: 0.347vw 0.69444vw 0.347vw 0.69444vw;
     cursor: pointer;
 `;
 
@@ -29,7 +31,7 @@ export default function Filter() {
 
     (function() {
         for(let i = 0; i < local.length; i++) {
-            listComponents.push(<Li style={i === 0 ? {marginLeft: '30px'} : null}>{local[i]}</Li>)
+            listComponents.push(<Li key={`${i}`} style={i === 0 ? {marginLeft: '30px'} : null}>{local[i]}</Li>)
         }
     })()
 

@@ -7,7 +7,7 @@ top:0;
 left:0;
 background-color: rgba(0,0,0,0.4);
 z-index: 100;
-height: 100vh;
+height: 100%;
 width: 100%;
 overflow-y: hidden;
 `;

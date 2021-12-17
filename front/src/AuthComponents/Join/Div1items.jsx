@@ -158,8 +158,8 @@ const Div1items = ({newUserInfo, setNewUserInfo}) => {
                       }
                     }
                     id = "birthday"
-                    type="number"
-
+                    type="text"
+                    maxLength="8"
                 ></BirthDayInput>
                 <BirthDayLabel focus={birthDayFocus} htmlFor="birthday">생년월일 yyyymmdd</BirthDayLabel>
             </BirthDayDiv>
