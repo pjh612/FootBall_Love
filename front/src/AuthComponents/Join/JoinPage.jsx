@@ -4,11 +4,10 @@ import MainDiv from './MainDiv';
 
 const Div = styled.div`
     width:100vw;
-    height:93vh;
-    overflow: hidden;
     display:flex;
     flex-direction : column;
     align-items: center;
+    overflow: auto;
 `;
 
 const JoinPage = () => {

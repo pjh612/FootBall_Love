@@ -1,9 +1,8 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import LoginModal from './AuthComponents/LoginModal';
-import JoinModal from './AuthComponents/JoinModal';
+import JoinModal from './AuthComponents/Join/JoinModal';
 import {Link} from 'react-router-dom'
-import Soccer from './icon/soccer.svg';
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -18,7 +17,6 @@ const NavbarContainer = styled.div`
 const NavBarContainerCenter = styled.div`
     height: 56px;
     padding: 0 20px;
-    max-width: 1024px;
     width: 1024px;
     display: flex;
     justify-content: space-between;
@@ -74,7 +72,7 @@ height: 15px;
 color: rgba(255,255,255,0.8);
 font-size: 12px;
 margin-right: 3px;
-margin-left: 3px;   
+margin-left: 3px;
 `;
 
 const Join = styled.span`

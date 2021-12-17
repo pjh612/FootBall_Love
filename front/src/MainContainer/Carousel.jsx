@@ -14,11 +14,9 @@ const ParentDiv = styled.div`
     
 `;
 
-
-
 const Block1 = styled.div`
     position: absolute;
-    width: 250px;
+    width: 17.36vw;
     height: 360px;
     background-color:#fafafa;
     z-index: 5;
@@ -27,7 +25,7 @@ const Block1 = styled.div`
 const Block2 = styled.div`
     position:absolute;
     right: 0px;
-    width: 250px;
+    width: 17.36vw;
     height: 360px;
     background-color: #fafafa;
     z-index: 5;
@@ -47,14 +45,14 @@ export default function Carousel() {
 
     
     const imgStyle = {
-        width: 940,
+        width: '65.28vw',
         height: 320,
         borderRadius: '20px',
         marginTop: '20px',
     }
     const imgDivStyle = {
         position: 'absolute',
-        left: '250px',
+        left: '17.36vw',
         display: 'flex',
         transfrom: 'translate3d(0,0,0)',
         transition: 'transform 0.6s',

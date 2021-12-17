@@ -11,7 +11,7 @@ const Container =  styled.div`
 const DateNav = styled.div`
     padding: 20px 0;
     position: sticky;
-    z-index: 2000;
+    z-index: 10;
     top:0;
     // background-color: red;
 `;
@@ -80,7 +80,7 @@ word-break: break-all;
 
 
 const Span = styled.span`
-    font-size: 11px;
+    font-size: 0.763888vw;
     font-family: 'Nanum Gothic', sans-serif;
 `;
 
@@ -172,7 +172,6 @@ export default function DateCarousel(props) {
             let date = utils.parseDate(i);
             let today = utils.getToday(i);
             let fontColor = 'black';
-            console.log(today);
             if (today === "일") {
                 fontColor = 'red';
             }

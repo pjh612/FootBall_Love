@@ -12,8 +12,6 @@ export function slider(totalImgNum) {
 
       index -= 1;
       DivElem.style.transform = `translate3d(-${940 * index}px, 0, 0)`;
-
-      console.log(DivElem.style.transform);
     },
 
     clickNext: function () {
@@ -23,7 +21,7 @@ export function slider(totalImgNum) {
         return;
       }
       index += 1;
-      DivElem.style.transform = `translate3d(-${940 * index}px, 0, 0)`;
+      DivElem.style.transform = `translate3d(-${65.2777 * index}vw, 0, 0)`;
     },
 
     autoSlide: function () {
@@ -32,7 +30,6 @@ export function slider(totalImgNum) {
         this.clickNext();
         stopper += 1;
         if (stopper % 2 === 0) {
-          console.log("stopper is working!");
           clearInterval(interval);
           setTimeout(() => {
             this.autoSlide();
