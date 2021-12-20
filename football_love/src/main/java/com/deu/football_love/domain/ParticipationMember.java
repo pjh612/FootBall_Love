@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class ParticipationMember {
+public class ParticipationMember extends BaseEntity {
 
 
     @Id

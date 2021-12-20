@@ -1,14 +1,20 @@
 package com.deu.football_love.service;
 
 import com.deu.football_love.domain.*;
-import com.deu.football_love.domain.type.AuthorityType;
+import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.JoinRequest;
-import com.deu.football_love.dto.MemberResponse;
-import com.deu.football_love.dto.TeamDto;
+import com.deu.football_love.domain.type.TeamMemberType;
+import com.deu.football_love.dto.board.AddBoardRequest;
+import com.deu.football_love.dto.board.AddBoardResponse;
+import com.deu.football_love.dto.member.MemberJoinRequest;
+import com.deu.football_love.dto.member.QueryMemberDto;
+import com.deu.football_love.dto.post.WritePostRequest;
+import com.deu.football_love.dto.post.WritePostResponse;
+import com.deu.football_love.dto.team.QueryTeamDto;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.TeamRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,28 +44,48 @@ public class TeamServiceImplTest {
 
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    BoardService boardService;
+
+    @Autowired
+    PostService postService;
+
     @Autowired
     EntityManager em;
 
-    @BeforeEach
-    public void init()
-    {
 
-       JoinRequest memberADto = new JoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark",LocalDate.now(),new Address("busan","guemgangro","46233"),"pjh_jn@naver.com","01012341234", MemberType.NORMAL);
-        JoinRequest memberBDto = new JoinRequest("memberB", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark",LocalDate.now(),new Address("busan","guemgangro","46233"),"pjh_jn@naver.com","01012341234", MemberType.NORMAL);
+    @BeforeEach
+    public void init() {
+
+        MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh612@naver.com", "01012341234", MemberType.NORMAL);
+        MemberJoinRequest memberBDto = new MemberJoinRequest("memberB", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
         memberService.join(memberADto);
         memberService.join(memberBDto);
         teamService.createNewTeam(memberADto.getId(), "teamA");
 
     }
 
+
+   /* public void auditor_test() {
+
+        MemberResponse member = memberService.login(new LoginRequest("memberA", "1234"));
+        session.setAttribute(SessionConst.SESSION_MEMBER, member);
+        TeamDto teamA = teamService.findTeamByName("teamA");
+
+        System.out.println("teamA.getCreatedBy() = " + teamA.getCreatedBy());
+        System.out.println("teamA.getLastModifiedBy() = " + teamA.getLastModifiedBy());
+        System.out.println("teamA.getCreatedDate() = " + teamA.getCreatedDate());
+        System.out.println("teamA.getLastModifiedDate() = " + teamA.getLastModifiedDate());
+    }*/
+
     @Test
     public void 팀_생성_테스트() {
 
-        TeamDto findTeam = teamService.findTeamByName("teamA");
-        MemberResponse memberA = memberService.findMemberById("memberA");
+        QueryTeamDto findTeam = teamService.findTeamByName("teamA");
+        QueryMemberDto memberA = memberService.findMemberById("memberA");
         assertNotNull(findTeam);
-        assertEquals(1, teamService.findTeamMember(findTeam.getId(),memberA.getNumber()).size());
+        assertEquals(1, teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
     }
 
     /**
@@ -67,28 +93,28 @@ public class TeamServiceImplTest {
      */
     @Test
     public void 회원_탈퇴_테스트() {
-        TeamDto findTeam = teamService.findTeamByName("teamA");
+        QueryTeamDto findTeam = teamService.findTeamByName("teamA");
 
-        MemberResponse memberA = memberService.findMemberById("memberA");
-        teamService.withdrawal(findTeam.getId(),"memberA");
+        QueryMemberDto memberA = memberService.findMemberById("memberA");
+        teamService.withdrawal(findTeam.getId(), "memberA");
 
         assertNotNull(findTeam);
-        assertEquals(0,teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
+        assertEquals(0, teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
     }
 
     @Test
     public void 회원_팀탈퇴_테스트() {
         Team teamA = teamRepository.selectTeamByName("teamA");
         Member memberB = memberRepository.selectMemberById("memberB");
-        TeamMember teamMemberB = new TeamMember(teamA, memberB, AuthorityType.MEMBER);
+        TeamMember teamMemberB = new TeamMember(teamA, memberB, TeamMemberType.COMMON);
 
         teamRepository.insertNewTeamMember(teamMemberB);
         teamService.withdrawal(teamA.getId(), "memberA");
 
-        MemberResponse findMemberA = memberService.findMemberById("memberA");
-        MemberResponse findMemberB = memberService.findMemberById("memberB");
+        QueryMemberDto findMemberA = memberService.findMemberById("memberA");
+        QueryMemberDto findMemberB = memberService.findMemberById("memberB");
         List<TeamMember> findTeamMemberA = teamRepository.selectTeamMember(teamA.getId(), findMemberA.getNumber());
-      List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember(teamA.getId(), findMemberB.getNumber());
+        List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember(teamA.getId(), findMemberB.getNumber());
 
         assertEquals(1, teamRepository.selectTeamMember(teamA.getId(), null).size());
         assertEquals(0, findTeamMemberA.size());
@@ -101,17 +127,39 @@ public class TeamServiceImplTest {
     public void 팀해체_테스트() {
 
         Team findTeam = teamRepository.selectTeamByName("teamA");
-
-        teamService.applyToTeam(findTeam.getId(),"memberB", "hi");
-        teamService.acceptApplication(findTeam.getId(),"memberB");
+        long teamId = findTeam.getId();
+        teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
+        teamService.acceptApplication(findTeam.getId(), "memberB");
         teamService.disbandmentTeam(findTeam.getId());
 
-        MemberResponse memberA = memberService.findMemberById("memberA");
-        MemberResponse memberB = memberService.findMemberById("memberB");
-        assertNull(teamRepository.selectTeam(findTeam.getId()));
-        assertEquals(teamRepository.selectTeamMember(findTeam.getId(),memberA.getNumber()).size(),0);
-        assertEquals(teamRepository.selectTeamMember(findTeam.getId(),memberB.getNumber()).size() ,0);
+    /*    MemberResponse memberA = memberService.findMemberById("memberA");
+        MemberResponse memberB = memberService.findMemberById("memberB");*/
+        /*     assertNull(teamRepository.selectTeam(findTeam.getId()));
+         *//*     assertEquals(teamRepository.selectTeamMember(teamId, memberA.getNumber()).size(), 0);
+        assertEquals(teamRepository.selectTeamMember(teamId, memberB.getNumber()).size(), 0);*//*
         assertNotNull(memberRepository.selectMemberById("memberA"));
-        assertNotNull(memberRepository.selectMemberById("memberB"));
+        assertNotNull(memberRepository.selectMemberById("memberB"));*/
+    }
+
+    @Test
+    public void 팀해제Cascade_테스트() {
+        Member findMember = memberRepository.selectMemberById("memberA");
+        Team findTeam = teamRepository.selectTeamByName("teamA");
+        teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
+        teamService.acceptApplication(findTeam.getId(), "memberB");
+        AddBoardResponse addBoardResponse = boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
+        WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요", "가입인사 합니다."));
+        WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요 팀장입니다.", "내일 집합이요"));
+
+        teamService.disbandmentTeam(findTeam.getId());
+
+        Assertions.assertEquals(0,teamService.findTeamMember(findTeam.getId(), null).size());
+        Assertions.assertNull(teamService.findTeamByName("teamA"));
+        Assertions.assertNull(boardService.findById(addBoardResponse.getBoardId()));
+        Assertions.assertEquals(0, teamService.findTeamMember(findTeam.getId(), null).size());
+        Assertions.assertEquals(0,findTeam.getBoards().size());
+        Assertions.assertEquals(0,findMember.getPosts().size());
+        Assertions.assertNull(postService.findPost(post1.getPostId()));
+        Assertions.assertNull(postService.findPost(post2.getPostId()));
     }
 }

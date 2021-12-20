@@ -13,28 +13,33 @@ import java.util.List;
 @Setter
 @Getter
 @NoArgsConstructor
-public class Board {
+public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name= "board_id")
+    @Column(name = "board_id")
     private Long id;
 
-    @Column(name="board_name")
+    @Column(name = "board_name")
     private String boardName;
 
-    @Column(name="board_type")
+    @Column(name = "board_type")
     private BoardType boardType;
 
     @OneToMany(mappedBy = "id")
     private List<Post> posts = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", referencedColumnName ="team_id")
+    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
     private Team team;
 
     public Board(String boardName, BoardType boardType) {
         this.boardName = boardName;
         this.boardType = boardType;
+    }
+
+    public void deleteBoard() {
+        team.getBoards().remove(this);
+        this.team = null;
     }
 }

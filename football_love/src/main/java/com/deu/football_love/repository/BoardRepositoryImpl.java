@@ -29,8 +29,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 	}
 
 	@Override
-	public void deleteBoard(Long boardId) {
-		Board board = em.find(Board.class, boardId);
+	public void deleteBoard(Board board) {
 		em.remove(board);
 	}
 
@@ -40,6 +39,19 @@ public class BoardRepositoryImpl implements BoardRepository {
 				boardType);
 		List<BigInteger> list = query.getResultList();
 		return list.get(0).intValue();
+	}
+
+	public Board selectBoardByTeamIdAndBoardName(String boardName, Long teamId)
+	{
+		List<Board> board = em.createQuery("SELECT b FROM Board b " +
+				"join fetch b.team t " +
+				"WHERE t.id = :teamId AND b.boardName = :boardName", Board.class)
+				.setParameter("teamId", teamId)
+				.setParameter("boardName", boardName)
+				.getResultList();
+		if (board.size() == 1)
+			return board.get(0);
+		return null;
 	}
 
 	@Override

@@ -1,12 +1,17 @@
 package com.deu.football_love.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-public class ApplicationJoinTeam {
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ApplicationJoinTeam extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -28,7 +33,11 @@ public class ApplicationJoinTeam {
         this.message = message;
     }
 
-    protected ApplicationJoinTeam() {
-
+    public void delete()
+    {
+        team.getApplicationJoinTeams().remove(this);
+        this.team = null;
+        member.getApplicationJoinTeams().remove(this);
+        this.member = null;
     }
 }
