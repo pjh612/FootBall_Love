@@ -8,13 +8,9 @@ import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.company.QueryCompanyDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.tomcat.jni.Local;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,6 +57,10 @@ public class QueryMemberDto extends BaseEntity {
 		this.teams = member.getTeamMembers().stream().map(tm -> new TeamDto(tm.getTeam().getId(), tm.getTeam().getName(), tm.getType())).collect(Collectors.toList());
 		if (member.getCompany() != null)
 		this.company = QueryCompanyDto.from(member.getCompany());
+		setCreatedBy(member.getCreatedBy());
+		setLastModifiedBy(member.getLastModifiedBy());
+		setCreatedDate(member.getCreatedDate());
+		setLastModifiedDate(member.getLastModifiedDate());
 	}
 
 	class TeamDto
