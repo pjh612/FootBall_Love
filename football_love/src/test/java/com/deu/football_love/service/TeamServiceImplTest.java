@@ -130,15 +130,22 @@ public class TeamServiceImplTest {
         long teamId = findTeam.getId();
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
+
+        QueryMemberDto memberA = memberService.findMemberById("memberA");
+        QueryMemberDto memberB = memberService.findMemberById("memberB");
+        AddBoardResponse boardA = boardService.add(new AddBoardRequest("boardA", BoardType.NOTICE, teamId));
+        postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(), "hello", "content"));
+        postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(), "hello", "content"));
         teamService.disbandmentTeam(findTeam.getId());
 
-    /*    MemberResponse memberA = memberService.findMemberById("memberA");
-        MemberResponse memberB = memberService.findMemberById("memberB");*/
-        /*     assertNull(teamRepository.selectTeam(findTeam.getId()));
-         *//*     assertEquals(teamRepository.selectTeamMember(teamId, memberA.getNumber()).size(), 0);
-        assertEquals(teamRepository.selectTeamMember(teamId, memberB.getNumber()).size(), 0);*//*
+
+        assertNull(teamRepository.selectTeam(findTeam.getId()));
+        assertEquals(0, teamRepository.selectTeamMember(teamId, memberA.getNumber()).size());
+        assertEquals(0, teamRepository.selectTeamMember(teamId, memberB.getNumber()).size());
+        assertNull(boardService.findById(boardA.getBoardId()));
+        assertEquals(0,postService.findAllPostsByBoardId(boardA.getBoardId()).size());
         assertNotNull(memberRepository.selectMemberById("memberA"));
-        assertNotNull(memberRepository.selectMemberById("memberB"));*/
+        assertNotNull(memberRepository.selectMemberById("memberB"));
     }
 
     @Test
