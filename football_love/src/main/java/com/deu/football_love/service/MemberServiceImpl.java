@@ -2,6 +2,8 @@ package com.deu.football_love.service;
 
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.domain.*;
+import com.deu.football_love.domain.type.MemberType;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.TokenInfo;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
@@ -30,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TeamService teamService;
 
     @Override
     @Transactional(readOnly = true)
@@ -147,14 +150,31 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean withdraw(String id) {
         Member findMember = memberRepository.selectMemberById(id);
-        if (findMember == null)
+        if (findMember == null || memberRepository.chkWithDraw(id) == null)
             return false;
-        Long withDrawCnt = memberRepository.chkWithDraw(id);
-        memberRepository.updateWithdraw(id);
+        memberRepository.updateWithdraw(findMember);
+        //게시물 삭제
         while (findMember.getPosts().size() != 0) {
             Post post = findMember.getPosts().get(0);
             post.deletePost();
             postRepository.deletePost(post);
+        }
+        /**
+         * 멤버 소유의 팀 삭제, 멤버 소속 탈퇴
+         */
+        List<TeamMember> teamMembers = findMember.getTeamMembers();
+        while (teamMembers.size() != 0) {
+            TeamMember curTeamMember = teamMembers.get(0);
+            if (curTeamMember.getType() == TeamMemberType.LEADER) {
+                teamService.disbandmentTeam(curTeamMember.getTeam().getId());
+            } else {
+                curTeamMember.deleteTeamMember();
+                teamRepository.deleteTeamMember(curTeamMember.getTeam().getId(), curTeamMember.getMember().getNumber());
+            }
+        }
+        //사업자일 경우 컴퍼니 삭제
+        if (findMember.getMemberType() == MemberType.BUSINESS) {
+            findMember.getCompany().deleteCompany();
         }
         return true;
     }
