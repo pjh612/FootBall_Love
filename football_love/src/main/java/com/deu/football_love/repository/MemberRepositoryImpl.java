@@ -69,10 +69,8 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 
 	@Override
-	public void updateWithdraw(String memberId) {
-		List<Member> findMember = em.createQuery("SELECT m FROM Member m where m.id = :id", Member.class).setParameter("id", memberId).getResultList();
-		WithdrawalMember state = new WithdrawalMember();
-		state.setMember(findMember.get(0));
+	public void updateWithdraw(Member member) {
+		WithdrawalMember state = new WithdrawalMember(member);
 		em.persist(state);
 	}
 
