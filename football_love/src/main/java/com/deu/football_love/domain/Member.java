@@ -67,7 +67,7 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private WithdrawalMember withdrawalMember;
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(mappedBy = "owner", orphanRemoval = true)
     private Company company;
 
 
