@@ -9,12 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class WithdrawalMember extends BaseEntity {
 
     @Id
@@ -26,6 +27,7 @@ public class WithdrawalMember extends BaseEntity {
     @JoinColumn(name = "member_number", referencedColumnName = "member_number")
     private Member member;
 
-    @Column(name = "withdrawal_date")
-    private LocalDateTime date;
+    public WithdrawalMember(Member member) {
+        this.member = member;
+    }
 }
