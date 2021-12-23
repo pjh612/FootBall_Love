@@ -174,8 +174,7 @@ public class TeamServiceImpl implements TeamService {
         while (team.getTeamMembers().size() != 0) {
             TeamMember teamMember = team.getTeamMembers().get(0);
             Long teamMemberId = teamMember.getId();
-            teamMember.setTeam(null);
-            team.getTeamMembers().remove(teamMember);
+            teamMember.deleteTeamMember();;
             teamRepository.deleteTeamMember(team.getId(), teamMemberId);
         }
         teamRepository.deleteTeam(team);
