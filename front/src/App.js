@@ -1,20 +1,10 @@
 import Navbar from "./Navbar";
 import LandingPage from "./MainContainer/LandingPage";
 import JoinPage from "./AuthComponents/Join/JoinPage";
+import LoginPage from "./AuthComponents/Login/LoginPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
-  // const [resize, setResize] = useState(false);
-  // const resizeHandler = () => {
-  //   setResize(!resize);
-  // };
-  // useEffect(() => {
-  //   window.addEventListener("resize", resizeHandler);
-  //   return () => {
-  //     // 메모리 누수를 줄이기 위한 removeEvent
-  //     window.removeEventListener("resize", resizeHandler);
-  //   };
-  // }, []);
   return (
     <BrowserRouter>
       <div>
@@ -23,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/join" element={<JoinPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </div>
     </BrowserRouter>

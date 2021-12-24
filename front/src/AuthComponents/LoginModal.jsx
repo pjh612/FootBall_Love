@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import {Link} from 'react-router-dom';
 
 const BackGround = styled.div`
 position: fixed;
@@ -41,13 +41,10 @@ const FootBallLoveLogin = styled.div`
     display: block;
     position: relative;
     width: 85%;
-    background: blue;
     font-size: 16px;
     padding: 14px 14px;
     margin: 10px auto;
     text-align: center;
-    border-radius: 12px;
-    color: white;
 `;
 
 const Span = styled.span`
@@ -65,7 +62,7 @@ function LoginModal({CloseModal}) {
         <ModalDiv>
             <Span>축구는 <b>풋볼러브</b>에서</Span>
             <KakaoLogin>카카오로 로그인하기</KakaoLogin>
-            <FootBallLoveLogin>아이디 또는 이메일로 로그인</FootBallLoveLogin>
+            <Link to="/login" onClick={() => CloseModal()}><FootBallLoveLogin>아이디 또는 이메일로 로그인</FootBallLoveLogin></Link>
         </ModalDiv>
         <BackGround onClick={() => CloseModal()}></BackGround>
         </>
