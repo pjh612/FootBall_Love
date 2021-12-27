@@ -1,6 +1,5 @@
 package com.deu.football_love.controller;
 
-import com.deu.football_love.domain.type.TeamMemberType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,9 +9,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.match.ApproveMatchRequest;
 import com.deu.football_love.dto.match.CreateMatchRequest;
+import com.deu.football_love.dto.match.MatchApplicationResponse;
+import com.deu.football_love.dto.match.MatchApproveResponse;
 import com.deu.football_love.dto.match.MatchResponse;
 import com.deu.football_love.dto.match.ModifyMatchRequest;
 import com.deu.football_love.dto.match.ModifyMatchResponse;
@@ -49,23 +50,23 @@ public class MatchController {
 
 	@ApiOperation("매치확정")
 	@PostMapping("/approval/{matchId}")
-	public ResponseEntity<MatchResponse> approve(@RequestBody ApproveMatchRequest request,
+	public ResponseEntity<MatchApproveResponse> approve(@RequestBody ApproveMatchRequest request,
 			@PathVariable("matchId") Long matchId) {
 		if (checkAuthority(request.getTeamId(), request.getMemberNumber())) {
-			return new ResponseEntity<MatchResponse>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<MatchApproveResponse>(HttpStatus.UNAUTHORIZED);
 		}
-		MatchResponse matchResponse = matchService.approveMatch(matchId, request.getMatchApplicationId());
-		return new ResponseEntity<MatchResponse>(matchResponse, HttpStatus.OK);
+		MatchApproveResponse matchApproveResponse = matchService.approveMatch(matchId, request.getMatchApplicationId());
+		return new ResponseEntity<MatchApproveResponse>(matchApproveResponse, HttpStatus.OK);
 	}
 
 	@ApiOperation("매치신청")
 	@PostMapping("/match/apply")
-	public ResponseEntity<MatchResponse> apply(@RequestBody ApplyMatchRequest request) {
+	public ResponseEntity<MatchApplicationResponse> apply(@RequestBody ApplyMatchRequest request) {
 		if (checkAuthority(request.getTeamId(), request.getMemberNumber())) {
-			return new ResponseEntity<MatchResponse>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<MatchApplicationResponse>(HttpStatus.UNAUTHORIZED);
 		}
-		MatchResponse matchResponse = matchService.addMatchApplication(request.getTeamId(), request.getMatchId());
-		return new ResponseEntity<MatchResponse>(matchResponse, HttpStatus.OK);
+		MatchApplicationResponse matchResponse = matchService.addMatchApplication(request.getTeamId(), request.getMatchId());
+		return new ResponseEntity<MatchApplicationResponse>(matchResponse, HttpStatus.OK);
 	}
 
 	@ApiOperation("매치삭제")
