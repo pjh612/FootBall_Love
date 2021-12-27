@@ -1,14 +1,10 @@
 package com.deu.football_love.repository;
 
-import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import com.deu.football_love.dto.member.QueryMemberDto;
 import org.springframework.stereotype.Repository;
-
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.WithdrawalMember;
 import com.deu.football_love.repository.sql.MemberSql;
@@ -37,15 +33,15 @@ public class MemberRepositoryImpl implements MemberRepository {
         return em.find(Member.class, number);
     }
 
-	@Override
-	public Member selectMemberById(String id) {
-		List<Member> result = em.createQuery("select m from Member m where m.id = :id", Member.class)
-				.setParameter("id", id)
-				.getResultList();
-		if (result == null)
-			return null;
-		return result.get(0);
-	}
+    @Override
+    public Member selectMemberById(String id) {
+        List<Member> result = em.createQuery("select m from Member m where m.id = :id", Member.class)
+                .setParameter("id", id)
+                .getResultList();
+        if (result.size() == 0)
+            return null;
+        return result.get(0);
+    }
 
     @Override
     public List<QueryMemberDto> selectQueryMemberDto(Long number) {
@@ -73,14 +69,24 @@ public class MemberRepositoryImpl implements MemberRepository {
         em.persist(state);
     }
 
-	@Override
-	public Long chkWithDraw(String id) {
-		List<Long> result = em.createQuery("SELECT count(w) FROM WithdrawalMember w where w.member.id = :id",Long.class)
-				.setParameter("id", id)
-				.getResultList();
+    @Override
+    public void deleteWithdrawalMemberByDate(LocalDateTime cur, Long day) {
+        LocalDateTime threshold = cur.minusDays(day);
+        em.createQuery("DELETE FROM WithdrawalMember wm WHERE wm.createdDate <= :threshold")
+                .setParameter("threshold", threshold)
+                .executeUpdate();
+        em.clear();
+    }
 
-		return result.size() == 1 ? result.get(0) : null;
-	}
+    @Override
+    public Long chkWithdraw(String id) {
+        Long result = em.createQuery("SELECT count(w) FROM WithdrawalMember w where w.member.id = :id", Long.class)
+                .setParameter("id", id)
+                .setMaxResults(1)
+                .getSingleResult();
+
+        return result == 1 ? result : null;
+    }
 
     @Override
     public String selectMemberAuthority(String memberId, String teamId) {

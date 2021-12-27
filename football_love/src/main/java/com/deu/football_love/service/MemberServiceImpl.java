@@ -12,6 +12,7 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
 import com.deu.football_love.repository.PostRepository;
 import com.deu.football_love.repository.TeamRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
@@ -151,7 +153,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean withdraw(String id) {
         Member findMember = memberRepository.selectMemberById(id);
-        if (findMember == null || memberRepository.chkWithDraw(id) == null)
+        if (findMember == null || memberRepository.chkWithdraw(id) != null)
             return false;
         memberRepository.updateWithdraw(findMember);
         //게시물 삭제
