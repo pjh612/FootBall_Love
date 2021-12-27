@@ -53,16 +53,17 @@ public class MemberServiceImpl implements MemberService {
         String encodedPassword = passwordEncoder.encode(password);
         joinRequest.setPwd(encodedPassword);
 
-        Member member = new Member();
-        member.setAddress(joinRequest.getAddress());
-        member.setBirth(joinRequest.getBirth());
-        member.setEmail(joinRequest.getEmail());
-        member.setId(joinRequest.getId());
-        member.setPwd(joinRequest.getPwd());
-        member.setNickname(joinRequest.getNickname());
-        member.setName(joinRequest.getName());
-        member.setPhone(joinRequest.getPhone());
-        member.setMemberType(joinRequest.getType());
+        Member member = Member.memberBuilder()
+                .address(joinRequest.getAddress())
+                .birth(joinRequest.getBirth())
+                .email(joinRequest.getEmail())
+                .id(joinRequest.getId())
+                .pwd(joinRequest.getPwd())
+                .nickname(joinRequest.getNickname())
+                .name(joinRequest.getName())
+                .phone(joinRequest.getPhone())
+                .memberType(joinRequest.getType()).build();
+
         Long number = memberRepository.insertMember(member);
         member.setCreatedBy(number);
 

@@ -26,10 +26,11 @@ public class BoardRepositoryTest {
     @Test
    // @Rollback(value = false)
     public void deleteTest() {
-        Member member = new Member();
-        member.setId("memberA");
-        member.setPwd(passwordEncoder.encode("123"));
-        member.setName("박진형");
+        Member member = Member.memberBuilder()
+                .id("memberA")
+                .pwd(passwordEncoder.encode("123"))
+                .name("박진형")
+                .build();
         em.persist(member);
 
     }
