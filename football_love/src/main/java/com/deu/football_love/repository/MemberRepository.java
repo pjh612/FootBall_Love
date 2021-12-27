@@ -24,7 +24,7 @@ public interface MemberRepository {
 
     void updateWithdraw(Member member);
 
-    Long chkWithDraw(String id);
+    Long chkWithdraw(String id);
 
     String selectMemberAuthority(String memberId, String teamId);
 }
