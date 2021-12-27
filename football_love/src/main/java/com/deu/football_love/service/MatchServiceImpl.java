@@ -9,9 +9,10 @@ import com.deu.football_love.domain.MatchApplication;
 import com.deu.football_love.domain.Matches;
 import com.deu.football_love.domain.Stadium;
 import com.deu.football_love.domain.Team;
+import com.deu.football_love.dto.match.MatchApplicationResponse;
+import com.deu.football_love.dto.match.MatchApproveResponse;
 import com.deu.football_love.dto.match.MatchResponse;
 import com.deu.football_love.dto.match.ModifyMatchResponse;
-import com.deu.football_love.dto.match.QueryMatchDto;
 import com.deu.football_love.repository.MatchRepositoryImpl;
 import com.deu.football_love.repository.StadiumRepositoryImpl;
 import com.deu.football_love.repository.TeamRepository;
@@ -28,11 +29,11 @@ public class MatchServiceImpl implements MatchService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public QueryMatchDto findMatch(Long matchId) {
+	public MatchResponse findMatch(Long matchId) {
 		Matches findMatch = matchRepository.selectMatch(matchId);
 		if (findMatch == null)
 			return null;
-		return QueryMatchDto.from(findMatch);
+		return MatchResponse.from(findMatch);
 	}
 
 	@Override
@@ -51,14 +52,14 @@ public class MatchServiceImpl implements MatchService {
 	}
 
 	@Override
-	public MatchResponse approveMatch(Long matchId, Long matchApplicationId) {
+	public MatchApproveResponse approveMatch(Long matchId, Long matchApplicationId) {
 		Matches matches = matchRepository.updateMatch(matchId);
 		MatchApplication matchApplication = matchRepository.updateMatchApplication(matchApplicationId);
-		return MatchResponse.from(matches);
+		return MatchApproveResponse.from(matches,matchApplication);
 	}
 
 	@Override
-	public MatchResponse addMatchApplication(Long teamId, Long matchId) {
+	public MatchApplicationResponse addMatchApplication(Long teamId, Long matchId) {
 		Team team = teamRepository.selectTeam(teamId);
 		Matches matches = matchRepository.selectMatch(matchId);
 
@@ -68,7 +69,7 @@ public class MatchServiceImpl implements MatchService {
 		matchApplication.setApproval(false);
 		matchRepository.insertMatchApplication(matchApplication);
 
-		return MatchResponse.from(matchApplication);
+		return MatchApplicationResponse.from(matchApplication);
 	}
 
 	@Override
