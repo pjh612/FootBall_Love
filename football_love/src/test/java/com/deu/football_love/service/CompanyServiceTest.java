@@ -75,7 +75,7 @@ class CompanyServiceTest {
         AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
         memberService.withdraw("memberA");
-        Assertions.assertEquals(1, memberRepository.chkWithDraw("memberA"));
+        Assertions.assertEquals(1, memberRepository.chkWithdraw("memberA"));
         Assertions.assertNull(companyService.findCompany(newCompany.getCompanyId()));
     }
 

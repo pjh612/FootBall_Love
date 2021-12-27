@@ -39,7 +39,6 @@ public class CompanyServiceImpl implements CompanyService {
         List<QueryCompanyDto> result = companyRepository.selectCompaniesById(companyName).stream()
                 .map(c -> new QueryCompanyDto(c.getId(), c.getName(), c.getOwner().getNumber(), c.getLocation(), c.getTel(), c.getDescription())
                 ).collect(Collectors.toList());
-
         return result;
     }
 

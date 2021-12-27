@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.match.ApproveMatchRequest;
 import com.deu.football_love.dto.match.CreateMatchRequest;
@@ -19,7 +18,7 @@ import com.deu.football_love.dto.match.MatchResponse;
 import com.deu.football_love.dto.match.ModifyMatchRequest;
 import com.deu.football_love.dto.match.ModifyMatchResponse;
 import com.deu.football_love.dto.match.RemoveRequest;
-import com.deu.football_love.dto.match.applyMatchRequest;
+import com.deu.football_love.dto.match.ApplyMatchRequest;
 import com.deu.football_love.service.MatchServiceImpl;
 import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
@@ -62,7 +61,7 @@ public class MatchController {
 
 	@ApiOperation("매치신청")
 	@PostMapping("/match/apply")
-	public ResponseEntity<MatchApplicationResponse> apply(@RequestBody applyMatchRequest request) {
+	public ResponseEntity<MatchApplicationResponse> apply(@RequestBody ApplyMatchRequest request) {
 		if (checkAuthority(request.getTeamId(), request.getMemberNumber())) {
 			return new ResponseEntity<MatchApplicationResponse>(HttpStatus.UNAUTHORIZED);
 		}

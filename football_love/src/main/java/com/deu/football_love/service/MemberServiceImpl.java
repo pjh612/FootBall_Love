@@ -12,6 +12,7 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
 import com.deu.football_love.repository.PostRepository;
 import com.deu.football_love.repository.TeamRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
@@ -53,16 +55,17 @@ public class MemberServiceImpl implements MemberService {
         String encodedPassword = passwordEncoder.encode(password);
         joinRequest.setPwd(encodedPassword);
 
-        Member member = new Member();
-        member.setAddress(joinRequest.getAddress());
-        member.setBirth(joinRequest.getBirth());
-        member.setEmail(joinRequest.getEmail());
-        member.setId(joinRequest.getId());
-        member.setPwd(joinRequest.getPwd());
-        member.setNickname(joinRequest.getNickname());
-        member.setName(joinRequest.getName());
-        member.setPhone(joinRequest.getPhone());
-        member.setMemberType(joinRequest.getType());
+        Member member = Member.memberBuilder()
+                .address(joinRequest.getAddress())
+                .birth(joinRequest.getBirth())
+                .email(joinRequest.getEmail())
+                .id(joinRequest.getId())
+                .pwd(joinRequest.getPwd())
+                .nickname(joinRequest.getNickname())
+                .name(joinRequest.getName())
+                .phone(joinRequest.getPhone())
+                .memberType(joinRequest.getType()).build();
+
         Long number = memberRepository.insertMember(member);
         member.setCreatedBy(number);
 
@@ -150,7 +153,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean withdraw(String id) {
         Member findMember = memberRepository.selectMemberById(id);
-        if (findMember == null || memberRepository.chkWithDraw(id) == null)
+        if (findMember == null || memberRepository.chkWithdraw(id) != null)
             return false;
         memberRepository.updateWithdraw(findMember);
         //게시물 삭제
