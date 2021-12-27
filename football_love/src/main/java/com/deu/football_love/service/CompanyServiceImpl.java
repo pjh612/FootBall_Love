@@ -48,7 +48,7 @@ public class CompanyServiceImpl implements CompanyService {
     public AddCompanyResponse addCompany(String name, Long ownerNumber, Address location, String tel, String description) {
         Member findMember = memberRepository.selectMember(ownerNumber);
         Company newCompany = companyRepository.insertCompany(new Company(name, findMember, location, tel, description));
-        log.info("companyId ={}", newCompany.getId());
+        findMember.setCompany(newCompany);
         return AddCompanyResponse.from(newCompany);
     }
 

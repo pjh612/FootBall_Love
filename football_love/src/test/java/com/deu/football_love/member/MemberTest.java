@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-@ExtendWith(MockitoExtension.class)
+
 public class MemberTest {
 
 	@Autowired

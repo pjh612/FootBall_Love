@@ -22,7 +22,7 @@ public interface MemberRepository {
 
     //Member updateMember(JoinRequest joinRequest);
 
-    void updateWithdraw(String memberId);
+    void updateWithdraw(Member member);
 
     Long chkWithDraw(String id);
 

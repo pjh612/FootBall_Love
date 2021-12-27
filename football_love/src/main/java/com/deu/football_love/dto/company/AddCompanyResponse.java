@@ -8,15 +8,15 @@ import lombok.Getter;
 public class AddCompanyResponse {
     private Long companyId;
     private String companyName;
-    private Long owner;
+    private Long ownerNumber;
     private Address location;
     private String tel;
     private String description;
 
-    public AddCompanyResponse(Long id, String name, Long owner, Address location, String tel, String description) {
+    public AddCompanyResponse(Long id, String name, Long ownerNumber, Address location, String tel, String description) {
         this.companyId = id;
         this.companyName = name;
-        this.owner = owner;
+        this.ownerNumber = ownerNumber;
         this.location = location;
         this.tel = tel;
         this.description = description;
