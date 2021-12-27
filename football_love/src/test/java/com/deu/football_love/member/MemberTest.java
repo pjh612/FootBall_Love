@@ -117,7 +117,6 @@ public class MemberTest {
 		String memberId = "dbtlwns";
 		String teamName = "FC Flow";
 		assertEquals(memberService.checkMemberAuthority(memberId, teamName), TeamMemberType.LEADER);
-
 	}
 
 	@DisplayName("회원탈퇴 true일때 성공")
