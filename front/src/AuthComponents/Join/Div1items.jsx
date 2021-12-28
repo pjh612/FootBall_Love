@@ -38,7 +38,6 @@ const NameDiv = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border: 1px solid red;
 `;
 
 const LastName = styled.input`
@@ -94,7 +93,6 @@ const BirthDayDiv = styled.div`
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border: 1px solid red;
 `;
 
 const BirthDayLabel = styled.label`
