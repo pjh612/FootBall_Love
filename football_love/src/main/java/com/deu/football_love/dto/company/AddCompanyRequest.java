@@ -3,8 +3,10 @@ package com.deu.football_love.dto.company;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.Company;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class AddCompanyRequest {
     private Long companyId;
     private String companyName;
