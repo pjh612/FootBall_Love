@@ -2,15 +2,16 @@ package com.deu.football_love.service;
 
 import java.time.LocalDateTime;
 
+import com.deu.football_love.dto.match.AddMatchResponse;
 import com.deu.football_love.dto.match.MatchApplicationResponse;
 import com.deu.football_love.dto.match.MatchApproveResponse;
-import com.deu.football_love.dto.match.MatchResponse;
 import com.deu.football_love.dto.match.ModifyMatchResponse;
+import com.deu.football_love.dto.match.QueryMatchDto;
 
 public interface MatchService {
-	MatchResponse findMatch(Long matchId);
+	QueryMatchDto findMatch(Long matchId);
 
-	MatchResponse addMatch(Long teamId, Long stadiumId, LocalDateTime reservationTime);
+	AddMatchResponse addMatch(Long teamId, Long stadiumId, LocalDateTime reservationTime);
 
 	MatchApproveResponse approveMatch(Long matchId, Long matchApplicationId);
 

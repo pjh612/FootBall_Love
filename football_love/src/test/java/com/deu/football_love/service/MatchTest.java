@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,10 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.company.AddCompanyResponse;
+import com.deu.football_love.dto.match.AddMatchResponse;
 import com.deu.football_love.dto.match.MatchApplicationResponse;
 import com.deu.football_love.dto.match.MatchApproveResponse;
-import com.deu.football_love.dto.match.MatchResponse;
 import com.deu.football_love.dto.match.ModifyMatchResponse;
+import com.deu.football_love.dto.match.QueryMatchDto;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.stadium.AddStadiumResponse;
@@ -57,8 +56,8 @@ public class MatchTest {
 		AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo.getNumber(), address, "010-6779-3476", "좋은 회사");
 		
 		AddStadiumResponse stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "풋살장", "30*50", 120000L);
-		MatchResponse matchDto = matchService.addMatch(teamInfo.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
-		MatchResponse findMatchDto = matchService.findMatch(matchDto.getMatchId());
+		AddMatchResponse matchDto = matchService.addMatch(teamInfo.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
+		QueryMatchDto findMatchDto = matchService.findMatch(matchDto.getMatchId());
 		
 		assertAll(() -> assertEquals(matchDto.getMatchId(), findMatchDto.getMatchId()),
 				() -> assertTrue(matchDto.getTeamName().equals(findMatchDto.getTeamName())),
@@ -81,7 +80,7 @@ public class MatchTest {
 		AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo1.getNumber(), address, "010-6779-3476", "좋은 회사");
 		
 		AddStadiumResponse stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "풋살장", "30*50", 120000L);
-		MatchResponse matchDto = matchService.addMatch(teamInfo1.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
+		AddMatchResponse matchDto = matchService.addMatch(teamInfo1.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
 		MatchApplicationResponse matchApplication = matchService.addMatchApplication(teamInfo2.getTeamId(), matchDto.getMatchId());
 		
 		MatchApproveResponse match = matchService.approveMatch(matchDto.getMatchId(),matchApplication.getMatchApplicationId());
@@ -100,9 +99,9 @@ public class MatchTest {
 		AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo.getNumber(), address, "010-6779-3476", "좋은 회사");
 		
 		AddStadiumResponse stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "풋살장", "30*50", 120000L);
-		MatchResponse matchDto = matchService.addMatch(teamInfo.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
+		AddMatchResponse matchDto = matchService.addMatch(teamInfo.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
 		matchService.cancelMatch(matchDto.getMatchId());
-		MatchResponse findMatchDto = matchService.findMatch(matchDto.getMatchId());
+		QueryMatchDto findMatchDto = matchService.findMatch(matchDto.getMatchId());
 		assertNull(findMatchDto);
 	}
 
@@ -118,9 +117,9 @@ public class MatchTest {
 		AddStadiumResponse stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "풋살장", "30*50", 120000L);
 		AddStadiumResponse soccerStadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "축구장", "120*60", 180000L);
 		
-		MatchResponse matchDto = matchService.addMatch(teamInfo.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
+		AddMatchResponse matchDto = matchService.addMatch(teamInfo.getTeamId(),stadiumInfo.getId(),LocalDateTime.now());
 		ModifyMatchResponse modifyMatchDto = matchService.modifyMatch(matchDto.getMatchId(), soccerStadiumInfo.getId(), LocalDateTime.now().minusHours(2L));
-		MatchResponse findMatchDto = matchService.findMatch(modifyMatchDto.getMatchId());
+		QueryMatchDto findMatchDto = matchService.findMatch(modifyMatchDto.getMatchId());
 		
 		assertAll(() -> assertEquals(matchDto.getMatchId(), findMatchDto.getMatchId()),
 				() -> assertTrue(matchDto.getTeamName().equals(findMatchDto.getTeamName())),
