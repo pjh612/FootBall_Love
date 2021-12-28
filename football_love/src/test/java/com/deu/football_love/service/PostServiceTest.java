@@ -154,6 +154,7 @@ public class PostServiceTest {
     @Test
     public void cascadeMemberTest()
     {
+        //given
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
         QueryMemberDto memberJoinResponse = memberService.join(memberADto);
         CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA");
@@ -173,22 +174,11 @@ public class PostServiceTest {
         WritePostResponse writePostResponse4 = postService.writePost(writePostRequest4);
 
         Member findMember = memberRepository.selectMemberById("memberA");
-        memberService.withdraw(findMember.getId());
-        while (findMember.getPosts().size() != 0)
-        {
-            Post curPost = findMember.getPosts().get(0);
-            curPost.deletePost();
-            postRepository.deletePost(curPost);
-        }
-        List<TeamMember> teamMembers = findMember.getTeamMembers();
-        while (teamMembers.size() != 0) {
-            TeamMember curTeamMember = teamMembers.get(0);
-            curTeamMember.deleteTeamMember();
-            teamRepository.deleteTeamMember(curTeamMember.getTeam().getId(), curTeamMember.getMember().getNumber());
-        }
-        memberRepository.deleteMember(memberRepository.selectMemberById("memberA"));
 
-        Assertions.assertNull(memberRepository.selectMemberById("memberA"));
+        //when
+        memberService.withdraw(findMember.getId());
+
+        //then
         Assertions.assertNull(postRepository.selectPost(writePostResponse1.getPostId()));
         Assertions.assertNull(postRepository.selectPost(writePostResponse2.getPostId()));
         Assertions.assertNull(postRepository.selectPost(writePostResponse3.getPostId()));

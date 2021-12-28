@@ -69,6 +69,7 @@ public class PostServiceImpl implements PostService {
         return QueryPostDto.from(post);
     }
 
+    @Override
     public List<QueryPostDto> findAllPostsByBoardId(Long boardId)
     {
         List<Post> posts = postRepository.selectAllPostsByBoardId(boardId);

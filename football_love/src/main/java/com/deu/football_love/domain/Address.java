@@ -1,9 +1,12 @@
 package com.deu.football_love.domain;
 
-
+import lombok.Getter;
+import lombok.ToString;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@ToString
+@Getter
 public class Address {
 
     private String city;

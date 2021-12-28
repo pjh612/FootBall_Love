@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-@ExtendWith(MockitoExtension.class)
+
 public class MemberTest {
 
 	@Autowired
@@ -117,7 +117,6 @@ public class MemberTest {
 		String memberId = "dbtlwns";
 		String teamName = "FC Flow";
 		assertEquals(memberService.checkMemberAuthority(memberId, teamName), TeamMemberType.LEADER);
-
 	}
 
 	@DisplayName("회원탈퇴 true일때 성공")

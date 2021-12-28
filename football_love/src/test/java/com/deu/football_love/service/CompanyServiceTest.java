@@ -67,6 +67,7 @@ class CompanyServiceTest {
     }
 
     @Test
+    //@Rollback(value = false)
     public void withdrawalCascadeTest()
     {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.BUSINESS);
@@ -74,9 +75,7 @@ class CompanyServiceTest {
         AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
         memberService.withdraw("memberA");
-        QueryMemberDto findMember = memberService.findMember(memberA.getNumber());
-        em.remove(memberRepository.selectMember(findMember.getNumber()));
-        Assertions.assertEquals(1, memberRepository.chkWithDraw("memberA"));
+        Assertions.assertEquals(1, memberRepository.chkWithdraw("memberA"));
         Assertions.assertNull(companyService.findCompany(newCompany.getCompanyId()));
     }
 

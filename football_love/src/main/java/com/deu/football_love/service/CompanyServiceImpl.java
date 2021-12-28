@@ -39,7 +39,6 @@ public class CompanyServiceImpl implements CompanyService {
         List<QueryCompanyDto> result = companyRepository.selectCompaniesById(companyName).stream()
                 .map(c -> new QueryCompanyDto(c.getId(), c.getName(), c.getOwner().getNumber(), c.getLocation(), c.getTel(), c.getDescription())
                 ).collect(Collectors.toList());
-
         return result;
     }
 
@@ -48,7 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
     public AddCompanyResponse addCompany(String name, Long ownerNumber, Address location, String tel, String description) {
         Member findMember = memberRepository.selectMember(ownerNumber);
         Company newCompany = companyRepository.insertCompany(new Company(name, findMember, location, tel, description));
-        log.info("companyId ={}", newCompany.getId());
+        findMember.setCompany(newCompany);
         return AddCompanyResponse.from(newCompany);
     }
 

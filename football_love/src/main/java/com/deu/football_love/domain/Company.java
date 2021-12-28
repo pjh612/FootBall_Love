@@ -29,7 +29,7 @@ public class Company extends BaseEntity {
     @Column(name = "company_description")
     private String description;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "owner_number", referencedColumnName = "member_number")
     private Member owner;
 
@@ -42,5 +42,11 @@ public class Company extends BaseEntity {
         this.location = location;
         this.tel = tel;
         this.description = description;
+    }
+
+    public void deleteCompany()
+    {
+        owner.setCompany(null);
+        this.owner = null;
     }
 }

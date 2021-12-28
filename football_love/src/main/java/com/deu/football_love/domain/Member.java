@@ -10,12 +10,12 @@ import javax.persistence.*;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
     @Id
@@ -67,9 +67,23 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private WithdrawalMember withdrawalMember;
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(mappedBy = "owner", orphanRemoval = true)
     private Company company;
 
+    @Builder(builderClassName = "MemberBuilder",
+            builderMethodName = "memberBuilder")
+    public Member(Long number, String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType memberType) {
+        this.number = number;
+        this.id = id;
+        this.pwd = pwd;
+        this.nickname = nickname;
+        this.name = name;
+        this.birth = birth;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.memberType = memberType;
+    }
 
     public void updateMember(UpdateMemberRequest request) {
         pwd = request.getPwd();

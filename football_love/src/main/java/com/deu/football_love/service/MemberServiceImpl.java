@@ -2,6 +2,8 @@ package com.deu.football_love.service;
 
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.domain.*;
+import com.deu.football_love.domain.type.MemberType;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.TokenInfo;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
@@ -10,6 +12,7 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
 import com.deu.football_love.repository.PostRepository;
 import com.deu.football_love.repository.TeamRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +27,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final TeamService teamService;
 
     @Override
     @Transactional(readOnly = true)
@@ -50,16 +55,17 @@ public class MemberServiceImpl implements MemberService {
         String encodedPassword = passwordEncoder.encode(password);
         joinRequest.setPwd(encodedPassword);
 
-        Member member = new Member();
-        member.setAddress(joinRequest.getAddress());
-        member.setBirth(joinRequest.getBirth());
-        member.setEmail(joinRequest.getEmail());
-        member.setId(joinRequest.getId());
-        member.setPwd(joinRequest.getPwd());
-        member.setNickname(joinRequest.getNickname());
-        member.setName(joinRequest.getName());
-        member.setPhone(joinRequest.getPhone());
-        member.setMemberType(joinRequest.getType());
+        Member member = Member.memberBuilder()
+                .address(joinRequest.getAddress())
+                .birth(joinRequest.getBirth())
+                .email(joinRequest.getEmail())
+                .id(joinRequest.getId())
+                .pwd(joinRequest.getPwd())
+                .nickname(joinRequest.getNickname())
+                .name(joinRequest.getName())
+                .phone(joinRequest.getPhone())
+                .memberType(joinRequest.getType()).build();
+
         Long number = memberRepository.insertMember(member);
         member.setCreatedBy(number);
 
@@ -147,14 +153,31 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean withdraw(String id) {
         Member findMember = memberRepository.selectMemberById(id);
-        if (findMember == null)
+        if (findMember == null || memberRepository.chkWithdraw(id) != null)
             return false;
-        Long withDrawCnt = memberRepository.chkWithDraw(id);
-        memberRepository.updateWithdraw(id);
+        memberRepository.updateWithdraw(findMember);
+        //게시물 삭제
         while (findMember.getPosts().size() != 0) {
             Post post = findMember.getPosts().get(0);
             post.deletePost();
             postRepository.deletePost(post);
+        }
+        /**
+         * 멤버 소유의 팀 삭제, 멤버 소속 탈퇴
+         */
+        List<TeamMember> teamMembers = findMember.getTeamMembers();
+        while (teamMembers.size() != 0) {
+            TeamMember curTeamMember = teamMembers.get(0);
+            if (curTeamMember.getType() == TeamMemberType.LEADER) {
+                teamService.disbandmentTeam(curTeamMember.getTeam().getId());
+            } else {
+                curTeamMember.deleteTeamMember();
+                teamRepository.deleteTeamMember(curTeamMember.getTeam().getId(), curTeamMember.getMember().getNumber());
+            }
+        }
+        //사업자일 경우 컴퍼니 삭제
+        if (findMember.getMemberType() == MemberType.BUSINESS) {
+            findMember.getCompany().deleteCompany();
         }
         return true;
     }
