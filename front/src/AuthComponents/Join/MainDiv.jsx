@@ -10,7 +10,7 @@ import {sendJoinData} from '../../axios/axios.js';
 const Div1 = styled.div`
     width: 70%;
     height: 35vh;
-    border-bottom: 1px solid red;
+    
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -19,7 +19,7 @@ const Div1 = styled.div`
 const Div2 = styled.div`
     width: 70%;
     height: 35vh;
-    border-bottom: 1px solid red;
+    
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -28,7 +28,7 @@ const Div2 = styled.div`
 const Div3 = styled.div`
     width: 70%;
     height: 35vh;
-    border-bottom: 1px solid red;
+    
     display:flex;
     flex-direction: column;
     align-items: center;
