@@ -8,7 +8,6 @@ import lombok.Getter;
 
 @Getter
 public class ModifyMatchRequest {
-	Long memberNumber;
 	Long matchId;
 	Long teamId;
 	Long stadiumId;
