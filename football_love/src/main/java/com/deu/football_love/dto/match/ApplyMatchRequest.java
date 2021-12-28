@@ -6,5 +6,4 @@ import lombok.Getter;
 public class ApplyMatchRequest {
 	Long teamId;
 	Long matchId;
-	Long memberNumber;
 }

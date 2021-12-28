@@ -5,6 +5,5 @@ import lombok.Getter;
 @Getter
 public class RemoveRequest {
 	Long teamId;
-	Long memberNumber;
 	Long matchId;
 }
