@@ -26,7 +26,7 @@ const Login = () => {
         justifyContents: "center",
         flexDirection: 'column',
         alignItems: 'center',
-        width: "400px",
+        width: "450px",
         paddingTop: "100px",
         }}>
             <Avatar sx={{ m: 1, bgcolor: 'black' }}>
@@ -35,7 +35,7 @@ const Login = () => {
             <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , width: "400px"}}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , width: "450px"}}>
             <TextField id="id" label="아이디" variant="outlined" fullWidth name="id"
                 sx={{
                     marginTop: '30px',
@@ -60,7 +60,7 @@ const Login = () => {
             </Box>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" >
                   비밀번호를 잃어버렸습니까?
                 </Link>
               </Grid>
