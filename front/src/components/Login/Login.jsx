@@ -9,14 +9,34 @@ import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import Avatar from '@mui/material/Avatar';
 import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import {setLocalStorage} from '../../setLocalStorage';
 
-const Login = ({setUser}) => {
+const Div = styled.div`
+    width:100vw;
+    display:flex;
+    flex-direction : column;
+    align-items: center;
+    overflow: auto;
+    overflow-x: hidden;
+`;
+
+// flex-direction 을 row 로 해주기 위한 div
+const Div2 = styled.div`
+    width: 100%;
+    height: 100vh;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const Login = ({setKey}) => {
     const [loginSuccess, setLoginSuccess] = useState(false);
     const navigate = useNavigate();
         
     useEffect(() => {
       if (loginSuccess) {
-        navigate.push('/');
+        navigate('/');
       }
     }, [loginSuccess, navigate]);
 
@@ -27,7 +47,8 @@ const Login = ({setUser}) => {
         sendLoginData(data)
         .then((res) => {
             console.log(res);
-            setUser(res.data);
+            setKey(res.data.key);
+            setLocalStorage(res.data.key);
             setLoginSuccess(true);
         })
         .catch((err) => {
@@ -35,6 +56,8 @@ const Login = ({setUser}) => {
         });
     }
     return(
+      <Div>
+                 <Div2>
         <Box sx={{display: "flex",
         justifyContents: "center",
         flexDirection: 'column',
@@ -84,6 +107,8 @@ const Login = ({setUser}) => {
               </Grid>
             </Grid>
         </Box>
+        </Div2>
+            </Div>
     );
 }
 

@@ -40,6 +40,16 @@ vertical-align: middle;
 color: #f5f5f7;
 cursor: pointer;
 `;
+const Name = styled.span`
+font-family: 'Nanum Gothic', sans-serif;
+font-weight: 800;
+line-height: 100%;  
+font-size: 20px;
+vertical-align: middle;
+color: #f5f5f7;
+cursor: pointer;
+
+`;
 
 const NavBarContainerUser = styled.div`
     width: 151px;
@@ -51,7 +61,7 @@ const NavBarContainerUser = styled.div`
 `;
 
 const GoIn = styled.div`
-    width: 114px;
+    width: 150px;
     height:19px;
     
 `;
@@ -107,7 +117,7 @@ export default function Navbar({user}) {
                     <Logo>
                     <SportsBasketballIcon sx={{mr:1}}></SportsBasketballIcon>
                     </Logo>
-                    <Logo>풋볼러브</Logo>
+                    <Name>풋볼러브</Name>
                 </Link>
             </NavBarContainerLogo>
             <NavBarContainerUser>

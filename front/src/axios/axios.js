@@ -24,3 +24,10 @@ export function sendLoginData(data) {
     data: jsonData,
   });
 }
+
+export function getUserInfo(key) {
+  return axios({
+    method: "get",
+    url: `http://127.0.0.1:8080/member/${key}`,
+  });
+}

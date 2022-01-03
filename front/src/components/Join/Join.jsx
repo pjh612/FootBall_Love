@@ -14,10 +14,10 @@ const Join = () => {
 
     useEffect(() => {
       if(joinSuccess) {
-        navigate.push('/login');
+        navigate('/login');
       }
     }, [joinSuccess, navigate])
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = { id :e.target.id.value,

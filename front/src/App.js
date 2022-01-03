@@ -1,13 +1,34 @@
 import Navbar from "./components/Navbar";
 import LandingPage from "./components/MainContainer/LandingPage";
 import JoinPage from "./components/Join/JoinPage";
-import LoginPage from "./components/Login/LoginPage";
+import Login from "./components/Login/Login";
 import Profile from "./components/Profile/Profile";
+import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { getLocalStorage } from "./setLocalStorage";
 function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(true);
+  const [key, setKey] = useState(null);
+
+  useEffect(() => {
+    const key = getLocalStorage();
+    if (key) {
+      setKey(key);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (key) {
+      getUserInfo(key)
+        .then((res) => {
+          setUser(res.data.user);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [key]);
 
   return (
     <BrowserRouter>
@@ -16,7 +37,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/join" element={<JoinPage />} />
-          <Route path="/login" element={<LoginPage setUser={setUser} />} />
+          <Route path="/login" element={<Login setKey={setKey} />} />
           <Route path="/profile" element={<Profile user={user} />} />
         </Routes>
       </div>
