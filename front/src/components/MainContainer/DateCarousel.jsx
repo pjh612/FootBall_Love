@@ -145,7 +145,7 @@ export default function DateCarousel(props) {
                 const isThirtyOne = thirtyOne[month];
                 let date = todayDate + i;
                 if (isThirtyOne) {
-                    if (date > 32) {
+                    if (date > 31) {
                         date -= 31;
                     }
                 } else {

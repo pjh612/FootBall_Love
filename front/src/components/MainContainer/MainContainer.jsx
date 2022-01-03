@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const TestDiv = styled.div`
     width:100vw;
     height: 50vh;
-    background: yellow;
+    // background: yellow;
 `;
 
 export default function MainContainer() {

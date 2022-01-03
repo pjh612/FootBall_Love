@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import SubBar from "./SubBar";
-import Login from './Login';
+import Login from "./Login";
 
 const Div = styled.div`
     width:100vw;
@@ -15,7 +14,6 @@ const Div = styled.div`
 const Div2 = styled.div`
     width: 100%;
     height: 100vh;
-    
     display:flex;
     flex-direction: row;
     justify-content: center;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import SubBar from './SubBar';
-import MainDiv from './MainDiv';
+import Join from './Join';
+
 
 const Div = styled.div`
     width:100vw;
@@ -14,7 +14,7 @@ const JoinPage = () => {
     return(
         <>
             <Div>
-                <MainDiv></MainDiv>
+                <Join></Join>
             </Div>
         </>
     )
