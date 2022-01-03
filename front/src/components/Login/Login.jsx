@@ -7,8 +7,19 @@ import Link from '@mui/material/Link';
 import {sendLoginData} from "../../axios/axios";
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
 import Avatar from '@mui/material/Avatar';
+import {useState, useEffect} from 'react'
+import {useNavigate} from 'react-router-dom';
 
-const Login = () => {
+const Login = ({setUser}) => {
+    const [loginSuccess, setLoginSuccess] = useState(false);
+    const navigate = useNavigate();
+        
+    useEffect(() => {
+      if (loginSuccess) {
+        navigate.push('/');
+      }
+    }, [loginSuccess, navigate]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = { id :e.target.id.value,
@@ -16,6 +27,8 @@ const Login = () => {
         sendLoginData(data)
         .then((res) => {
             console.log(res);
+            setUser(res.data);
+            setLoginSuccess(true);
         })
         .catch((err) => {
             console.error(err);
