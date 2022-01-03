@@ -1,6 +1,6 @@
 import React,{useEffect} from "react";
 import styled from "styled-components";
-import {slider}from "../utils";
+import {slider}from "../../utils";
 
 const CarouselContainer = styled.div`
     background-color : #fafafa;

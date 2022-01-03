@@ -4,7 +4,7 @@ import LoginModal from './Login/LoginModal';
 import JoinModal from './Join/JoinModal';
 import {Link} from 'react-router-dom'
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
-
+import UserAvatar from './Avatar';
 const NavbarContainer = styled.div`
   margin: 0;
   width:100%;
@@ -83,7 +83,7 @@ const Join = styled.span`
 `;
 
 
-export default function Navbar() {
+export default function Navbar({user}) {
     const [openLoginModal, setOpenLoginModal] = useState(false);
     const [openJoinModal, setOpenJoinModal] = useState(false);
 
@@ -111,16 +111,13 @@ export default function Navbar() {
                 </Link>
             </NavBarContainerLogo>
             <NavBarContainerUser>
-                <GoIn>
+                {user ? <UserAvatar user={user}></UserAvatar> :  <GoIn>
                     <Login onClick={() => openLoginModalFn()}>로그인</Login>
                     {openLoginModal && <LoginModal CloseModal={closeLoginModal}></LoginModal>}
                     <And>또는</And>
                     <Join onClick={() => openJoinModalFn()}>회원가입</Join>
                     {openJoinModal && <JoinModal CloseModal={closeJoinModal}></JoinModal>}
-                    {/* <Badge badgeContent={4} color="success"> */}
-        {/* <MailIcon color="black" /> */}
-      {/* </Badge> */}
-                </GoIn>
+                </GoIn>}
             </NavBarContainerUser>
         </NavBarContainerCenter>
     </NavbarContainer>)
