@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.deu.football_love.domain.Address;
 
 import com.deu.football_love.domain.type.MemberType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,6 +22,7 @@ public class MemberJoinRequest {
 
 	private String name;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd", timezone = "Asia/Seoul")
 	private LocalDate birth;
 
 	private Address address;

@@ -1,14 +1,13 @@
 package com.deu.football_love.controller;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.controller.consts.SessionConst;
 import com.deu.football_love.dto.auth.LoginInfo;
-import com.deu.football_love.dto.auth.TokenInfo;
+import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.LoginRequest;
 import com.deu.football_love.dto.auth.ValidRefreshTokenResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
@@ -28,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,6 +37,12 @@ public class MemberController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
+
+    @GetMapping("/{number}")
+    public List<QueryMemberDto> getMember(@PathVariable(name = "number") Long number) {
+        log.info(Long.toString(number));
+        return memberService.findMemberDto(number);
+    }
 
     @GetMapping("/auth")
     public LoginInfo get(@AuthenticationPrincipal LoginInfo loginInfo) {
@@ -56,10 +62,10 @@ public class MemberController {
 
     @ApiOperation(value = "jwt 로그인 요청")
     @PostMapping("/login_jwt/{id}")
-    public ResponseEntity<TokenInfo> login_jwt(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
-        TokenInfo loginResponse = memberService.login_jwt(loginRequest);
+    public ResponseEntity<LoginResponse> login_jwt(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        LoginResponse loginResponse = memberService.login_jwt(loginRequest);
         if (loginResponse.getResult().equals("fail")) {
-            return new ResponseEntity<TokenInfo>(HttpStatus.CONFLICT);
+            return new ResponseEntity<LoginResponse>(HttpStatus.CONFLICT);
         } else {
             ArrayList<String> data = new ArrayList<>();
             data.add(loginRequest.getId());
@@ -75,7 +81,7 @@ public class MemberController {
             response.addCookie(accessTokenCookie);
             response.addCookie(refreshTokenCookie);
             redisService.setStringValue(loginResponse.getRefreshToken(), data, JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
-            return new ResponseEntity<TokenInfo>(loginResponse, HttpStatus.OK);
+            return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
         }
     }
 
@@ -96,8 +102,8 @@ public class MemberController {
 
     @ApiOperation(value = "로그아웃 요청")
     @PostMapping("/logout_jwt")
-    public ResponseEntity<TokenInfo> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
-                                                @CookieValue(value = "accessToken") String accessToken
+    public ResponseEntity<LoginResponse> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
+                                                    @CookieValue(value = "accessToken") String accessToken
             , @CookieValue(value = "refreshToken") String refreshToken
     ) {
         log.info("accessToken = {}", accessToken);

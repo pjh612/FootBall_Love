@@ -1,6 +1,6 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.dto.auth.TokenInfo;
+import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
 import com.deu.football_love.dto.member.MemberJoinRequest;
@@ -32,5 +32,5 @@ public interface MemberService {
 
     LoginInfo findMemberById_jwt(String id);
 
-    TokenInfo login_jwt(LoginRequest loginRequest);
+    LoginResponse login_jwt(LoginRequest loginRequest);
 }
