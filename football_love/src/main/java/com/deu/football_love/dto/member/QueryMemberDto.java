@@ -7,6 +7,7 @@ import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.company.QueryCompanyDto;
+import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -38,7 +39,7 @@ public class QueryMemberDto extends BaseEntity {
 
 	private MemberType type;
 
-	private List<TeamDto> teams;
+	private List<QueryTeamMemberDto> teams;
 
 	private List<Long> participationMembers = new ArrayList<>();
 
@@ -54,25 +55,12 @@ public class QueryMemberDto extends BaseEntity {
 		this.address = member.getAddress();
 		this.phone = member.getPhone();
 		this.type = member.getMemberType();
-		this.teams = member.getTeamMembers().stream().map(tm -> new TeamDto(tm.getTeam().getId(), tm.getTeam().getName(), tm.getType())).collect(Collectors.toList());
+		/*this.teams = member.getTeamMembers().stream().map(tm -> new TeamDto(tm.getTeam().getId(), tm.getTeam().getName(), tm.getType())).collect(Collectors.toList());
 		if (member.getCompany() != null)
-		this.company = QueryCompanyDto.from(member.getCompany());
+		this.company = QueryCompanyDto.from(member.getCompany());*/
 		setCreatedBy(member.getCreatedBy());
 		setLastModifiedBy(member.getLastModifiedBy());
 		setCreatedDate(member.getCreatedDate());
 		setLastModifiedDate(member.getLastModifiedDate());
-	}
-
-	class TeamDto
-	{
-		Long teamId;
-		String teamName;
-		TeamMemberType teamMemberType;
-
-		public TeamDto(Long teamId, String teamName, TeamMemberType teamMemberType) {
-			this.teamId = teamId;
-			this.teamName = teamName;
-			this.teamMemberType = teamMemberType;
-		}
 	}
 }

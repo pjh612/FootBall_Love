@@ -56,12 +56,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.cors().configurationSource(corsConfigurationSource())
 				.and()
 					.csrf().disable()//요고를 사용법을 숙지해서 코딩
-					.headers().frameOptions().disable()
-				.and()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 					.authorizeRequests()
-					.antMatchers("/member","/member/login_jwt/**","/member/login/**","/member/auth").permitAll()
+					.antMatchers("/member","/member/login_jwt/**","/member/login/**","/member/**","/team/**").permitAll()
 					.anyRequest().authenticated()
 				.and()
 					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
