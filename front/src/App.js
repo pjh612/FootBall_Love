@@ -1,4 +1,4 @@
-import Navbar from "./components/Navbar";
+import Navbar from "./components/NavBar/Navbar";
 import LandingPage from "./components/MainContainer/LandingPage";
 import JoinPage from "./components/Join/JoinPage";
 import Login from "./components/Login/Login";
@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getLocalStorage } from "./setLocalStorage";
 function App() {
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(null);
   const [key, setKey] = useState(null);
 
   useEffect(() => {

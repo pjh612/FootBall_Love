@@ -1,10 +1,11 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import LoginModal from './Login/LoginModal';
-import JoinModal from './Join/JoinModal';
+import LoginModal from '../Login/LoginModal';
+import JoinModal from '../Join/JoinModal';
 import {Link} from 'react-router-dom'
 import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
-import UserAvatar from './Avatar';
+import UserAvatar from './UserAvatar';
+
 const NavbarContainer = styled.div`
   margin: 0;
   width:100%;
@@ -96,6 +97,7 @@ const Join = styled.span`
 export default function Navbar({user}) {
     const [openLoginModal, setOpenLoginModal] = useState(false);
     const [openJoinModal, setOpenJoinModal] = useState(false);
+    
 
     const openLoginModalFn = () => {
         setOpenLoginModal(true);
@@ -109,6 +111,8 @@ export default function Navbar({user}) {
     const closeJoinModal = () => {
         setOpenJoinModal(false);
     }
+    
+   
 
     return(<NavbarContainer>
         <NavBarContainerCenter>
