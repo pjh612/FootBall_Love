@@ -1,6 +1,5 @@
 package com.deu.football_love.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,13 +7,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -55,8 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.disable()
 					.cors().configurationSource(corsConfigurationSource())
 				.and()
-					.csrf().disable()//요고를 사용법을 숙지해서 코딩
-					.headers().frameOptions().disable()
+					.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.and()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
@@ -65,6 +65,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.anyRequest().authenticated()
 				.and()
 					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-
 	}
 }
