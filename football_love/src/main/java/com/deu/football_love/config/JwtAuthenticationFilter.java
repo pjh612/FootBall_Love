@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String accessToken = null;
         Cookie[] cookies = ((HttpServletRequest) request).getCookies();
-        if (cookies != null)
+        if (cookies != null && jwtTokenProvider.getCookie((HttpServletRequest) request, JwtTokenProvider.ACCESS_TOKEN_NAME) != null)
             accessToken = jwtTokenProvider.getCookie((HttpServletRequest) request, JwtTokenProvider.ACCESS_TOKEN_NAME).getValue();
         if (!jwtTokenProvider.isLoggedOut(accessToken)) {
             try {
