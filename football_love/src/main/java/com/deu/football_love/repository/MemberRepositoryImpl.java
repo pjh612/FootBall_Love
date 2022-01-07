@@ -3,7 +3,9 @@ package com.deu.football_love.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
+import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.dto.member.QueryMemberDto;
+import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import org.springframework.stereotype.Repository;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.WithdrawalMember;
@@ -43,16 +45,51 @@ public class MemberRepositoryImpl implements MemberRepository {
         return result.get(0);
     }
 
-    @Override
-    public List<QueryMemberDto> selectQueryMemberDto(Long number) {
-        return em.createQuery("select new com.deu.football_love.dto.member.QueryMemberDto(m)" +
-                " from Member m" +
-                " join m.teamMembers" +
-                " join m.company" +
-                " where m.number = :memberNumber", QueryMemberDto.class)
-                .setParameter("memberNumber", number)
+    public List<QueryTeamMemberDto> selectQueryTeamMemberDto(Long memberNumber) {
+        return em.createQuery(
+                "select new com.deu.football_love.dto.team.QueryTeamMemberDto(tm)" +
+                        " from TeamMember tm" +
+                        " join tm.member" +
+                        " where tm.member.number = :memberNumber", QueryTeamMemberDto.class)
+                .setParameter("memberNumber", memberNumber)
                 .getResultList();
     }
+
+    public List<QueryCompanyDto> selectQueryCompanyDto(Long memberNumber) {
+        return em.createQuery(
+                "select new com.deu.football_love.dto.company.QueryCompanyDto(c)" +
+                        " from Company c" +
+                        " join c.owner" +
+                        " where c.owner.number = :memberNumber", QueryCompanyDto.class)
+                .setParameter("memberNumber", memberNumber)
+                .getResultList();
+    }
+
+    public List<QueryMemberDto> selectQueryMemberDtoByNumber(Long number) {
+        List<QueryMemberDto> resultList = em.createQuery("select new com.deu.football_love.dto.member.QueryMemberDto(m)" +
+                        " from Member m" +
+                        " where m.number = :memberNumber"
+                , QueryMemberDto.class)
+                .setParameter("memberNumber", number)
+                .getResultList();
+        return  resultList;
+    }
+
+    @Override
+    public List<QueryMemberDto> selectQueryMemberDto(Long number) {
+        List<QueryMemberDto> queryMemberDtos = selectQueryMemberDtoByNumber(number);
+
+        if (queryMemberDtos.size() != 0) {
+            queryMemberDtos.get(0).setTeams(selectQueryTeamMemberDto(number));
+            List<QueryCompanyDto> companyResult = selectQueryCompanyDto(number);
+            if (companyResult.size() != 0)
+                queryMemberDtos.get(0).setCompany(companyResult.get(0));
+        }
+        return queryMemberDtos;
+    }
+
+
+
 
     @Override
     public int isDuplicationId(String id) {

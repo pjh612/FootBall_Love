@@ -58,10 +58,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 					.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.and()
-					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				.and()
 					.authorizeRequests()
-					.antMatchers("/member","/member/login_jwt/**","/member/login/**","/member/auth").permitAll()
+					.antMatchers("/member","/member/login_jwt/**","/member/login/**","/member/**","/team/**").permitAll()
 					.anyRequest().authenticated()
 				.and()
 					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

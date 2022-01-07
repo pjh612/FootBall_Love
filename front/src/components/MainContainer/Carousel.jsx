@@ -1,6 +1,6 @@
 import React,{useEffect} from "react";
 import styled from "styled-components";
-import {slider}from "../utils.js";
+import {slider}from "../../utils";
 
 const CarouselContainer = styled.div`
     background-color : #fafafa;
@@ -32,8 +32,6 @@ const Block2 = styled.div`
     
 `;
 
-
-
 export default function Carousel() {
     
     const imgsrc = ['img/football.jpg', 'img/football2.jpg', 'img/football3.jpg', 'img/football4.jpg','img/football5.jpg'];
@@ -47,7 +45,7 @@ export default function Carousel() {
     const imgStyle = {
         width: '65.28vw',
         height: 320,
-        borderRadius: '20px',
+        borderRadius: '5px',
         marginTop: '20px',
     }
     const imgDivStyle = {

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React,{useState, useEffect, useRef} from "react";
-import {ReactComponent as RightArrow} from "../icon/rightArrow.svg";
-import {ReactComponent as LeftArrow} from "../icon/leftArrow.svg";
+import {ReactComponent as RightArrow} from "../../icon/rightArrow.svg";
+import {ReactComponent as LeftArrow} from "../../icon/leftArrow.svg";
 
 
 const Container =  styled.div`
@@ -145,7 +145,7 @@ export default function DateCarousel(props) {
                 const isThirtyOne = thirtyOne[month];
                 let date = todayDate + i;
                 if (isThirtyOne) {
-                    if (date > 32) {
+                    if (date > 31) {
                         date -= 31;
                     }
                 } else {

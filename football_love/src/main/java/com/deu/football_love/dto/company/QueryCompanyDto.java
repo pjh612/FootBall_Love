@@ -23,6 +23,14 @@ public class QueryCompanyDto {
         this.description = description;
     }
 
+    public QueryCompanyDto(Company company) {
+        this.companyId = company.getId();
+        this.companyName = company.getName();
+        this.owner = company.getOwner().getNumber();
+        this.location = company.getLocation();
+        this.tel = company.getTel();
+        this.description = company.getDescription();
+    }
     public static QueryCompanyDto from(Company company)
     {
         return new QueryCompanyDto(company.getId(), company.getName(), company.getOwner().getNumber(), company.getLocation(),company.getTel(), company.getDescription());

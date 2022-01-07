@@ -1,19 +1,44 @@
-import Navbar from "./Navbar";
-import LandingPage from "./MainContainer/LandingPage";
-import JoinPage from "./AuthComponents/Join/JoinPage";
-import LoginPage from "./AuthComponents/Login/LoginPage";
+import Navbar from "./components/NavBar/Navbar";
+import LandingPage from "./components/MainContainer/LandingPage";
+import JoinPage from "./components/Join/JoinPage";
+import Login from "./components/Login/Login";
+import Profile from "./components/Profile/Profile";
+import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import { useState, useEffect } from "react";
+import { getLocalStorage } from "./setLocalStorage";
 function App() {
+  const [user, setUser] = useState(null);
+  const [key, setKey] = useState(null);
+
+  useEffect(() => {
+    const key = getLocalStorage();
+    if (key) {
+      setKey(key);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (key) {
+      getUserInfo(key)
+        .then((res) => {
+          setUser(res.data.user);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [key]);
+
   return (
     <BrowserRouter>
       <div>
-        <Navbar></Navbar>
-        {/* Routes 내부는 url 에 따라 표현되는 컴포넌트가 달라짐 */}
+        <Navbar user={user}></Navbar>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/join" element={<JoinPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<Login setKey={setKey} />} />
+          <Route path="/profile" element={<Profile user={user} />} />
         </Routes>
       </div>
     </BrowserRouter>

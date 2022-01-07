@@ -4,7 +4,7 @@ import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.domain.*;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
-import com.deu.football_love.dto.auth.TokenInfo;
+import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
 import com.deu.football_love.dto.member.MemberJoinRequest;
@@ -38,15 +38,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public TokenInfo login_jwt(LoginRequest loginRequest) {
+    public LoginResponse login_jwt(LoginRequest loginRequest) {
         Member member = memberRepository.selectMemberById(loginRequest.getId());
         if (member != null && member.getId().equals(loginRequest.getId()) && passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
             List<String> roleList = Arrays.asList(member.getMemberType().name());
             String accessToken = jwtTokenProvider.createAccessToken(member.getId(), roleList);
             String refreshToken = jwtTokenProvider.createRefreshToken();
-            return new TokenInfo("success", "create token success", accessToken, refreshToken);
+            return new LoginResponse("success", "create token success", accessToken, refreshToken, member.getNumber());
         } else
-            return new TokenInfo("fail", "create token fail", null, null);
+            return new LoginResponse("fail", "create token fail", null, null, null);
     }
 
     @Override
@@ -118,8 +118,13 @@ public class MemberServiceImpl implements MemberService {
         return new LoginInfo(member);
     }
 
-    public List<QueryMemberDto> findMemberDto(Long number) {
-        return memberRepository.selectQueryMemberDto(number);
+    public List<QueryMemberDto> findMemberDto(Long number)
+    {
+        List<QueryMemberDto> queryMemberDtos = memberRepository.selectQueryMemberDto(number);
+        for (QueryMemberDto queryMemberDto : queryMemberDtos) {
+            log.info(queryMemberDto.getId());
+        };
+        return queryMemberDtos;
     }
 
     @Override

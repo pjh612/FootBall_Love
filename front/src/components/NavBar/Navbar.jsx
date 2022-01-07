@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import LoginModal from './AuthComponents/LoginModal';
-import JoinModal from './AuthComponents/Join/JoinModal';
+import LoginModal from '../Login/LoginModal';
+import JoinModal from '../Join/JoinModal';
 import {Link} from 'react-router-dom'
+import SportsBasketballIcon from '@mui/icons-material/SportsBasketball';
+import UserAvatar from './UserAvatar';
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -11,7 +13,7 @@ const NavbarContainer = styled.div`
   display:flex;
   justify-content: center;
   align-items: center;
-  background: rgba(0,0,0,0.8);
+  background: #064635;
 `;
 
 const NavBarContainerCenter = styled.div`
@@ -24,16 +26,30 @@ const NavBarContainerCenter = styled.div`
 `;
 
 const NavBarContainerLogo = styled.div`
-    width: 100px;
-    height: 21px;
+    width: 200px;
+    height: 100%;
+    display:flex;
+    align-items:center;
 `;
 
 const Logo = styled.span`
-line-height: 24px;
-font-family: 'Black Han Sans', sans-serif;
-font-size: 24px;
+font-family: 'Nanum Gothic', sans-serif;
+font-weight: 800;
+line-height: 100%;  
+font-size: 20px;
+vertical-align: middle;
 color: #f5f5f7;
 cursor: pointer;
+`;
+const Name = styled.span`
+font-family: 'Nanum Gothic', sans-serif;
+font-weight: 800;
+line-height: 100%;  
+font-size: 20px;
+vertical-align: middle;
+color: #f5f5f7;
+cursor: pointer;
+
 `;
 
 const NavBarContainerUser = styled.div`
@@ -41,22 +57,16 @@ const NavBarContainerUser = styled.div`
     height: 24px;
     display:flex;
     align-items: center; 
+    text-align:center;
     justify-content:space-between;   
 `;
 
 const GoIn = styled.div`
-    width: 114px;
+    width: 150px;
     height:19px;
     
 `;
 
-const SlideBarTrigerDiv = styled.div`
-    width: 32px;
-    height: 24px;
-    
-    padding-left: 8px;
-    cursor: pointer;
-`;
 
 const Login = styled.span`
     width: 36.34px;
@@ -83,33 +93,11 @@ const Join = styled.span`
     cursor: pointer;
 `;
 
-const MoreIconWrap = styled.div`
-    display: flex;
-    padding: 10px 0;
-`;
 
-const MoreIcon = styled.div`
-width: 4px;
-height: 4px;
-background-color: white;
-margin: 0 2.9px;
-border-radius: 10px;
-display: inline-block;
-`;
-
-// const IconBox = styled.div`
-//     width: 10px;
-//     height: 10px;
-//     // margin-top: 5px;
-//     // margin-left: 15px;
-//     // margin-right: 10px;
-//     // margin-bottom: 5px;
-//     background-image : url(${props => props.src ? props.src : null});
-// `;
-
-export default function Navbar() {
+export default function Navbar({user}) {
     const [openLoginModal, setOpenLoginModal] = useState(false);
     const [openJoinModal, setOpenJoinModal] = useState(false);
+    
 
     const openLoginModalFn = () => {
         setOpenLoginModal(true);
@@ -123,27 +111,27 @@ export default function Navbar() {
     const closeJoinModal = () => {
         setOpenJoinModal(false);
     }
+    
+   
 
     return(<NavbarContainer>
         <NavBarContainerCenter>
             <NavBarContainerLogo>
-                <Link to='/'  style={{ textDecoration: 'none' }}><Logo>풋볼러브</Logo></Link>
+                <Link to='/'  style={{ textDecoration: 'none'}}>
+                    <Logo>
+                    <SportsBasketballIcon sx={{mr:1}}></SportsBasketballIcon>
+                    </Logo>
+                    <Name>풋볼러브</Name>
+                </Link>
             </NavBarContainerLogo>
             <NavBarContainerUser>
-                <GoIn>
+                {user ? <UserAvatar user={user}></UserAvatar> :  <GoIn>
                     <Login onClick={() => openLoginModalFn()}>로그인</Login>
                     {openLoginModal && <LoginModal CloseModal={closeLoginModal}></LoginModal>}
                     <And>또는</And>
                     <Join onClick={() => openJoinModalFn()}>회원가입</Join>
                     {openJoinModal && <JoinModal CloseModal={closeJoinModal}></JoinModal>}
-                </GoIn>
-                <SlideBarTrigerDiv>
-                    <MoreIconWrap>
-                        <MoreIcon></MoreIcon>
-                        <MoreIcon></MoreIcon>
-                        <MoreIcon></MoreIcon>
-                    </MoreIconWrap>
-                </SlideBarTrigerDiv>
+                </GoIn>}
             </NavBarContainerUser>
         </NavBarContainerCenter>
     </NavbarContainer>)
