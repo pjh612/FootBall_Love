@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.controller.consts.SessionConst;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.LoginRequest;
@@ -167,18 +168,18 @@ public class MemberController {
 
     @ApiOperation(value = "회원 권한확인 요청")
     @GetMapping("/{memberId}/authority")
-    public ResponseEntity<String> checkMemberAuthority(@RequestParam("memberId") String memberId,
+    public ResponseEntity<TeamMemberType> checkMemberAuthority(@RequestParam("memberId") String memberId,
                                                        @RequestParam("teamName") String teamName, HttpSession session) {
         Member sessionMember = (Member) session.getAttribute(SessionConst.SESSION_MEMBER);
         if (sessionMember == null) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
 
-        String authority = memberService.checkMemberAuthority(memberId, teamName);
+        TeamMemberType authority = memberService.checkMemberAuthority(memberId, teamName);
         if (authority == null) {
             return new ResponseEntity(HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<String>(authority, HttpStatus.OK);
+            return new ResponseEntity<TeamMemberType>(authority, HttpStatus.OK);
         }
     }
 
