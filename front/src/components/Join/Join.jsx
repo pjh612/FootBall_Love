@@ -35,7 +35,7 @@ const Join = () => {
             }
         
         sendJoinData(data)
-        .then((res) => {
+        .then(() => {
             setJoinSuccess(true);
         })
         .catch((err) => {
