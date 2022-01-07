@@ -1,6 +1,8 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.TeamMember;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.member.QueryMemberDto;
 
 import java.time.LocalDateTime;
@@ -27,7 +29,7 @@ public interface MemberRepository {
 
     Long chkWithdraw(String id);
 
-    String selectMemberAuthority(String memberId, String teamId);
+    TeamMemberType selectMemberAuthority(String memberId, String teamId);
 
     void deleteWithdrawalMemberByDate(LocalDateTime cur, Long day);
 }

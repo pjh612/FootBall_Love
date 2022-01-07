@@ -3,6 +3,9 @@ package com.deu.football_love.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
+
+import com.deu.football_love.domain.TeamMember;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
@@ -126,12 +129,16 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public String selectMemberAuthority(String memberId, String teamId) {
-        List<String> list = em.createQuery(MemberSql.GET_MEMBER_AUTH, String.class)
+    public TeamMemberType selectMemberAuthority(String memberId, String teamName) {
+        List<TeamMember> result = em.createQuery("SELECT tm "
+                + "FROM TeamMember tm "
+                + "JOIN FETCH tm.member m "
+                + "JOIN FETCH tm.team t "
+                + "WHERE m.id = :m_id AND t.name = :t_name", TeamMember.class)
                 .setParameter("m_id", memberId)
-                .setParameter("t_id", teamId)
+                .setParameter("t_name", teamName)
                 .getResultList();
-        return list.get(0);
+        return result.size() != 0 ? result.get(0).getType() : TeamMemberType.NONE;
     }
 
     @Override
