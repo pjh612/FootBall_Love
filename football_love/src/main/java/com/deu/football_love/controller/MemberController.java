@@ -126,7 +126,7 @@ public class MemberController {
     @ApiOperation(value = "아이디 중복확인 요청")
     @GetMapping("/duplication/id")
     public ResponseEntity isDuplicaitonId(@RequestParam String id) {
-        if (memberService.isDuplicationId(id)) {
+        if (!memberService.isDuplicationId(id)) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.CONFLICT);
@@ -136,7 +136,7 @@ public class MemberController {
     @ApiOperation(value = "이메일 중복확인 요청")
     @GetMapping("/duplication/email")
     public ResponseEntity isDuplicaitonEmail(@RequestParam String email) {
-        if (memberService.isDuplicationEmail(email)) {
+        if (!memberService.isDuplicationEmail(email)) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.CONFLICT);

@@ -2,13 +2,16 @@ package com.deu.football_love.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import javax.persistence.EntityManager;
+
+import org.springframework.stereotype.Repository;
+
+import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.WithdrawalMember;
 import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
-import org.springframework.stereotype.Repository;
-import com.deu.football_love.domain.Member;
-import com.deu.football_love.domain.WithdrawalMember;
 import com.deu.football_love.repository.sql.MemberSql;
 
 import lombok.RequiredArgsConstructor;
@@ -92,12 +95,11 @@ public class MemberRepositoryImpl implements MemberRepository {
 
 
     @Override
-    public int isDuplicationId(String id) {
-        List<Long> list = em.createQuery(MemberSql.COUNT_ID, Long.class)
+    public long countDuplicationId(String id) {
+        return em.createQuery(MemberSql.COUNT_ID,Long.class)
                 .setParameter("id", id)
-                .getResultList();
-
-        return list.get(0).intValue();
+                .setMaxResults(1)
+                .getSingleResult();
     }
 
     @Override
@@ -135,10 +137,10 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public int isDuplicationEmail(String email) {
-        List<Long> list = em.createQuery(MemberSql.COUNT_EMAIL, Long.class)
+    public long countDuplicationEmail(String email) {
+        return em.createQuery(MemberSql.COUNT_EMAIL, Long.class)
                 .setParameter("email", email)
-                .getResultList();
-        return list.get(0).intValue();
+                .setMaxResults(1)
+                .getSingleResult();
     }
 }
