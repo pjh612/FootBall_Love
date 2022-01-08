@@ -2,7 +2,7 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
-const ProfileAvatar = ({userImg}) => {
+const ProfileAvatar = () => {
     //src 를 userImg 로 바꾸면 됨.
     return(
         <Stack mt={10} spacing={2} alignItems="center">

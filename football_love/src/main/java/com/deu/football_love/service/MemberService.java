@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
@@ -28,7 +29,7 @@ public interface MemberService {
 
     boolean withdraw(String id);
 
-    String checkMemberAuthority(String memberId, String teamName);
+    TeamMemberType checkMemberAuthority(String memberId, String teamName);
 
     LoginInfo findMemberById_jwt(String id);
 

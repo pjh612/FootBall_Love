@@ -20,12 +20,13 @@ const InfoWrapper = styled.div`
 
 
 const Profile = ({user}) => {
+    
     return(
         <>
             <CheckLogin user={user}>
                 <FlexBox> 
                     <AvatarWrapper>          
-                        <ProfileAvatar userImg={user.img}></ProfileAvatar>
+                        <ProfileAvatar userImg={user}></ProfileAvatar>
                     </AvatarWrapper>
                     <InfoWrapper>
                         <ProfileInfo user={user}></ProfileInfo>

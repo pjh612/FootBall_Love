@@ -183,7 +183,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true)
-    public String checkMemberAuthority(String memberId, String teamName) {
+    public TeamMemberType checkMemberAuthority(String memberId, String teamName) {
         return memberRepository.selectMemberAuthority(memberId, teamName);
     }
 }

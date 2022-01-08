@@ -128,12 +128,16 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public String selectMemberAuthority(String memberId, String teamId) {
-        List<String> list = em.createQuery(MemberSql.GET_MEMBER_AUTH, String.class)
+    public TeamMemberType selectMemberAuthority(String memberId, String teamName) {
+        List<TeamMember> result = em.createQuery("SELECT tm "
+                + "FROM TeamMember tm "
+                + "JOIN FETCH tm.member m "
+                + "JOIN FETCH tm.team t "
+                + "WHERE m.id = :m_id AND t.name = :t_name", TeamMember.class)
                 .setParameter("m_id", memberId)
-                .setParameter("t_id", teamId)
+                .setParameter("t_name", teamName)
                 .getResultList();
-        return list.get(0);
+        return result.size() != 0 ? result.get(0).getType() : TeamMemberType.NONE;
     }
 
     @Override
