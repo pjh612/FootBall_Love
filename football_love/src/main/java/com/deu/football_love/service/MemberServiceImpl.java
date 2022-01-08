@@ -79,22 +79,16 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true)
     public boolean isDuplicationId(String id) {
-        int cnt = memberRepository.isDuplicationId(id);
-        if (cnt == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        long countId = memberRepository.countDuplicationId(id);
+        log.info("Id개수" + Long.toString(countId));
+        return countId != 0;
     }
 
     @Override
     public boolean isDuplicationEmail(String email) {
-        int cnt = memberRepository.isDuplicationEmail(email);
-        if (cnt == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        long countEmail = memberRepository.countDuplicationEmail(email);
+        log.info("Email개수" + Long.toString(countEmail));
+        return countEmail != 0;
     }
 
     @Override
