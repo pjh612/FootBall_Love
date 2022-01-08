@@ -104,7 +104,7 @@ public class MemberTest {
 		MemberJoinRequest joinRequest = new MemberJoinRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
 		memberService.join(joinRequest);
 		String email = "simba0502@naver.com";
-		assertTrue(memberService.isDuplicationId(email));
+		assertTrue(memberService.isDuplicationEmail(email));
 	}
 
 	@Test
