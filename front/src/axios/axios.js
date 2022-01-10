@@ -8,7 +8,7 @@ export function sendJoinData(data) {
     headers: {
       "content-type": "application/json; charset=UTF-8",
     },
-    url: `https://love.fbl.p-e.kr/member`, // 3000 을 8080으로바까야함.
+    url: `https://flove.fbl.p-e.kr/api/member`, // 3000 을 8080으로바까야함.
     data: jsonData,
   });
 }
@@ -20,7 +20,7 @@ export function sendLoginData(data) {
     headers: {
       "content-type": "application/json",
     },
-    url: `https://love.fbl.p-e.kr/member/login_jwt/${data.id}`,
+    url: `https://flove.fbl.p-e.kr/api/member/login_jwt/${data.id}`,
     data: jsonData,
   });
 }
@@ -28,6 +28,6 @@ export function sendLoginData(data) {
 export function getUserInfo(key) {
   return axios({
     method: "get",
-    url: `https://love.fbl.p-e.kr/member/${key}`,
+    url: `https://flove.fbl.p-e.kr/api/member/${key}`,
   });
 }
