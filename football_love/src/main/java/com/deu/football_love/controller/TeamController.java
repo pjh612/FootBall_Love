@@ -35,9 +35,9 @@ public class TeamController {
     /**
      * 팀 이름 중복 체크
      **/
-    @PostMapping("/duplication/{teamId}")
-    public ResponseEntity duplicationCheck(@PathVariable Long teamId) {
-        QueryTeamDto findTeam = teamService.findTeam(teamId);
+    @PostMapping("/duplication/name")
+    public ResponseEntity duplicationCheck(@RequestBody String teamName) {
+        QueryTeamDto findTeam = teamService.findTeamByName(teamName);
         if (findTeam == null)
             return new ResponseEntity(HttpStatus.OK);
         else
