@@ -25,6 +25,6 @@ public class ModifyMatchRequest {
 	Long stadiumId;
 
 	@Future
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	LocalDateTime reservationTime;
 }
