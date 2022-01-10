@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/company")
+@RequestMapping("/api/company")
 @RequiredArgsConstructor
 public class CompanyController {
     private final CompanyService companyService;

@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;

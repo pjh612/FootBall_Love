@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class PostController {
 
     private final MemberService memberService;

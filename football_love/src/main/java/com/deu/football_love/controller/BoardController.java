@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class BoardController {
 
     private final BoardService boardService;

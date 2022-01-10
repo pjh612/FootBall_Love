@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController()
-@RequestMapping("/match")
+@RequestMapping("/api/match")
 @RequiredArgsConstructor
 public class MatchController {
 

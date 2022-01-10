@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/team")
+@RequestMapping("/api/team")
 @RequiredArgsConstructor
 @RestController
 @Slf4j

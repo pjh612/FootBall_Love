@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/stadium")
+@RequestMapping("/api/stadium")
 @RequiredArgsConstructor
 public class StadiumController {
 
