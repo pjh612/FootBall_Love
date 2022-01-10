@@ -3,6 +3,7 @@ package com.deu.football_love.dto.member;
 import java.time.LocalDate;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -35,6 +36,7 @@ public class MemberJoinRequest {
 	@Size(min=1,max=20)
 	private String name;
 
+	@Past
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd", timezone = "Asia/Seoul")
 	private LocalDate birth;
 	
