@@ -1,9 +1,17 @@
 package com.deu.football_love.dto.post;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import lombok.Getter;
 
 @Getter
 public class DeletePostRequest {
-    private Long boardId;
-    private Long postId;
+	@Positive
+	@NotNull
+	private Long boardId;
+
+	@Positive
+	@NotNull
+	private Long postId;
 }

@@ -1,5 +1,8 @@
 package com.deu.football_love.dto.team;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,9 +10,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreateTeamRequest {
-    private String name;
+	@NotNull
+	@Size(min = 1, max = 20)
+	private String name;
 
-    public CreateTeamRequest(String name) {
-        this.name = name;
-    }
+	public CreateTeamRequest(String name) {
+		this.name = name;
+	}
 }

@@ -3,6 +3,7 @@ package com.deu.football_love.controller;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.controller.consts.SessionConst;
@@ -52,7 +53,7 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입 요청")
     @PostMapping
-    public ResponseEntity<QueryMemberDto> join(@RequestBody MemberJoinRequest joinRequest) {
+    public ResponseEntity<QueryMemberDto> join(@Valid @RequestBody MemberJoinRequest joinRequest) {
         QueryMemberDto joinMember = memberService.join(joinRequest);
         if (joinMember == null) {
             return new ResponseEntity<QueryMemberDto>(HttpStatus.CONFLICT);

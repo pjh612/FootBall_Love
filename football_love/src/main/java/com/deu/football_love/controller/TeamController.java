@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @RequestMapping("/team")
 @RequiredArgsConstructor
 @RestController
@@ -48,7 +50,7 @@ public class TeamController {
      * 팀 생성
      **/
     @PostMapping
-    public ResponseEntity add(@RequestBody CreateTeamRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity add(@Valid @RequestBody CreateTeamRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
         CreateTeamResponse response = teamService.createNewTeam(loginInfo.getId(), request.getName());
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -59,7 +61,7 @@ public class TeamController {
      * 팀 가입 신청
      **/
     @PostMapping("/join_requestion/{teamId}")
-    public ResponseEntity apply(@PathVariable Long teamId, JoinApplyRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity apply(@PathVariable Long teamId,@Valid @RequestBody JoinApplyRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
         if (!loginInfo.isLoggedIn())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         teamService.applyToTeam(teamId, loginInfo.getId(), request.getMessage());
