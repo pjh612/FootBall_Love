@@ -4,9 +4,9 @@ import JoinPage from "./components/Join/JoinPage";
 import Login from "./components/Login/Login";
 import ProfileContainer from "./components/Profile/ProfileContainer";
 import WriteContainer from "./components/Write/WriteContainer";
-import Team from "./components/Team/Team";
 import Logout from "./components/Logout/Logout";
-import TeamMake from "./components/Team/TeamMake";
+import TeamMakeContainer from "./components/TeamMake/TeamMakeContainer";
+import TeamPage from "./components/TeamPage/TeamPage";
 import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -41,9 +41,13 @@ function App() {
           <Route path="/login" element={<Login setKey={setKey} />} />
           <Route path="/profile" element={<ProfileContainer user={user} />} />
           <Route path="/write" element={<WriteContainer user={user} />} />
-          <Route path="/team" element={<Team />} />
           <Route path="/logout" element={<Logout setKey={setKey} />} />
-          <Route path="/teammake" element={<TeamMake></TeamMake>} />
+          <Route
+            exact
+            path="/teammake"
+            element={<TeamMakeContainer user={user}></TeamMakeContainer>}
+          />
+          <Route path="/teampage" element={<TeamPage></TeamPage>} />
         </Routes>
       </div>
     </BrowserRouter>
