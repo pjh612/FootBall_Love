@@ -1,16 +1,13 @@
 package com.deu.football_love.domain;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
-
 import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -51,6 +48,9 @@ public class Member extends BaseEntity {
 
     @Column(name = "member_type")
     private MemberType memberType;
+
+    @Column(name = "member_profile_img_uri")
+    private String profileImgUri;
 
     @OneToMany(mappedBy = "author")
     private List<Post> posts = new ArrayList<>();
@@ -93,5 +93,9 @@ public class Member extends BaseEntity {
         birth = request.getBirth();
         address = request.getAddress();
         phone = request.getPhone();
+    }
+
+    public void updateProfileImgUri(String uri) {
+        profileImgUri = uri;
     }
 }
