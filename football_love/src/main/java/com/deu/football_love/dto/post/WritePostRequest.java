@@ -1,20 +1,33 @@
 package com.deu.football_love.dto.post;
 
-import lombok.Data;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 
 @Data
 public class WritePostRequest {
-    private Long authorNumber;
-    private Long boardId;
-    private String title;
-    private String content;
+	@Positive
+	@NotNull
+	private Long authorNumber;
 
-    public WritePostRequest(Long authorNumber, Long boardId, String title, String content) {
-        this.authorNumber = authorNumber;
-        this.boardId = boardId;
-        this.title = title;
-        this.content = content;
-    }
+	@Positive
+	@NotNull
+	private Long boardId;
+
+	@NotNull
+	@Size(min = 1, max = 30)
+	private String title;
+
+	@NotNull
+	@Size(min = 1, max = 30)
+	private String content;
+
+	public WritePostRequest(Long authorNumber, Long boardId, String title, String content) {
+		this.authorNumber = authorNumber;
+		this.boardId = boardId;
+		this.title = title;
+		this.content = content;
+	}
 }

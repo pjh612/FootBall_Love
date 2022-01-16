@@ -17,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class PostController {
      * 게시글 삭제
      */
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity deletePost(@PathVariable Long postId, DeletePostRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+    public ResponseEntity deletePost(@PathVariable Long postId,@Valid @RequestBody DeletePostRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
         QueryPostDto findPost = postService.findPost(postId);
 
         if (findPost == null)
@@ -59,7 +60,7 @@ public class PostController {
      * 게시글 수정
      */
     @PutMapping("/post/{postId}")
-    public ResponseEntity modifyPost(@PathVariable Long postId, UpdatePostRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity modifyPost(@PathVariable Long postId,@Valid @RequestBody UpdatePostRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
         QueryPostDto findPost = postService.findPost(postId);
 
         if (findPost == null)

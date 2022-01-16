@@ -3,14 +3,23 @@ package com.deu.football_love.domain;
 import lombok.Getter;
 import lombok.ToString;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Embeddable
 @ToString
 @Getter
 public class Address {
-
+	@NotNull
+	@Size(min=1,max=20)
     private String city;
+	
+	@NotNull
+	@Size(min=1,max=20)
     private String street;
+	
+	@NotNull
+	@Size(min=1,max=20)
     private String zipcode;
 
     protected Address() {

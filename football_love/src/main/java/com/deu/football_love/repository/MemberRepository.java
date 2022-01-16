@@ -19,9 +19,9 @@ public interface MemberRepository {
 
     Member selectMemberById(String id);
 
-    int isDuplicationId(String id);
+    long countDuplicationId(String id);
 
-    int isDuplicationEmail(String email);
+    long countDuplicationEmail(String email);
 
     //Member updateMember(JoinRequest joinRequest);
 

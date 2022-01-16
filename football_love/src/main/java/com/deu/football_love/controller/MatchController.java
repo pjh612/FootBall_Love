@@ -1,5 +1,7 @@
 package com.deu.football_love.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,7 +43,7 @@ public class MatchController {
 
 	@ApiOperation("매치생성")
 	@PostMapping("/create")
-	public ResponseEntity<AddMatchResponse> add(@RequestBody CreateMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo ) {
+	public ResponseEntity<AddMatchResponse> add(@Valid @RequestBody CreateMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo ) {
 		if (checkAuthority(request.getTeamId(), loginInfo.getNumber())) {
 			return new ResponseEntity<AddMatchResponse>(HttpStatus.FORBIDDEN);
 		}
@@ -52,7 +54,7 @@ public class MatchController {
 
 	@ApiOperation("매치확정")
 	@PostMapping("/approval/{matchId}")
-	public ResponseEntity<MatchApproveResponse> approve(@RequestBody ApproveMatchRequest request,
+	public ResponseEntity<MatchApproveResponse> approve(@Valid @RequestBody ApproveMatchRequest request,
 			@PathVariable("matchId") Long matchId, @AuthenticationPrincipal LoginInfo loginInfo) {
 		if (checkAuthority(request.getTeamId(), loginInfo.getNumber())) {
 			return new ResponseEntity<MatchApproveResponse>(HttpStatus.FORBIDDEN);
@@ -63,7 +65,7 @@ public class MatchController {
 
 	@ApiOperation("매치신청")
 	@PostMapping("/match/apply")
-	public ResponseEntity<MatchApplicationResponse> apply(@RequestBody ApplyMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+	public ResponseEntity<MatchApplicationResponse> apply(@Valid @RequestBody ApplyMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
 		if (checkAuthority(request.getTeamId(), loginInfo.getNumber())) {
 			return new ResponseEntity<MatchApplicationResponse>(HttpStatus.FORBIDDEN);
 		}
@@ -73,7 +75,7 @@ public class MatchController {
 
 	@ApiOperation("매치삭제")
 	@DeleteMapping
-	public ResponseEntity cancel(@RequestBody RemoveRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+	public ResponseEntity cancel(@Valid @RequestBody RemoveRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
 		if (checkAuthority(request.getTeamId(), loginInfo.getNumber())) {
 			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		}
@@ -83,7 +85,7 @@ public class MatchController {
 
 	@ApiOperation("매치수정")
 	@PutMapping
-	public ResponseEntity modify(@RequestBody ModifyMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+	public ResponseEntity modify(@Valid @RequestBody ModifyMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
 		if (checkAuthority(request.getTeamId(), loginInfo.getNumber())) {
 			return new ResponseEntity(HttpStatus.FORBIDDEN);
 		}

@@ -7,6 +7,9 @@ import com.deu.football_love.dto.board.DeleteBoardResponse;
 import com.deu.football_love.service.BoardService;
 import com.deu.football_love.service.TeamService;
 import com.mysql.cj.log.Log;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +31,7 @@ public class BoardController {
     private final TeamService teamService;
 
     @PostMapping("/team/{teamId}/board")
-    public ResponseEntity add(@PathVariable("teamId") Long teamId, @RequestBody AddBoardRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+    public ResponseEntity add(@PathVariable("teamId") Long teamId,@Valid @RequestBody AddBoardRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
         TeamMemberType teamMemberType = teamService.authorityCheck(teamId, loginInfo.getNumber());
         if (teamMemberType != TeamMemberType.ADMIN && teamMemberType != TeamMemberType.LEADER)
             return new ResponseEntity("권한 없음", HttpStatus.FORBIDDEN);
