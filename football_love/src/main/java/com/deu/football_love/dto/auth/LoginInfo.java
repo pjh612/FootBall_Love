@@ -3,6 +3,7 @@ package com.deu.football_love.dto.auth;
 import com.deu.football_love.domain.Member;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import java.util.Collection;
 
 @Getter
 @ToString
+@Slf4j
 public class LoginInfo implements UserDetails {
     private Long number;
     private String id;
@@ -20,6 +22,7 @@ public class LoginInfo implements UserDetails {
     private Collection<GrantedAuthority> roles;
 
     public LoginInfo() {
+        this.number= -1L;
         this.number = -1L;
         this.name = "anonymous";
         this.password = "secret";
