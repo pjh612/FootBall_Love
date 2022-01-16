@@ -67,7 +67,7 @@ public class WithdrawalMemberTest {
         Assertions.assertEquals(1, memberRepository.chkWithdraw(memberA.getId()));
         Assertions.assertEquals(1, memberRepository.chkWithdraw(memberB.getId()));
 
-        memberRepository.deleteWithdrawalMemberByDate(cur, 15L);
+        memberRepository.deleteWithdrawalMemberByDate(cur, 14L);
         Assertions.assertNull(memberRepository.chkWithdraw(memberA.getId()));
         Assertions.assertNull(memberRepository.chkWithdraw(memberB.getId()));
     }

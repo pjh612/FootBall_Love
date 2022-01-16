@@ -18,4 +18,5 @@ public interface TeamRepository {
     void deleteTeamMember(Long teamId, Long memberNumber);
     List<TeamMember> selectTeamMember(Long teamId, Long memberNumber);
     void deleteTeam(Team team);
+    boolean existsTeamByTeamName(String teamName);
 }

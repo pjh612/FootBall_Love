@@ -16,7 +16,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/stadium")
+@RequestMapping("/api/stadium")
 @RequiredArgsConstructor
 public class StadiumController {
 
