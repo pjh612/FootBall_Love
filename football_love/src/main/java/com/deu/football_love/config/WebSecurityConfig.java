@@ -39,15 +39,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
+		configuration.addAllowedOrigin("http://115.85.183.128:3000");
 		configuration.addAllowedOrigin("http://127.0.0.1:3000");
+		configuration.addAllowedOrigin("http://localhost:3000");
+		configuration.addAllowedOrigin("https://127.0.0.1:3000");
+		configuration.addAllowedOrigin("https://localhost:3000");
+		configuration.addAllowedOrigin("https://dev.example.com:3000");
+		configuration.addAllowedOrigin("https://localhost:3000");
+		configuration.addAllowedOrigin("https://flove.fbl.p-e.kr");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
 		configuration.setAllowCredentials(true);
-
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+
+
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
@@ -59,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.and()
 					.authorizeRequests()
-					.antMatchers("/member","/member/login_jwt/**","/member/login/**","/member/**","/team/**").permitAll()
+					.antMatchers("/**", "/","/member","/member/login_jwt/**","/team/**").permitAll()
 					.anyRequest().authenticated()
 				.and()
 					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
