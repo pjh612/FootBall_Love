@@ -31,3 +31,11 @@ export function getUserInfo(key) {
     url: `https://flove.fbl.p-e.kr/api/member/${key}`,
   });
 }
+
+export function postUserImg(imgFile) {
+  return axios({
+    method: "post",
+    url: "https://flove.fbl.p-e.kr/api/upload",
+    data: imgFile,
+  });
+}

@@ -5,7 +5,6 @@ import JoinModal from "../Join/JoinModal";
 import { Link } from "react-router-dom";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import UserAvatar from "./UserAvatar";
-import UserRdAvartar from "./UserRdAvatar";
 
 const NavbarContainer = styled.div`
   margin: 0;
@@ -121,11 +120,7 @@ export default function Navbar({ user }) {
         </NavBarContainerLogo>
         <NavBarContainerUser>
           {user ? (
-            user.image ? (
-              <UserAvatar user={user}></UserAvatar>
-            ) : (
-              <UserRdAvartar user={user}></UserRdAvartar>
-            )
+            <UserAvatar user={user}></UserAvatar>
           ) : (
             <GoIn>
               <Login onClick={() => openLoginModalFn()}>로그인</Login>
