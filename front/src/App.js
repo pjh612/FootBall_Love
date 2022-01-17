@@ -3,18 +3,18 @@ import LandingPage from "./components/MainContainer/LandingPage";
 import JoinPage from "./components/Join/JoinPage";
 import Login from "./components/Login/Login";
 import ProfileContainer from "./components/Profile/ProfileContainer";
-import WriteContainer from "./components/Write/WriteContainer";
 import Logout from "./components/Logout/Logout";
 import TeamMakeContainer from "./components/TeamMake/TeamMakeContainer";
 import TeamPage from "./components/TeamPage/TeamPage";
+import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
 import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function App() {
-  const devENV = false;
-  const [user, setUser] = useState(devENV);
-  const [key, setKey] = useState(devENV);
+  const devLogin = true;
+  const [user, setUser] = useState(devLogin);
+  const [key, setKey] = useState(devLogin); // key 는 유저의 고유 번호로, 로그인 성공시 api 에서 return 되는 값이다.
 
   useEffect(() => {
     if (key) {
@@ -40,7 +40,7 @@ function App() {
           <Route path="/join" element={<JoinPage />} />
           <Route path="/login" element={<Login setKey={setKey} />} />
           <Route path="/profile" element={<ProfileContainer user={user} />} />
-          <Route path="/write" element={<WriteContainer user={user} />} />
+          <Route path="/write" element={<WriteMatchContainer user={user} />} />
           <Route path="/logout" element={<Logout setKey={setKey} />} />
           <Route
             exact
