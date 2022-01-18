@@ -8,9 +8,11 @@ import com.deu.football_love.repository.BoardRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +26,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
-
+    private final GcpStorageService gcpStorageService;
+    @SneakyThrows
     @Override
 
     public WritePostResponse writePost(WritePostRequest request) {
@@ -37,6 +40,9 @@ public class PostServiceImpl implements PostService {
         newPost.setBoard(findBoard);
         findMember.getPosts().add(newPost);
         findBoard.getPosts().add(newPost);
+        for (MultipartFile image : request.getImages()) {
+           newPost.addPostImage(gcpStorageService.updatePostImg(image));
+        }
         postRepository.insertPost(newPost);
         return WritePostResponse.from(newPost);
     }
@@ -46,7 +52,6 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.selectPost(postId);
         if (post == null)
             return null;
-        System.out.println("post = " + post);
         postRepository.deletePost(post);
         return new DeletePostResponse(postId);
     }
@@ -63,17 +68,17 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public QueryPostDto findPost(Long postId) {
-        Post post = postRepository.selectPost(postId);
-        if (post == null)
+        QueryPostDto result = postRepository.selectPostByPostId(postId);
+        if (result == null)
             return null;
-        return QueryPostDto.from(post);
+        return result;
     }
 
     @Override
     public List<QueryPostDto> findAllPostsByBoardId(Long boardId)
     {
         List<Post> posts = postRepository.selectAllPostsByBoardId(boardId);
-        return posts.stream().map(p -> new QueryPostDto(p.getId(), p.getAuthor().getNumber(), p.getAuthor().getId(), p.getBoard().getId(), p.getCreatedDate(), p.getLastModifiedDate(), p.getTitle(), p.getContent())).collect(Collectors.toList());
+        return posts.stream().map(p -> new QueryPostDto(p)).collect(Collectors.toList());
 
     }
 }

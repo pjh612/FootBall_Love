@@ -14,4 +14,6 @@ public interface PostService {
     QueryPostDto findPost(Long postId);
 
     List<QueryPostDto> findAllPostsByBoardId(Long boardId);
+
+
 }

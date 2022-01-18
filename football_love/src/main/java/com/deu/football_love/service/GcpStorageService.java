@@ -33,6 +33,9 @@ public class GcpStorageService {
     @Value("${spring.cloud.gcp.storage.profileBucketName}")
     private String profileBucketName;
 
+    @Value("${spring.cloud.gcp.storage.postBucketName}")
+    private String postBucketName;
+
     private final MemberRepository memberRepository;
 
     public String updateProfileImg(MultipartFile file, String userId) throws IOException {
@@ -42,19 +45,30 @@ public class GcpStorageService {
         if (findMember.getProfileImgUri() != null)
             imgName = findMember.getProfileImgUri();
         else
-            imgName = userId + UUID.randomUUID();
+            imgName = UUID.randomUUID().toString();
         BlobInfo blobInfo = BlobInfo.newBuilder(profileBucketName, imgName)
                 .setContentType(file.getContentType())
                 .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
                 .build();
         try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.md5Match())) {
             ByteStreams.copy(targetStream, Channels.newOutputStream(writer));
-
         }
         findMember.updateProfileImgUri(imgName);
         return findMember.getProfileImgUri();
     }
 
+    public String updatePostImg(MultipartFile file) throws IOException {
+        InputStream targetStream = new ByteArrayInputStream(file.getBytes());
+        String imgName = UUID.randomUUID().toString();
+        BlobInfo blobInfo = BlobInfo.newBuilder(postBucketName, imgName)
+                .setContentType(file.getContentType())
+                .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
+                .build();
+        try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.md5Match())) {
+            ByteStreams.copy(targetStream, Channels.newOutputStream(writer));
+        }
+        return imgName;
+    }
 
 
 }
