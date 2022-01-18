@@ -12,7 +12,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function App() {
-  const devLogin = true;
+  const devLogin = false;
   const [user, setUser] = useState(devLogin);
   const [key, setKey] = useState(devLogin); // key 는 유저의 고유 번호로, 로그인 성공시 api 에서 return 되는 값이다.
 

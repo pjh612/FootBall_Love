@@ -26,8 +26,8 @@ export default function TeamPageNav() {
     <ThemeProvider theme={theme}>
       <Box
         sx={{
+          width: "80vw",
           display: "flex",
-
           paddingLeft: "210px",
           borderBottom: "1px solid #eeeeee",
         }}

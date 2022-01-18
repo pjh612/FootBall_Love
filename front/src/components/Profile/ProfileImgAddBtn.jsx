@@ -8,6 +8,7 @@ const ProfileImgAddBtn = () => {
 
   const onChange = (e) => {
     const newImg = e.target.files[0];
+    console.log(newImg);
     const formData = new FormData();
     formData.append("file", newImg);
     postUserImg(formData)

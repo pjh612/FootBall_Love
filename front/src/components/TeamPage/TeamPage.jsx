@@ -8,6 +8,7 @@ const TeamPage = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
       }}
     >
       <TeamPageHeader></TeamPageHeader>
