@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 				.and()
 					.authorizeRequests()
-					.antMatchers("/**", "/","/member","/member/login_jwt/**","/team/**").permitAll()
+					.antMatchers("/**", "/","/api/member","/member/login_jwt/**","/api/team/**").permitAll()
 					.anyRequest().authenticated()
 				.and()
 					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);

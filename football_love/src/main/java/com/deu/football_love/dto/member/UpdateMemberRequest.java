@@ -1,18 +1,18 @@
 package com.deu.football_love.dto.member;
 
-import com.deu.football_love.domain.Address;
-import com.deu.football_love.domain.type.MemberType;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.istack.NotNull;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.deu.football_love.domain.Address;
+import com.deu.football_love.domain.type.MemberType;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
