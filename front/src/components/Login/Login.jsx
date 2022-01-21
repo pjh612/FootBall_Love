@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
-import {setLocalStorage} from '../../setLocalStorage';
+
 
 const Div = styled.div`
     width:100vw;
@@ -47,14 +47,14 @@ const Login = ({setKey}) => {
         sendLoginData(data)
         .then((res) => {
             console.log(res);
-            setKey(res.data.key);
-            setLocalStorage(res.data.key);
+            setKey(res.data.memberNumber);
             setLoginSuccess(true);
         })
         .catch((err) => {
             console.error(err);
         });
     }
+    
     return(
       <Div>
                  <Div2>

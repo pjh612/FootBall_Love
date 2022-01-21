@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/stadium")
 @RequiredArgsConstructor
@@ -37,13 +39,13 @@ public class StadiumController {
     }
 
     @PostMapping
-    public ResponseEntity add(AddStadiumRequest request) {
+    public ResponseEntity add(@Valid @RequestBody AddStadiumRequest request) {
         AddStadiumResponse response = stadiumService.addStadium(request.getCompanyId(), request.getType(), request.getSize(), request.getCost());
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity delete(DeleteStadiumRequest request) {
+    public ResponseEntity delete(@Valid @RequestBody DeleteStadiumRequest request) {
         RemoveStadiumResponse response = stadiumService.deleteStadium(request.getStadiumId());
         return new ResponseEntity(response, HttpStatus.OK);
 

@@ -1,23 +1,35 @@
 package com.deu.football_love.dto.post;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Data
 public class WritePostRequest {
-    private Long authorNumber;
-    private Long boardId;
-    private String title;
-    private String content;
-    private List<MultipartFile> images;
+	@Positive
+	@NotNull
+	private Long authorNumber;
 
-    public WritePostRequest(Long authorNumber, Long boardId, String title, String content, List<MultipartFile> images) {
+	@Positive
+	@NotNull
+	private Long boardId;
+
+	@NotNull
+	@Size(min = 1, max = 30)
+	private String title;
+
+	@NotNull
+	@Size(min = 1, max = 30)
+	private String content;
+  private List<MultipartFile> images;
+
+	   public WritePostRequest(Long authorNumber, Long boardId, String title, String content, List<MultipartFile> images) {
         this.authorNumber = authorNumber;
         this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.images = images;
     }
+
 }

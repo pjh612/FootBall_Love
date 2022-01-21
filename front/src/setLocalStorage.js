@@ -1,5 +1,5 @@
 export function setLocalStorage(key) {
-  window.setLocalStorage("key", JSON.stringify(key));
+  window.localStorage.setItem("key", JSON.stringify(key));
 }
 
 export function getLocalStorage() {

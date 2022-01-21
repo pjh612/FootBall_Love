@@ -3,6 +3,7 @@ package com.deu.football_love.controller;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.controller.consts.SessionConst;
@@ -53,7 +54,7 @@ public class MemberController {
 
     @ApiOperation(value = "회원가입 요청")
     @PostMapping
-    public ResponseEntity<QueryMemberDto> join(@RequestBody MemberJoinRequest joinRequest) {
+    public ResponseEntity<QueryMemberDto> join(@Valid @RequestBody MemberJoinRequest joinRequest) {
         QueryMemberDto joinMember = memberService.join(joinRequest);
         if (joinMember == null) {
             return new ResponseEntity<QueryMemberDto>(HttpStatus.CONFLICT);
@@ -130,7 +131,7 @@ public class MemberController {
     @ApiOperation(value = "아이디 중복확인 요청")
     @GetMapping("/duplication/id")
     public ResponseEntity isDuplicaitonId(@RequestParam String id) {
-        if (memberService.isDuplicationId(id)) {
+        if (!memberService.isDuplicationId(id)) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.CONFLICT);
@@ -140,7 +141,7 @@ public class MemberController {
     @ApiOperation(value = "이메일 중복확인 요청")
     @GetMapping("/duplication/email")
     public ResponseEntity isDuplicaitonEmail(@RequestParam String email) {
-        if (memberService.isDuplicationEmail(email)) {
+        if (!memberService.isDuplicationEmail(email)) {
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.CONFLICT);
