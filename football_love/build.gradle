@@ -40,6 +40,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	testImplementation 'org.springframework.batch:spring-batch-test'
+	implementation platform("com.google.cloud:spring-cloud-gcp-dependencies:2.0.7")
+	implementation("com.google.cloud:spring-cloud-gcp-starter-storage")
+
+	implementation platform('com.google.cloud:libraries-bom:24.2.0')
+	implementation 'com.google.cloud:google-cloud-storage'
+
 }
 
 test {

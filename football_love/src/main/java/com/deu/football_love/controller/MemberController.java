@@ -18,6 +18,7 @@ import com.deu.football_love.dto.member.UpdateMemberRequest;
 import com.deu.football_love.service.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 public class MemberController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -72,16 +73,18 @@ public class MemberController {
             ArrayList<String> data = new ArrayList<>();
             data.add(loginRequest.getId());
             data.add(loginResponse.getAccessToken());
-            Cookie accessTokenCookie = new Cookie(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken());
-            Cookie refreshTokenCookie = new Cookie(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken());
-            // accessTokenCookie.setMaxAge((int) JwtTokenProvider.TOKEN_VALIDATION_SECOND);
-            // accessTokenCookie.setSecure(true);
-            // accessTokenCookie.setHttpOnly(true);
-            // refreshTokenCookie.setMaxAge((int) JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
-            // refreshTokenCookie.setSecure(true);
-            // refreshTokenCookie.setHttpOnly(true);
-            response.addCookie(accessTokenCookie);
-            response.addCookie(refreshTokenCookie);
+            ResponseCookie accessTokenCookie = ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken())
+                    .path("/")
+                    .secure(true)
+                    .sameSite("None")
+                    .build();
+            ResponseCookie refreshTokenCookie = ResponseCookie.from(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken())
+                    .path("/")
+                    .secure(true)
+                    .sameSite("None")
+                    .build();
+            response.setHeader("Set-Cookie", accessTokenCookie.toString());
+            response.addHeader("Set-Cookie", refreshTokenCookie.toString());
             redisService.setStringValue(loginResponse.getRefreshToken(), data, JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
             return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
         }

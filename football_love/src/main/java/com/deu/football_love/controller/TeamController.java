@@ -12,12 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 import javax.validation.Valid;
 
-@RequestMapping("/team")
+@RequestMapping("/api/team")
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -37,9 +35,9 @@ public class TeamController {
     /**
      * 팀 이름 중복 체크
      **/
-    @PostMapping("/duplication/{teamId}")
-    public ResponseEntity duplicationCheck(@PathVariable Long teamId) {
-        QueryTeamDto findTeam = teamService.findTeam(teamId);
+    @PostMapping("/duplication/name")
+    public ResponseEntity duplicationCheck(@RequestBody String teamName) {
+        QueryTeamDto findTeam = teamService.findTeamByName(teamName);
         if (findTeam == null)
             return new ResponseEntity(HttpStatus.OK);
         else

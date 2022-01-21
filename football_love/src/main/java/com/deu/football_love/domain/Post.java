@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +32,9 @@ public class Post extends BaseEntity {
     @Column(name = "post_content")
     private String content;
 
+    @OneToMany(mappedBy = "post")
+    private List<PostImage> postImages = new ArrayList<>();
+
     public Post() {
     }
 
@@ -54,5 +57,10 @@ public class Post extends BaseEntity {
         this.author = null;
         board.getPosts().remove(this);
         this.board = null;
+    }
+
+    public void addPostImage(String imageUri) {
+        PostImage postImage = new PostImage(imageUri, this);
+        this.getPostImages().add(postImage);
     }
 }

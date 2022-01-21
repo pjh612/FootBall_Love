@@ -134,8 +134,8 @@ public class TeamServiceImplTest {
         QueryMemberDto memberA = memberService.findMemberById("memberA");
         QueryMemberDto memberB = memberService.findMemberById("memberB");
         AddBoardResponse boardA = boardService.add(new AddBoardRequest("boardA", BoardType.NOTICE, teamId));
-        postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(), "hello", "content"));
-        postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(), "hello", "content"));
+        postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(), "hello", "content", null));
+        postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(), "hello", "content", null));
         teamService.disbandmentTeam(findTeam.getId());
 
 
@@ -155,8 +155,8 @@ public class TeamServiceImplTest {
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
         AddBoardResponse addBoardResponse = boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
-        WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요", "가입인사 합니다."));
-        WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요 팀장입니다.", "내일 집합이요"));
+        WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요", "가입인사 합니다.", null));
+        WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요 팀장입니다.", "내일 집합이요", null));
 
         teamService.disbandmentTeam(findTeam.getId());
 

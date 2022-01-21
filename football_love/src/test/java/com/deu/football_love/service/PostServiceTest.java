@@ -78,7 +78,7 @@ public class PostServiceTest {
 
         BoardDto findBoard = boardService.findById(response.getBoardId());
 
-        WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title", "hi");
+        WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title", "hi", null);
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);
         System.out.println("writePostResponse = " + writePostResponse);
         QueryPostDto findPost = postService.findPost(writePostResponse.getPostId());
@@ -97,7 +97,7 @@ public class PostServiceTest {
         AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
         AddBoardResponse response = boardService.add(request);
         BoardDto findBoard = boardService.findById(response.getBoardId());
-        WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title", "hi");
+        WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title", "hi", null);
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);
         System.out.println("writePostResponse = " + writePostResponse);
         QueryPostDto findPost = postService.findPost(writePostResponse.getPostId());
@@ -122,10 +122,10 @@ public class PostServiceTest {
         AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
         AddBoardResponse response = boardService.add(request);
         BoardDto findBoard = boardService.findById(response.getBoardId());
-        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi");
-        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi");
-        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi");
-        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi");
+        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi", null);
+        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi", null);
+        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi", null);
+        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi", null);
 
         WritePostResponse writePostResponse1 = postService.writePost(writePostRequest1);
         WritePostResponse writePostResponse2 = postService.writePost(writePostRequest2);
@@ -163,10 +163,10 @@ public class PostServiceTest {
         AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
         AddBoardResponse response = boardService.add(request);
         BoardDto findBoard = boardService.findById(response.getBoardId());
-        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi");
-        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi");
-        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi");
-        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi");
+        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi", null);
+        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi", null);
+        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi", null);
+        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi", null);
 
         WritePostResponse writePostResponse1 = postService.writePost(writePostRequest1);
         WritePostResponse writePostResponse2 = postService.writePost(writePostRequest2);
@@ -196,10 +196,10 @@ public class PostServiceTest {
         AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
         AddBoardResponse response = boardService.add(request);
         BoardDto findBoard = boardService.findById(response.getBoardId());
-        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi");
-        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi");
-        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi");
-        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi");
+        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi", null);
+        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi", null);
+        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi", null);
+        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi", null);
 
         WritePostResponse writePostResponse1 = postService.writePost(writePostRequest1);
         WritePostResponse writePostResponse2 = postService.writePost(writePostRequest2);
@@ -235,10 +235,10 @@ public class PostServiceTest {
         AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
         AddBoardResponse response = boardService.add(request);
         BoardDto findBoard = boardService.findById(response.getBoardId());
-        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi");
-        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi");
-        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi");
-        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi");
+        WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title1", "hi", null);
+        WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title2", "hi", null);
+        WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title3", "hi", null);
+        WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), "title4", "hi", null);
 
         WritePostResponse writePostResponse1 = postService.writePost(writePostRequest1);
         WritePostResponse writePostResponse2 = postService.writePost(writePostRequest2);

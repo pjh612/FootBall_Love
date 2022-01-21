@@ -92,4 +92,13 @@ public class TeamRepositoryImpl implements TeamRepository {
     {
         em.remove(team);
     }
+
+    @Override
+    public boolean existsTeamByTeamName(String teamName) {
+        Long result = em.createQuery("SELECT count(t) FROM Team t where t.name = :teamName", Long.class)
+                .setParameter("teamName", teamName)
+                .setMaxResults(1)
+                .getSingleResult();
+        return result == 1 ? true : false;
+    }
 }
