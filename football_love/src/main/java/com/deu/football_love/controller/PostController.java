@@ -1,13 +1,7 @@
 package com.deu.football_love.controller;
 
-import com.deu.football_love.controller.consts.SessionConst;
-import com.deu.football_love.domain.Board;
 import com.deu.football_love.dto.auth.LoginInfo;
-import com.deu.football_love.dto.board.BoardDto;
-import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.*;
-import com.deu.football_love.service.BoardService;
-import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.PostService;
 import com.deu.football_love.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -24,10 +19,8 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class PostController {
 
-    private final MemberService memberService;
     private final PostService postService;
     private final TeamService teamService;
-    private final BoardService boardService;
 
     /**
      * 게시글 생성
@@ -69,6 +62,14 @@ public class PostController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         postService.modifyPost(postId, request);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity findPost(@PathVariable Long postId) {
+        QueryPostDto post = postService.findPost(postId);
+        if (post == null)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(post, HttpStatus.OK);
     }
 
 }

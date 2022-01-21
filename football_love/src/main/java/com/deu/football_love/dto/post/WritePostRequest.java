@@ -1,5 +1,4 @@
 package com.deu.football_love.dto.post;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -23,11 +22,14 @@ public class WritePostRequest {
 	@NotNull
 	@Size(min = 1, max = 30)
 	private String content;
+  private List<MultipartFile> images;
 
-	public WritePostRequest(Long authorNumber, Long boardId, String title, String content) {
-		this.authorNumber = authorNumber;
-		this.boardId = boardId;
-		this.title = title;
-		this.content = content;
-	}
+	   public WritePostRequest(Long authorNumber, Long boardId, String title, String content, List<MultipartFile> images) {
+        this.authorNumber = authorNumber;
+        this.boardId = boardId;
+        this.title = title;
+        this.content = content;
+        this.images = images;
+    }
+
 }
