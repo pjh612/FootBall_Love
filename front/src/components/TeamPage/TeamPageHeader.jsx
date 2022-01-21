@@ -9,6 +9,8 @@ const TeamPageHeader = () => {
       sx={{
         height: 145,
         display: "flex",
+        alignSelf: "flex-start",
+        paddingLeft: "100px",
       }}
     >
       <Avatar

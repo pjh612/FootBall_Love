@@ -1,9 +1,11 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import UserMenuList from "./UserMenuList";
 
 const UserAvatar = ({ user }) => {
+  console.log(user.profileUri);
+
   function stringToColor(string) {
     if (!string) {
       return "#000000";
@@ -28,13 +30,6 @@ const UserAvatar = ({ user }) => {
   }
 
   const [openMenu, setOpenMenu] = useState(false);
-  const [userImg, setUserImg] = useState("#");
-
-  useEffect(() => {
-    if (user.image) {
-      setUserImg(user.image);
-    }
-  }, [user]);
 
   const OpenMenuList = () => {
     setOpenMenu(!openMenu);
@@ -44,10 +39,14 @@ const UserAvatar = ({ user }) => {
     <>
       <Avatar
         onClick={() => OpenMenuList()}
-        src={userImg}
+        src={
+          user.profileUri
+            ? `https://storage.googleapis.com/fbl_profile_img/${user.profileUri}`
+            : "#"
+        }
         sx={{ cursor: "pointer", bgcolor: stringToColor(user.name) }}
       >
-        {user.image ? null : user.name}
+        {user.profileUri ? null : user.name}
       </Avatar>
       {openMenu ? (
         <UserMenuList setOpenMenu={setOpenMenu}></UserMenuList>

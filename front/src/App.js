@@ -7,6 +7,7 @@ import Logout from "./components/Logout/Logout";
 import TeamMakeContainer from "./components/TeamMake/TeamMakeContainer";
 import TeamPage from "./components/TeamPage/TeamPage";
 import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
+import WriteAnyContainer from "./components/WriteAny/WriteAnyContainer";
 import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -48,6 +49,10 @@ function App() {
             element={<TeamMakeContainer user={user}></TeamMakeContainer>}
           />
           <Route path="/teampage" element={<TeamPage></TeamPage>} />
+          <Route
+            path="/writeany"
+            element={<WriteAnyContainer user={user}></WriteAnyContainer>}
+          />
         </Routes>
       </div>
     </BrowserRouter>

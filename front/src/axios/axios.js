@@ -35,7 +35,7 @@ export function getUserInfo(key) {
 export function postUserImg(imgFile) {
   return axios({
     method: "post",
-    url: "https://flove.fbl.p-e.kr/api/upload",
+    url: "https://flove.fbl.p-e.kr/api/profile_img",
     data: imgFile,
   });
 }
