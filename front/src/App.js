@@ -7,12 +7,13 @@ import Logout from "./components/Logout/Logout";
 import TeamMakeContainer from "./components/TeamMake/TeamMakeContainer";
 import TeamPage from "./components/TeamPage/TeamPage";
 import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
+import WriteAnyContainer from "./components/WriteAny/WriteAnyContainer";
 import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 function App() {
-  const devLogin = false;
+  const devLogin = true;
   const [user, setUser] = useState(devLogin);
   const [key, setKey] = useState(devLogin); // key 는 유저의 고유 번호로, 로그인 성공시 api 에서 return 되는 값이다.
 
@@ -48,6 +49,10 @@ function App() {
             element={<TeamMakeContainer user={user}></TeamMakeContainer>}
           />
           <Route path="/teampage" element={<TeamPage></TeamPage>} />
+          <Route
+            path="/writeany"
+            element={<WriteAnyContainer user={user}></WriteAnyContainer>}
+          />
         </Routes>
       </div>
     </BrowserRouter>
