@@ -8,7 +8,7 @@ export function sendJoinData(data) {
     headers: {
       "content-type": "application/json; charset=UTF-8",
     },
-    url: `https://flove.fbl.p-e.kr/api/member`, // 3000 을 8080으로바까야함.
+    url: `https://flove.fbl.p-e.kr/api/member`,
     data: jsonData,
   });
 }
@@ -37,5 +37,13 @@ export function postUserImg(imgFile) {
     method: "post",
     url: "https://flove.fbl.p-e.kr/api/profile_img",
     data: imgFile,
+  });
+}
+
+export function postUserPost(fd) {
+  return axios({
+    method: "post",
+    url: "https://flove.fbl.p-e.kr/api/board/post",
+    data: fd,
   });
 }

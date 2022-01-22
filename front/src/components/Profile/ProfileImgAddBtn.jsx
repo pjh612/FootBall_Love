@@ -1,24 +1,30 @@
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-// import { useState } from "react";
 import { postUserImg } from "../../axios/axios";
+import { useDispatch } from "react-redux";
+import { updateUserProfileUri } from "../../action/createAction";
 
 const ProfileImgAddBtn = () => {
   //   const [upLoadImg, setUpLoadImg] = useState(null);
+  const dispatch = useDispatch();
 
-  const onChange = (e) => {
+  const onChange = async (e) => {
     const newImg = e.target.files[0];
-    console.log(newImg);
     const formData = new FormData();
     formData.append("file", newImg);
-    postUserImg(formData)
-      .then((res) => console.log(res))
-      .catch((res) => console.log(res));
+
+    try {
+      const profileUri = await postUserImg(formData).then((res) => res.data);
+      dispatch(updateUserProfileUri(profileUri));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const Input = styled("input")({
     display: "none",
   });
+
   return (
     <label htmlFor="contained-button-file">
       <Input
