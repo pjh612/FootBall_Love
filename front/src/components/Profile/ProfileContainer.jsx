@@ -1,9 +1,9 @@
 import CheckLogin from "../CheckLogin";
 import Profile from "./Profile";
 
-const ProfileContainer = ({ user }) => {
+const ProfileContainer = () => {
   return (
-    <CheckLogin user={user}>
+    <CheckLogin>
       <Profile></Profile>
     </CheckLogin>
   );

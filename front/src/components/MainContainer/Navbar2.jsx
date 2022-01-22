@@ -50,6 +50,12 @@ export default function Navbar2() {
           >
             <Item>팀 만들기</Item>
           </Link>
+          <Link
+            to="/writeany"
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <Item>글쓰기</Item>
+          </Link>
         </NavbarItem>
       </NavbarWrapper>
     </NavbarContainer>

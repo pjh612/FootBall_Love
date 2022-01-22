@@ -2,10 +2,9 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import { useState } from "react";
 import UserMenuList from "./UserMenuList";
+import { useSelector } from "react-redux";
 
-const UserAvatar = ({ user }) => {
-  console.log(user.profileUri);
-
+const UserAvatar = () => {
   function stringToColor(string) {
     if (!string) {
       return "#000000";
@@ -35,6 +34,9 @@ const UserAvatar = ({ user }) => {
     setOpenMenu(!openMenu);
   };
 
+  const user = useSelector((state) => state.userReducer.user);
+  console.log(`네브바 아바타 이미지 링크 ${user.profileUri}`);
+  console.log("네브바 리랜더링완료");
   return (
     <>
       <Avatar
@@ -46,7 +48,11 @@ const UserAvatar = ({ user }) => {
         }
         sx={{ cursor: "pointer", bgcolor: stringToColor(user.name) }}
       >
-        {user.profileUri ? null : user.name}
+        {user.profileUri
+          ? null
+          : user.name.length <= 2
+          ? user.name
+          : user.name.slice(1, 3)}
       </Avatar>
       {openMenu ? (
         <UserMenuList setOpenMenu={setOpenMenu}></UserMenuList>

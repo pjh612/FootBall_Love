@@ -1,8 +1,10 @@
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-const ProfileInfo = ({ user }) => {
+import { useSelector } from "react-redux";
+const ProfileInfo = () => {
   // defaultValue 를 user 의 속성으로 만들어주면됨
+  const user = useSelector((state) => state.userReducer.user);
 
   const userName = user.name;
   const userNickName = user.nickname;

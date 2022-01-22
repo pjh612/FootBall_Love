@@ -17,16 +17,15 @@ const InfoWrapper = styled.div`
   height: 100%;
 `;
 
-const Profile = ({ user }) => {
-  console.log(user);
+const Profile = () => {
   return (
     <>
       <FlexBox>
         <AvatarWrapper>
-          <ProfileAvatar userImg={user}></ProfileAvatar>
+          <ProfileAvatar></ProfileAvatar>
         </AvatarWrapper>
         <InfoWrapper>
-          <ProfileInfo user={user}></ProfileInfo>
+          <ProfileInfo></ProfileInfo>
         </InfoWrapper>
       </FlexBox>
     </>
