@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class PostImage {
 
     @Id
+    @Column(name = "post_img_id")
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
