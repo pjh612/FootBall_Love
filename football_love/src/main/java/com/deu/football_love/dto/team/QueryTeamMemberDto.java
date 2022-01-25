@@ -7,7 +7,9 @@ import lombok.Getter;
 @Getter
 public class QueryTeamMemberDto {
 
-    private Long id;
+    private Long teamMemberId;
+
+    private Long teamId;
 
     private String teamName;
 
@@ -16,7 +18,8 @@ public class QueryTeamMemberDto {
     private TeamMemberType authority;
 
     public QueryTeamMemberDto(TeamMember teamMember) {
-        this.id = teamMember.getId();
+        this.teamMemberId = teamMember.getId();
+        this.teamId = teamMember.getTeam().getId();
         this.teamName = teamMember.getTeam().getName();
         this.memberId = teamMember.getMember().getId();
         this.authority = teamMember.getType();
