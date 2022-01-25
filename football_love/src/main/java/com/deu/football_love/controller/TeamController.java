@@ -49,7 +49,7 @@ public class TeamController {
      **/
     @PostMapping
     public ResponseEntity add(@Valid @RequestBody CreateTeamRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
-        CreateTeamResponse response = teamService.createNewTeam(loginInfo.getId(), request.getName());
+        CreateTeamResponse response = teamService.createNewTeam(loginInfo.getId(), request.getTeamName());
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);
