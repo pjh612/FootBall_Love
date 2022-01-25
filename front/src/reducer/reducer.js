@@ -1,11 +1,11 @@
+import produce from "immer";
+
 function userReducer(state, action) {
   if (state === undefined) {
     return {
       user: null,
     };
   }
-
-  const newState = { ...state };
 
   switch (action.type) {
     case "UPDATE_USERINFO":
@@ -15,8 +15,15 @@ function userReducer(state, action) {
       };
 
     case "UPDATE_PROFILE_PHOTO_URI":
-      newState.user.profileUri = action.uri;
-      return { ...newState };
+      return produce(state, (draft) => {
+        const newUri = action.uri;
+        draft.user.profileUri = newUri;
+      });
+
+    case "LOGOUT":
+      return produce(state, (draft) => {
+        draft.user = null;
+      });
 
     default:
       return { ...state };

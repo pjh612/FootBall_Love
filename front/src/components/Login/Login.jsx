@@ -46,11 +46,11 @@ const Login = () => {
             paddingTop: "100px",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "black" }}>
-            <SportsBasketballIcon />
+          <Avatar sx={{ m: 1, bgcolor: "black", width: 50, height: 50 }}>
+            <SportsBasketballIcon sx={{ width: 37, height: 37 }} />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h4">
+            로그인하기
           </Typography>
           <Box
             component="form"

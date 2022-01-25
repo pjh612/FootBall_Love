@@ -2,10 +2,10 @@ import Navbar from "./components/NavBar/Navbar";
 import LandingPage from "./components/MainContainer/LandingPage";
 import Join from "./components/Join/Join";
 import Login from "./components/Login/Login";
-import ProfileContainer from "./components/Profile/ProfileContainer";
-// import Logout from "./components/Logout/Logout";
-// import TeamMakeContainer from "./components/TeamMake/TeamMakeContainer";
-// import TeamPage from "./components/TeamPage/TeamPage";
+import Profile from "./components/Profile/Profile";
+import Logout from "./components/Logout/Logout";
+import TeamMake from "./components/TeamMake/TeamMake";
+import TeamPage from "./components/TeamPage/TeamPage";
 // import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
 // import WriteAnyContainer from "./components/WriteAny/WriteAnyContainer";
 // import { getUserInfo } from "./axios/axios";
@@ -26,18 +26,15 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/join" element={<Join />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<ProfileContainer />} />
-          {/* <Route path="/write" element={<WriteMatchContainer user={user} />} />
-          <Route path="/logout" element={<Logout setKey={setKey} />} />
-          <Route
-            exact
-            path="/teammake"
-            element={<TeamMakeContainer user={user}></TeamMakeContainer>}
-          />
+          <Route path="/profile" element={<Profile />} />
+          {/* <Route path="/write" element={<WriteMatchContainer user={user} />} /> */}
+          <Route path="/logout" element={<Logout />} />
+          <Route exact path="/teammake" element={<TeamMake></TeamMake>} />
           <Route path="/teampage" element={<TeamPage></TeamPage>} />
-          <Route
+          {/* <Route
             path="/writeany"
-            element={<WriteAnyContainer user={user}></WriteAnyContainer>} */}
+            element={<WriteAnyContainer user={user}></WriteAnyContainer>}
+          /> */}
         </Routes>
       </div>
     </BrowserRouter>

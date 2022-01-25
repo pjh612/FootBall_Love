@@ -1,18 +1,18 @@
-import {useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { logoutAction } from "../../action/createAction";
+import { useDispatch } from "react-redux";
 
-const Logout = ({setKey}) => {
-    const navigate = useNavigate();
+const Logout = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        setKey(false);
-        navigate('/');
-    }, [])
-    
-    return(
-        <>
-        </>
-    )
-}
+  useEffect(() => {
+    dispatch(logoutAction());
+    navigate("/");
+  }, []);
+
+  return <></>;
+};
 
 export default Logout;
