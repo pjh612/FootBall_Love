@@ -11,8 +11,8 @@ const ProfileAvatar = () => {
       <Avatar
         alt="Remy Sharp"
         src={
-          user.profilUrl
-            ? `https://storage.googleapis.com/fbl_profile_img/${user.profilUrl}`
+          user.profileUri
+            ? `https://storage.googleapis.com/fbl_profile_img/${user.profileUri}`
             : "#"
         }
         sx={{

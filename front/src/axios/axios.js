@@ -47,3 +47,11 @@ export function postUserPost(fd) {
     data: fd,
   });
 }
+
+export function postTeamInfo(data) {
+  return axios({
+    method: "post",
+    url: "https://flove.fbl.p-e.kr/api/team",
+    data: data,
+  });
+}

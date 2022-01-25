@@ -12,4 +12,10 @@ function updateUserProfileUri(newUri) {
   };
 }
 
-export { updateUserAction, updateUserProfileUri };
+function logoutAction() {
+  return {
+    type: "LOGOUT",
+  };
+}
+
+export { updateUserAction, updateUserProfileUri, logoutAction };

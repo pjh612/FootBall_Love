@@ -1,15 +1,15 @@
-import Navbar2 from "./Navbar2";
+import MenuBar from "./MenuBar";
 import Carousel from "./Carousel";
 import MainContainer from "./MainContainer";
 
 const LandingPage = () => {
-    return(
-        <>
-            <Navbar2/>
-            <Carousel/>
-            <MainContainer/>
-        </>
-    )
-}
+  return (
+    <>
+      <MenuBar />
+      <Carousel />
+      <MainContainer />
+    </>
+  );
+};
 
 export default LandingPage;

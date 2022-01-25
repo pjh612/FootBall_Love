@@ -5,9 +5,12 @@ const NavbarContainer = styled.div`
   width: 100%;
   height: 56px;
   display: flex;
+  // position: fixed;
+  // top: 0;
   justify-content: center;
   align-items: center;
   background: #064635;
+  // z-index: 10000;
 `;
 
 const NavBarContainerCenter = styled.div`
