@@ -3,6 +3,7 @@ package com.deu.football_love.service;
 import com.deu.football_love.domain.Board;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.Post;
+import com.deu.football_love.domain.PostImage;
 import com.deu.football_love.dto.post.*;
 import com.deu.football_love.repository.BoardRepository;
 import com.deu.football_love.repository.MemberRepository;
@@ -27,6 +28,7 @@ public class PostServiceImpl implements PostService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
     private final GcpStorageService gcpStorageService;
+
     @SneakyThrows
     @Override
 
@@ -40,10 +42,14 @@ public class PostServiceImpl implements PostService {
         newPost.setBoard(findBoard);
         findMember.getPosts().add(newPost);
         findBoard.getPosts().add(newPost);
-        for (MultipartFile image : request.getImages()) {
-           newPost.addPostImage(gcpStorageService.updatePostImg(image));
-        }
         postRepository.insertPost(newPost);
+        if(request.getImages() != null) {
+            for (MultipartFile image : request.getImages()) {
+                String imgUri = gcpStorageService.updatePostImg(image);
+                PostImage postImage = newPost.addPostImage(imgUri);
+                postRepository.insertPostImg(postImage);
+            }
+        }
         return WritePostResponse.from(newPost);
     }
 
@@ -75,10 +81,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<QueryPostDto> findAllPostsByBoardId(Long boardId)
-    {
-        List<Post> posts = postRepository.selectAllPostsByBoardId(boardId);
-        return posts.stream().map(p -> new QueryPostDto(p)).collect(Collectors.toList());
+    public List<QueryPostDto> findAllPostsByBoardId(Long boardId) {
+        List<QueryPostDto> posts = postRepository.selectAllPostsByBoardId(boardId)
+                .stream()
+                .map(p -> new QueryPostDto(p))
+                .collect(Collectors.toList());
+        for (QueryPostDto post : posts) {
+            post.setPostImages(
+                    postRepository.selectPostImagesByPostId(post.getId())
+                    .stream()
+                    .map(pi -> QueryPostImageDto.from(pi))
+                    .collect(Collectors.toList())
+            );
+        }
+        return posts;
 
+    }
+
+    @Override
+    public List<QueryPostDto> findAllPostsByMemberId(String memberId) {
+        List<QueryPostDto> posts = postRepository.selectPostsByMemberId(memberId)
+                .stream()
+                .map(p -> new QueryPostDto(p))
+                .collect(Collectors.toList());
+        for (QueryPostDto post : posts) {
+            post.setPostImages(
+                    postRepository.selectPostImagesByPostId(post.getId())
+                            .stream()
+                            .map(pi -> QueryPostImageDto.from(pi))
+                            .collect(Collectors.toList())
+            );
+        }
+        return posts;
     }
 }

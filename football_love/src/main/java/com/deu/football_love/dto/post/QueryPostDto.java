@@ -23,11 +23,13 @@ public class QueryPostDto extends BaseDto {
 
     private Long boardId;
 
+    private Long teamId;
+
     private String title;
 
     private String content;
 
-    private List<String> postImages = new ArrayList<>();
+    private List<QueryPostImageDto> postImages = new ArrayList<>();
 
    /* public QueryPostDto(Long id, Long authorNumber, String authorId, Long boardId, LocalDateTime createdDate, LocalDateTime lastModifiedDate, String title, String content) {
         this.id = id;
@@ -46,6 +48,7 @@ public class QueryPostDto extends BaseDto {
         this.authorNumber =post.getAuthor().getNumber();
         this.authorId = post.getAuthor().getId();
         this.boardId = post.getBoard().getId();
+        this.teamId = post.getBoard().getTeam().getId();
         this.setCreatedDate(post.getCreatedDate());
         this.setLastModifiedDate(post.getLastModifiedDate());
         this.setCreatedBy(post.getCreatedBy());
