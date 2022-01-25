@@ -59,8 +59,9 @@ public class Post extends BaseEntity {
         this.board = null;
     }
 
-    public void addPostImage(String imageUri) {
+    public PostImage addPostImage(String imageUri) {
         PostImage postImage = new PostImage(imageUri, this);
         this.getPostImages().add(postImage);
+        return postImage;
     }
 }
