@@ -66,5 +66,13 @@ public class BoardServiceImpl implements BoardService {
         return new BoardDto(board);
     }
 
+    @Override
+    public BoardDto findByTeamIdAndBoardName(Long teamId, String boardName) {
+        Board board = boardRepository.selectBoardByTeamIdAndBoardName(boardName, teamId);
+        if (board == null)
+            return null;
+        return new BoardDto(board);
+    }
+
 
 }
