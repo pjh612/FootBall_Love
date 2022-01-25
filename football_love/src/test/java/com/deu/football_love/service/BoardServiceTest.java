@@ -51,8 +51,6 @@ class BoardServiceTest {
         Assertions.assertNotNull(findTeam);
         AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
         AddBoardResponse response = boardService.add(request);
-        System.out.println(response.getBoardId());
-
         BoardDto findBoard = boardService.findById(response.getBoardId());
 
         Assertions.assertEquals(response.getBoardId(), findBoard.getBoardId());
