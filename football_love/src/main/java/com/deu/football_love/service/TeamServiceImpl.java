@@ -1,7 +1,6 @@
 package com.deu.football_love.service;
 
 import com.deu.football_love.domain.*;
-import com.deu.football_love.domain.type.AuthorityType;
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.team.*;
 import com.deu.football_love.repository.BoardRepository;
@@ -13,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
