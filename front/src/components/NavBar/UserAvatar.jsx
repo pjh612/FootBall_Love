@@ -35,8 +35,7 @@ const UserAvatar = () => {
   };
 
   const user = useSelector((state) => state.userReducer.user);
-  console.log(`네브바 아바타 이미지 링크 ${user.profileUri}`);
-  console.log("네브바 리랜더링완료");
+
   return (
     <>
       <Avatar
