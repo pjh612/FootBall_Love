@@ -43,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 
-public class GcpControllerTest {
+public class StorageControllerTest {
 
     @Autowired
     MockMvc mvc;
@@ -71,7 +71,7 @@ public class GcpControllerTest {
 
         //회원 가입
         MemberJoinRequest request = new MemberJoinRequest("pjh612", "123", "jhjh", "박진형",
-                null, address, "pjh_jn@naver.com", "010-2104-2419", MemberType.NORMAL);
+                null, address, "pjh_jn@naver.com", "010-1234-5678", MemberType.NORMAL);
         QueryMemberDto join = memberService.join(request);
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형");
         UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
@@ -99,12 +99,12 @@ public class GcpControllerTest {
         String content = "내용 입니다.";
         File file = new File("src/test/resources/test.JPG");
         String mimeType = Files.probeContentType(file.toPath());
-        MockMultipartFile image = new MockMultipartFile("images[0]", "test.JPG", mimeType,new FileInputStream(new File("src/test/resources/test.JPG")));
+        MockMultipartFile image = new MockMultipartFile("images[0]", "test.JPG", mimeType, new FileInputStream(new File("src/test/resources/test.JPG")));
         mvc.perform(multipart("/api/board/post")
                 .file(image)
                 .param("title", title)
-                .param("content",content)
-                .param("teamId",findTeam.getId().toString())
+                .param("content", content)
+                .param("teamId", findTeam.getId().toString())
                 .param("boardId", findBoard.getBoardId().toString())
                 .param("authorNumber", join.getNumber().toString())
                 .with(user(userDetails))

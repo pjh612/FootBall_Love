@@ -42,7 +42,7 @@ public class PostRepositoryImpl implements PostRepository {
         return em.createQuery(
                 "SELECT p FROM Post p" +
                         " JOIN FETCH p.board" +
-                        " JOIN FETCH p.board.team" +
+                        " JOIN  p.board.team" +
                         " WHERE p.board.id = :boardId"
         )
                 .setParameter("boardId", boardId)

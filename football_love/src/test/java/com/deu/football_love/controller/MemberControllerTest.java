@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,9 +56,9 @@ class MemberControllerTest {
     public void join() throws Exception {
         Address address = new Address("busan", "guemgangro", "46233");
         MemberJoinRequest request = new MemberJoinRequest("pjh612","123","jhjh","박진형",
-               null, address, "pjh_jn@naver.com","01021042419", MemberType.NORMAL);
+               null, address, "pjh_jn@naver.com","010-1234-5678", MemberType.NORMAL);
 
-        mvc.perform(MockMvcRequestBuilders.post("/member")
+        mvc.perform(MockMvcRequestBuilders.post("/api/member")
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(request))
         ).andExpect(status().isOk())
@@ -85,7 +85,7 @@ class MemberControllerTest {
         LoginRequest loginRequest = new LoginRequest(request.getId(), request.getPwd());
         memberService.join(request);
 
-        mvc.perform(MockMvcRequestBuilders.post("/member/login_jwt/"+ request.getId())
+        mvc.perform(MockMvcRequestBuilders.post("/api/member/login_jwt/"+ request.getId())
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(loginRequest))
         ).andExpect(status().isOk())
@@ -102,7 +102,7 @@ class MemberControllerTest {
         QueryMemberDto join = memberService.join(request);
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형");
         UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
-        mvc.perform(MockMvcRequestBuilders.post("/team").with(user(userDetails))
+        mvc.perform(MockMvcRequestBuilders.post("/api/team").with(user(userDetails))
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(createTeamRequest))
         ).andExpect(status().isOk())
@@ -113,8 +113,4 @@ class MemberControllerTest {
         assertNotNull(findTeam);
         assertEquals(1, teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
     }
-
-   /* @Test
-    public void */
-
 }

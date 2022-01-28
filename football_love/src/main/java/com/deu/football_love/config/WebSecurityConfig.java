@@ -19,55 +19,52 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
-	@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.addAllowedOrigin("http://115.85.183.128:3000");
-		configuration.addAllowedOrigin("http://127.0.0.1:3000");
-		configuration.addAllowedOrigin("http://localhost:3000");
-		configuration.addAllowedOrigin("https://127.0.0.1:3000");
-		configuration.addAllowedOrigin("https://localhost:3000");
-		configuration.addAllowedOrigin("https://dev.example.com:3000");
-		configuration.addAllowedOrigin("https://localhost:3000");
-		configuration.addAllowedOrigin("https://flove.fbl.p-e.kr");
-		configuration.addAllowedHeader("*");
-		configuration.addAllowedMethod("*");
-		configuration.setAllowCredentials(true);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
+        configuration.addAllowedOrigin("http://127.0.0.1:3000");
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://127.0.0.1:3000");
+        configuration.addAllowedOrigin("https://localhost:3000");
+        configuration.addAllowedOrigin("https://dev.example.com:3000");
+        configuration.addAllowedOrigin("https://flove.fbl.p-e.kr");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception{
-		http.
-				httpBasic()
-					.disable()
-					.cors().configurationSource(corsConfigurationSource())
-				.and()
-					.csrf().disable()
-				/*.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-				.and()*/
-					.authorizeRequests()
-					.antMatchers("/api/**", "/","/api/member","/api/member/login_jwt/**","/api/team/**").permitAll()
-					.anyRequest().authenticated()
-				.and()
-					.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-	}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.
+                httpBasic()
+                .disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
+                .csrf().disable()
+                /*.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()*/
+                .authorizeRequests()
+                .antMatchers("/api/**", "/", "/api/member", "/api/member/login_jwt/**", "/api/team/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+    }
 }

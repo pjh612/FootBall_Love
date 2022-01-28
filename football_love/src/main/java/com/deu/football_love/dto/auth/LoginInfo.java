@@ -2,7 +2,6 @@ package com.deu.football_love.dto.auth;
 
 import com.deu.football_love.domain.Member;
 import lombok.Getter;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
-@ToString
 @Slf4j
 public class LoginInfo implements UserDetails {
     private Long number;
