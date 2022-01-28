@@ -122,7 +122,8 @@ public class MemberTest {
 	@DisplayName("회원탈퇴 true일때 성공")
 	@Test
 	public void 멤버_탈퇴() {
-		String id = "dbtlwns";
-		assertTrue(memberService.withdraw(id));
+		MemberJoinRequest joinRequest = new MemberJoinRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
+		memberService.join(joinRequest);
+		assertTrue(memberService.withdraw(joinRequest.getId()));
 	}
 }
