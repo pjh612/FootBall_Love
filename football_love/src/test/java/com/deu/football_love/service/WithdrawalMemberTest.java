@@ -43,7 +43,7 @@ public class WithdrawalMemberTest {
                 .name("박진형")
                 .nickname("박진형")
                 .email("pjh_jn@naver.com")
-                .phone("01012341234")
+                .phone("010-1234-4567")
                 .memberType(MemberType.NORMAL).build();
 
 
@@ -54,7 +54,7 @@ public class WithdrawalMemberTest {
                 .name("박진행")
                 .nickname("박진행")
                 .email("pjh612@naver.com")
-                .phone("01012341234")
+                .phone("010-1234-4567")
                 .memberType(MemberType.NORMAL).build();
 
         em.persist(memberA);

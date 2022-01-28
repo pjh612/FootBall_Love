@@ -8,7 +8,6 @@ import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 public class QueryMemberDto extends BaseEntity {
 
 	private Long number;

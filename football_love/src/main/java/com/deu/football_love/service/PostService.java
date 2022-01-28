@@ -15,5 +15,5 @@ public interface PostService {
 
     List<QueryPostDto> findAllPostsByBoardId(Long boardId);
 
-
+    List<QueryPostDto> findAllPostsByMemberId(String memberId);
 }

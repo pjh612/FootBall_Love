@@ -26,8 +26,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,6 +61,7 @@ class MemberControllerTest {
     @DisplayName("정상적인 회원가입 테스트")
     @Test
     public void join() throws Exception {
+
         Address address = new Address("양산", "서들4길", "18");
         MemberJoinRequest request = new MemberJoinRequest("dbtlwns","123","ggongchi","유시준",
                LocalDate.of(1995, 05, 02), address, "simba0502@naver.com","010-6779-3476", MemberType.NORMAL);
@@ -134,6 +135,7 @@ class MemberControllerTest {
         LoginRequest loginRequest = new LoginRequest(request.getId(), request.getPwd());
         memberService.join(request);
 
+
         mvc.perform(MockMvcRequestBuilders.post(BASE_URL+"/login_jwt/"+ request.getId())
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(loginRequest))
@@ -152,7 +154,7 @@ class MemberControllerTest {
         QueryMemberDto join = memberService.join(request);
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형");
         UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
-        mvc.perform(MockMvcRequestBuilders.post("/team").with(user(userDetails))
+        mvc.perform(MockMvcRequestBuilders.post("/api/team").with(user(userDetails))
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(createTeamRequest))
                 .with(csrf())
@@ -164,8 +166,4 @@ class MemberControllerTest {
         assertNotNull(findTeam);
         assertEquals(1, teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
     }
-
-   /* @Test
-    public void */
-
 }

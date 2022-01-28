@@ -2,16 +2,18 @@ package com.deu.football_love.domain;
 
 import com.deu.football_love.domain.type.TeamMemberType;
 import lombok.AccessLevel;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Data
 @Table(name = "TeamMember", uniqueConstraints = {@UniqueConstraint(
         name = "TEAM_MEMBER_UNIQUE", columnNames = {"team_id", "member_number"}
 )})
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamMember extends BaseEntity {
 

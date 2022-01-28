@@ -1,15 +1,9 @@
 package com.deu.football_love.config;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.ValidRefreshTokenResponse;
 import com.deu.football_love.service.redis.RedisService;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -61,14 +61,13 @@ public class JwtTokenProvider {
         return new ValidRefreshTokenResponse(null, 403, null);
     }
 
-    // Jwt 토큰 생성
     public String createAccessToken(String userPk, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(userPk);
         claims.put("roles", roles);
         Date now = new Date();
         String accessToken = Jwts.builder()
-                .setClaims(claims) // 데이터
-                .setIssuedAt(now) // 토큰 발행일자
+                .setClaims(claims)
+                .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() +  TOKEN_VALIDATION_SECOND)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret값 세팅
                 .compact();
@@ -79,7 +78,7 @@ public class JwtTokenProvider {
     public String createRefreshToken() {
         Date now = new Date();
         String accessToken = Jwts.builder()
-                .setIssuedAt(now) // 토큰 발행일자
+                .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() +  REFRESH_TOKEN_VALIDATION_SECOND)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret값 세팅
                 .compact();
@@ -87,14 +86,12 @@ public class JwtTokenProvider {
         return accessToken;
     }
 
-    // Jwt 토큰으로 인증 정보를 조회
     public Authentication getAuthentication(String token) {
         LoginInfo userDetails = ((LoginInfo)userDetailsService.loadUserByUsername(this.getUserPk(token)));
         log.info("loginInfo = {}", userDetails);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    // Jwt 토큰에서 회원 구별 정보 추출
     public String getUserPk(String token) {
         try
         {
@@ -122,12 +119,10 @@ public class JwtTokenProvider {
         return null;
     }
 
-    // Request의 Header에서 token 파싱
     public String resolveToken(HttpServletRequest req, String headerName) {
         return req.getHeader(headerName);
     }
 
-    // Jwt 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());

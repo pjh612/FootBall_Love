@@ -1,33 +1,24 @@
 package com.deu.football_love.member;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.LocalDate;
-
-import com.deu.football_love.controller.MemberController;
+import com.deu.football_love.domain.Address;
+import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
+import com.deu.football_love.dto.member.MemberJoinRequest;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
+import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deu.football_love.domain.Address;
-import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.member.MemberJoinRequest;
-import com.deu.football_love.dto.auth.LoginRequest;
-import com.deu.football_love.dto.member.QueryMemberDto;
-import com.deu.football_love.service.MemberService;
+import java.time.LocalDate;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -122,6 +113,8 @@ public class MemberTest {
 	@DisplayName("회원탈퇴 true일때 성공")
 	@Test
 	public void 멤버_탈퇴() {
+		MemberJoinRequest joinRequest = new MemberJoinRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
+		memberService.join(joinRequest);
 		String id = "dbtlwns";
 		assertTrue(memberService.withdraw(id));
 	}

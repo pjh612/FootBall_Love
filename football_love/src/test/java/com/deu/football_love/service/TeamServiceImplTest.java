@@ -1,6 +1,9 @@
 package com.deu.football_love.service;
 
-import com.deu.football_love.domain.*;
+import com.deu.football_love.domain.Address;
+import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.Team;
+import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
@@ -11,10 +14,10 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
+import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.TeamRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -66,18 +69,12 @@ public class TeamServiceImplTest {
 
     }
 
-
-   /* public void auditor_test() {
-
-        MemberResponse member = memberService.login(new LoginRequest("memberA", "1234"));
-        session.setAttribute(SessionConst.SESSION_MEMBER, member);
-        TeamDto teamA = teamService.findTeamByName("teamA");
-
-        System.out.println("teamA.getCreatedBy() = " + teamA.getCreatedBy());
-        System.out.println("teamA.getLastModifiedBy() = " + teamA.getLastModifiedBy());
-        System.out.println("teamA.getCreatedDate() = " + teamA.getCreatedDate());
-        System.out.println("teamA.getLastModifiedDate() = " + teamA.getLastModifiedDate());
-    }*/
+    @Test
+    public void findTeamMemberByMemberIdTest() {
+        QueryTeamDto findTeam = teamService.findTeamByName("teamA");
+        List<QueryTeamMemberDto> memberA = teamService.findTeamMemberByMemberId(findTeam.getId(), "memberA");
+        assertEquals(1,memberA.size());
+    }
 
     @Test
     public void 팀_생성_테스트() {
@@ -134,8 +131,8 @@ public class TeamServiceImplTest {
         QueryMemberDto memberA = memberService.findMemberById("memberA");
         QueryMemberDto memberB = memberService.findMemberById("memberB");
         AddBoardResponse boardA = boardService.add(new AddBoardRequest("boardA", BoardType.NOTICE, teamId));
-        postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(), "hello", "content", null));
-        postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(), "hello", "content", null));
+        postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(),teamId, "hello", "content", null));
+        postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(),teamId, "hello", "content", null));
         teamService.disbandmentTeam(findTeam.getId());
 
 
@@ -155,18 +152,18 @@ public class TeamServiceImplTest {
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
         AddBoardResponse addBoardResponse = boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
-        WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요", "가입인사 합니다.", null));
-        WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), "안녕하세요 팀장입니다.", "내일 집합이요", null));
+        WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(),findTeam.getId(), "안녕하세요", "가입인사 합니다.", null));
+        WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(),findTeam.getId(), "안녕하세요 팀장입니다.", "내일 집합이요", null));
 
         teamService.disbandmentTeam(findTeam.getId());
 
-        Assertions.assertEquals(0,teamService.findTeamMember(findTeam.getId(), null).size());
-        Assertions.assertNull(teamService.findTeamByName("teamA"));
-        Assertions.assertNull(boardService.findById(addBoardResponse.getBoardId()));
-        Assertions.assertEquals(0, teamService.findTeamMember(findTeam.getId(), null).size());
-        Assertions.assertEquals(0,findTeam.getBoards().size());
-        Assertions.assertEquals(0,findMember.getPosts().size());
-        Assertions.assertNull(postService.findPost(post1.getPostId()));
-        Assertions.assertNull(postService.findPost(post2.getPostId()));
+        assertEquals(0,teamService.findTeamMember(findTeam.getId(), null).size());
+        assertNull(teamService.findTeamByName("teamA"));
+        assertNull(boardService.findById(addBoardResponse.getBoardId()));
+        assertEquals(0, teamService.findTeamMember(findTeam.getId(), null).size());
+        assertEquals(0,findTeam.getBoards().size());
+        assertEquals(0,findMember.getPosts().size());
+        assertNull(postService.findPost(post1.getPostId()));
+        assertNull(postService.findPost(post2.getPostId()));
     }
 }

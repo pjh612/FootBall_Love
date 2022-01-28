@@ -67,7 +67,6 @@ class CompanyServiceTest {
     }
 
     @Test
-    //@Rollback(value = false)
     public void withdrawalCascadeTest()
     {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.BUSINESS);
@@ -93,10 +92,10 @@ class CompanyServiceTest {
         QueryMemberDto memberC = memberService.join(memberCDto);
         QueryMemberDto memberD = memberService.join(memberDDto);
 
-        AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
-        AddCompanyResponse companyB = companyService.addCompany("companyA", memberB.getNumber(), new Address("seoul", "hongdaero", "12456"), "01012341234", "서울 홍대로에 위치한 풋살장");
-        AddCompanyResponse companyC = companyService.addCompany("companyA", memberC.getNumber(), new Address("daegu", "donseungro", "45678"), "01012341234", "대구 동성로에 위치한 풋살장");
-        AddCompanyResponse companyD = companyService.addCompany("companyA", memberD.getNumber(), new Address("ulsan", "sansanro", "56789"), "01012341234", "울산 삼산로에 위치한 풋살장");
+        companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
+        companyService.addCompany("companyA", memberB.getNumber(), new Address("seoul", "hongdaero", "12456"), "01012341234", "서울 홍대로에 위치한 풋살장");
+        companyService.addCompany("companyA", memberC.getNumber(), new Address("daegu", "donseungro", "45678"), "01012341234", "대구 동성로에 위치한 풋살장");
+        companyService.addCompany("companyA", memberD.getNumber(), new Address("ulsan", "sansanro", "56789"), "01012341234", "울산 삼산로에 위치한 풋살장");
 
         List<QueryCompanyDto> result = companyService.findCompaniesByName("companyA");
 

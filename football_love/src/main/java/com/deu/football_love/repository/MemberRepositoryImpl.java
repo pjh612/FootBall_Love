@@ -1,20 +1,19 @@
 package com.deu.football_love.repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
-import org.springframework.stereotype.Repository;
-
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.domain.WithdrawalMember;
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import com.deu.football_love.repository.sql.MemberSql;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,6 +52,7 @@ public class MemberRepositoryImpl implements MemberRepository {
                 "select new com.deu.football_love.dto.team.QueryTeamMemberDto(tm)" +
                         " from TeamMember tm" +
                         " join tm.member" +
+                        " join tm.team" +
                         " where tm.member.number = :memberNumber", QueryTeamMemberDto.class)
                 .setParameter("memberNumber", memberNumber)
                 .getResultList();
