@@ -115,7 +115,6 @@ public class MemberTest {
 	public void 멤버_탈퇴() {
 		MemberJoinRequest joinRequest = new MemberJoinRequest("dbtlwns","1234","금꽁치","유시준",LocalDate.of(1995,5,2), new Address("1", "2", "3"),"simba0502@naver.com" ,"010-6779-3476",MemberType.NORMAL);
 		memberService.join(joinRequest);
-		String id = "dbtlwns";
-		assertTrue(memberService.withdraw(id));
+		assertTrue(memberService.withdraw(joinRequest.getId()));
 	}
 }
