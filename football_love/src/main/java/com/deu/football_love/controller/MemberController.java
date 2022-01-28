@@ -1,21 +1,17 @@
 package com.deu.football_love.controller;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-
 import com.deu.football_love.config.JwtTokenProvider;
-import com.deu.football_love.controller.consts.SessionConst;
-import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.LoginInfo;
-import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.LoginRequest;
+import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.auth.ValidRefreshTokenResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
+import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.redis.RedisService;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -23,12 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import com.deu.football_love.domain.Member;
-import com.deu.football_love.service.MemberService;
-
-import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,22 +164,7 @@ public class MemberController {
         }
     }
 
-    @ApiOperation(value = "회원 권한확인 요청")
-    @GetMapping("/{memberId}/authority")
-    public ResponseEntity<TeamMemberType> checkMemberAuthority(@RequestParam("memberId") String memberId,
-                                                       @RequestParam("teamName") String teamName, HttpSession session) {
-        Member sessionMember = (Member) session.getAttribute(SessionConst.SESSION_MEMBER);
-        if (sessionMember == null) {
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        }
 
-        TeamMemberType authority = memberService.checkMemberAuthority(memberId, teamName);
-        if (authority == null) {
-            return new ResponseEntity(HttpStatus.CONFLICT);
-        } else {
-            return new ResponseEntity<TeamMemberType>(authority, HttpStatus.OK);
-        }
-    }
 
 	/*@ExceptionHandler(Exception.class)
 	public ResponseEntity serverException() {

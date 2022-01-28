@@ -35,7 +35,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @AutoConfigureMockMvc
 @Transactional
 class MemberControllerTest {
-
+  
   @Autowired
   private MockMvc mvc;
 
@@ -186,3 +186,4 @@ class MemberControllerTest {
         .andExpect(status().isOk()).andDo(print());
   }
 }
+

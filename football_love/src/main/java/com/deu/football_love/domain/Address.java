@@ -1,13 +1,12 @@
 package com.deu.football_love.domain;
 
 import lombok.Getter;
-import lombok.ToString;
+
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Embeddable
-@ToString
 @Getter
 public class Address {
 	@NotNull

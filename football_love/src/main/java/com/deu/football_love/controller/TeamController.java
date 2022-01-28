@@ -12,8 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api/team")
 @RequiredArgsConstructor
@@ -23,12 +24,12 @@ public class TeamController {
     private final MemberService memberService;
     private final TeamService teamService;
     private final JwtTokenProvider jwtTokenProvider;
+
     /**
      * 팀 정보 조회
      **/
     @GetMapping("/{teamId}")
     public ResponseEntity get(@PathVariable Long teamId, @AuthenticationPrincipal LoginInfo loginInfo) {
-        System.out.println("loginInfo = " + loginInfo);
         return ResponseEntity.ok().body(teamService.getTeamInfo(teamId));
     }
 
@@ -59,7 +60,7 @@ public class TeamController {
      * 팀 가입 신청
      **/
     @PostMapping("/join_requestion/{teamId}")
-    public ResponseEntity apply(@PathVariable Long teamId,@Valid @RequestBody JoinApplyRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity apply(@PathVariable Long teamId, @Valid @RequestBody JoinApplyRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
         if (!loginInfo.isLoggedIn())
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         teamService.applyToTeam(teamId, loginInfo.getId(), request.getMessage());
@@ -70,7 +71,7 @@ public class TeamController {
      * 팀 가입 수락
      */
     @PostMapping("/join_acception/{teamId}/{memberId]")
-    public ResponseEntity join(@PathVariable Long teamId, @PathVariable String memberId, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity join(@PathVariable Long teamId, @PathVariable String memberId, @AuthenticationPrincipal LoginInfo loginInfo) {
         TeamMemberType authorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
         if (authorityType != TeamMemberType.LEADER && authorityType != TeamMemberType.LEADER)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -89,7 +90,7 @@ public class TeamController {
      * 팀 멤버 탈퇴
      */
     @DeleteMapping("/{teamId}/member/{memberId}")
-    public ResponseEntity withdrawal(@PathVariable Long teamId, @PathVariable String memberId, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity withdrawal(@PathVariable Long teamId, @PathVariable String memberId, @AuthenticationPrincipal LoginInfo loginInfo) {
         QueryTeamDto findTeam = teamService.findTeam(teamId);
 
         if (findTeam == null || teamService.findTeamMemberByMemberId(teamId, memberId) == null)
@@ -109,7 +110,7 @@ public class TeamController {
      * 팀 해체
      */
     @DeleteMapping("/{teamId}")
-    public ResponseEntity disbandment(@PathVariable Long teamId, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity disbandment(@PathVariable Long teamId, @AuthenticationPrincipal LoginInfo loginInfo) {
         QueryTeamDto findTeam = teamService.findTeam(teamId);
         List<QueryTeamMemberDto> findTeamMember = teamService.findTeamMember(teamId, loginInfo.getNumber());
         if (findTeamMember.size() == 0 || findTeamMember.get(0).getAuthority() == TeamMemberType.COMMON)
@@ -122,7 +123,7 @@ public class TeamController {
      * 팀 멤버 권한 수정
      */
     @PatchMapping("/{teamId}/member/{memberId}")
-    public ResponseEntity updateAuthority(@PathVariable Long teamId, @PathVariable String memberId, @RequestBody TeamMemberType authorityType, @AuthenticationPrincipal  LoginInfo loginInfo) {
+    public ResponseEntity updateAuthority(@PathVariable Long teamId, @PathVariable String memberId, @RequestBody TeamMemberType authorityType, @AuthenticationPrincipal LoginInfo loginInfo) {
         //어드민인지 확인
         TeamMemberType myAuthorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
         if (myAuthorityType != TeamMemberType.ADMIN && myAuthorityType != TeamMemberType.LEADER)

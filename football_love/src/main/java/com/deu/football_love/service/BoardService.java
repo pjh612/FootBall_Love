@@ -11,4 +11,6 @@ public interface BoardService {
     DeleteBoardResponse delete(Long boardId);
 
     BoardDto findById(Long boardId);
+
+    BoardDto findByTeamIdAndBoardName(Long teamId, String boardName);
 }

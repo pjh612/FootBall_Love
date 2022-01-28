@@ -1,14 +1,15 @@
 import React from "react";
 import LoginPlz from "./ErrorPage/LoginPlz";
+import { useSelector } from "react-redux";
 
-const CheckLogin = ({ user, children }) => {
+const CheckLogin = ({ children }) => {
+  const user = useSelector((state) => state.userReducer.user);
+
   if (!user) {
     return <LoginPlz></LoginPlz>;
   }
   if (user) {
-    return React.cloneElement(children, {
-      user: user,
-    });
+    return React.cloneElement(children);
   }
 };
 

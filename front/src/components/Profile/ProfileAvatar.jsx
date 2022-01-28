@@ -1,9 +1,11 @@
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import ProfileImgAddBtn from "./ProfileImgAddBtn";
+import { useSelector } from "react-redux";
 
-const ProfileAvatar = ({ user }) => {
-  //src 를 userImg 로 바꾸면 됨.
+const ProfileAvatar = () => {
+  const user = useSelector((state) => state.userReducer.user);
+
   return (
     <Stack mt={10} spacing={2} alignItems="center">
       <Avatar

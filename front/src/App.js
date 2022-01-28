@@ -1,58 +1,40 @@
 import Navbar from "./components/NavBar/Navbar";
 import LandingPage from "./components/MainContainer/LandingPage";
-import JoinPage from "./components/Join/JoinPage";
+import Join from "./components/Join/Join";
 import Login from "./components/Login/Login";
-import ProfileContainer from "./components/Profile/ProfileContainer";
+import Profile from "./components/Profile/Profile";
 import Logout from "./components/Logout/Logout";
-import TeamMakeContainer from "./components/TeamMake/TeamMakeContainer";
+import TeamMake from "./components/TeamMake/TeamMake";
 import TeamPage from "./components/TeamPage/TeamPage";
-import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
-import WriteAnyContainer from "./components/WriteAny/WriteAnyContainer";
-import { getUserInfo } from "./axios/axios";
+// import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
+// import WriteAnyContainer from "./components/WriteAny/WriteAnyContainer";
+// import { getUserInfo } from "./axios/axios";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
+// import { useEffect } from "react";
+// import {useState} from "react";
+//리덕스
+// import { combineReducers, createStore } from "redux";
+// import { useDispatch } from "react-redux";
+// import rootReducer from "./reducer/index";
 
 function App() {
-  const devLogin = true;
-  const [user, setUser] = useState(devLogin);
-  const [key, setKey] = useState(devLogin); // key 는 유저의 고유 번호로, 로그인 성공시 api 에서 return 되는 값이다.
-
-  useEffect(() => {
-    if (key) {
-      getUserInfo(key)
-        .then((res) => {
-          setUser(res.data[0]);
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("유저정보를 받아오는데 실패했습니다.");
-        });
-    } else {
-      setUser(null);
-    }
-  }, [key]);
-
   return (
     <BrowserRouter>
       <div>
-        <Navbar user={user}></Navbar>
+        <Navbar></Navbar>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/join" element={<JoinPage />} />
-          <Route path="/login" element={<Login setKey={setKey} />} />
-          <Route path="/profile" element={<ProfileContainer user={user} />} />
-          <Route path="/write" element={<WriteMatchContainer user={user} />} />
-          <Route path="/logout" element={<Logout setKey={setKey} />} />
-          <Route
-            exact
-            path="/teammake"
-            element={<TeamMakeContainer user={user}></TeamMakeContainer>}
-          />
+          <Route path="/join" element={<Join />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
+          {/* <Route path="/write" element={<WriteMatchContainer user={user} />} /> */}
+          <Route path="/logout" element={<Logout />} />
+          <Route exact path="/teammake" element={<TeamMake></TeamMake>} />
           <Route path="/teampage" element={<TeamPage></TeamPage>} />
-          <Route
+          {/* <Route
             path="/writeany"
             element={<WriteAnyContainer user={user}></WriteAnyContainer>}
-          />
+          /> */}
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,33 +1,24 @@
 package com.deu.football_love.member;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.LocalDate;
-
-import com.deu.football_love.controller.MemberController;
+import com.deu.football_love.domain.Address;
+import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
+import com.deu.football_love.dto.member.MemberJoinRequest;
+import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
+import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.deu.football_love.domain.Address;
-import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.member.MemberJoinRequest;
-import com.deu.football_love.dto.auth.LoginRequest;
-import com.deu.football_love.dto.member.QueryMemberDto;
-import com.deu.football_love.service.MemberService;
+import java.time.LocalDate;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

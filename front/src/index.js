@@ -2,9 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import store from "./store/store";
 import { Provider } from "react-redux";
+import { createStore } from "redux";
+import configurestore from "./reducer/index";
 // import reportWebVitals from './reportWebVitals';
+
+const store = createStore(
+  configurestore,
+  /* preloadedState, */
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.render(
   <Provider store={store}>
