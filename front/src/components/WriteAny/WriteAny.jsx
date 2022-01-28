@@ -2,12 +2,24 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import React from "react";
+import { postUserPost } from "../../axios/axios";
 
 const WriteAny = ({ user }) => {
   const writer = user.id;
   console.log(writer);
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("content", e.target.content.value);
+    formData.append("title", e.target.content.value);
+    formData.append("authorId", user.number);
+    formData.append("boardId", 0);
+    formData.append("teamId", user.teams[0].teamId);
+    for (let i = 0; i < e.target.img.files; i++) {
+      formData.append("images[" + i + "]", e.target.img.files.file[i]);
+    }
+    postUserPost(formData);
     console.log(e.target.title.value); // 글제목
     console.log(e.target.content.value); // 글내용
     console.log(e.target.img.files); // 업로드파일

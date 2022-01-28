@@ -37,7 +37,7 @@ const Item = styled.span`
   font-weight: 700;
 `;
 
-export default function Navbar2() {
+export default function MenuBar() {
   return (
     <NavbarContainer>
       <NavbarWrapper>
@@ -49,6 +49,15 @@ export default function Navbar2() {
             style={{ textDecoration: "none", color: "black" }}
           >
             <Item>팀 만들기</Item>
+          </Link>
+          <Link
+            to="/writeany"
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <Item>글쓰기</Item>
+          </Link>
+          <Link to="/talk" style={{ textDecoration: "none", color: "black" }}>
+            <Item>커뮤니티</Item>
           </Link>
         </NavbarItem>
       </NavbarWrapper>

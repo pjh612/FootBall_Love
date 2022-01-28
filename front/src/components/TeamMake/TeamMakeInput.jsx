@@ -2,10 +2,9 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { sendLoginData } from "../../axios/axios";
+import { postTeamInfo } from "../../axios/axios";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import Avatar from "@mui/material/Avatar";
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -27,24 +26,19 @@ const Div2 = styled.div`
   justify-content: center;
 `;
 
-const TeamInput = ({ setKey }) => {
-  const [loginSuccess, setLoginSuccess] = useState(false);
+const TeamInput = () => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loginSuccess) {
-      navigate("/");
-    }
-  }, [loginSuccess, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = { id: e.target.id.value, pwd: e.target.password.value };
-    sendLoginData(data)
+    const data = {
+      teamName: e.target.teamName.value,
+      teamIntroduce: e.target.teamIntroduce.value,
+    };
+    postTeamInfo(data)
       .then((res) => {
         console.log(res);
-        setKey(res.data.memberNumber);
-        setLoginSuccess(true);
+        navigate("/");
       })
       .catch((err) => {
         console.error(err);
@@ -91,11 +85,11 @@ const TeamInput = ({ setKey }) => {
               }}
             />
             <TextField
-              id="teamInfo"
+              id="teamIntroduce"
               label="팀 소개"
               variant="outlined"
               fullWidth
-              name="teamInfo"
+              name="teamIntroduce"
               multiline
               rows={4}
               sx={{
