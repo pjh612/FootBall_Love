@@ -33,7 +33,13 @@ public class Post extends BaseEntity {
     private String content;
 
     @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
     private List<PostImage> postImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> postLikes = new ArrayList<>();
 
     public Post() {
     }
@@ -45,7 +51,10 @@ public class Post extends BaseEntity {
         this.content = content;
     }
 
-
+    /**
+     * 수정해야함
+     *
+     */
     public void update(UpdatePostRequest request) {
         this.setTitle(request.getTitle());
         this.setContent(request.getContent());

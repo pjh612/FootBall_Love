@@ -70,6 +70,13 @@ public class Member extends BaseEntity {
     @OneToOne(mappedBy = "owner", orphanRemoval = true)
     private Company company;
 
+    @OneToMany(mappedBy = "writer")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<PostLike> likes = new ArrayList<>();
+
+
     @Builder(builderClassName = "MemberBuilder",
             builderMethodName = "memberBuilder")
     public Member(Long number, String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType memberType) {
