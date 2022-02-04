@@ -41,6 +41,11 @@ public class MemberController {
         return memberService.findMemberDto(number);
     }
 
+    @GetMapping("/loginInfo")
+    public List<QueryMemberDto> getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+        return memberService.findMemberDto(loginInfo.getNumber());
+    }
+
     @GetMapping("/auth")
     public LoginInfo get(@AuthenticationPrincipal LoginInfo loginInfo) {
         return loginInfo;
@@ -105,18 +110,15 @@ public class MemberController {
                                                     @CookieValue(value = "accessToken") String accessToken
             , @CookieValue(value = "refreshToken") String refreshToken
     ) {
-        log.info("accessToken = {}", accessToken);
-        log.info("refreshToken = {}", refreshToken);
         if (accessToken == null || !jwtTokenProvider.validateToken(accessToken) || refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
-        log.info("login info = {}", (principal));
-
         if (remainExpiration >= 1) {
             redisService.del(refreshToken);
             redisService.setStringValue(accessToken, "true", remainExpiration);
             log.info("remain time  = {}", remainExpiration);
+            principal = null;
             return new ResponseEntity(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
