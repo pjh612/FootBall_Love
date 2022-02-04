@@ -163,7 +163,7 @@ public class TeamServiceImpl implements TeamService {
             while (board.getPosts().size() != 0) {
                 Post post = board.getPosts().get(0);
                 post.deletePost();
-                postRepository.deletePost(post);
+                postRepository.delete(post);
             }
             board.getTeam().getBoards().remove(board);
             board.setTeam(null);

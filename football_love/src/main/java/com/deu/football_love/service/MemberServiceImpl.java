@@ -159,7 +159,7 @@ public class MemberServiceImpl implements MemberService {
         while (findMember.getPosts().size() != 0) {
             Post post = findMember.getPosts().get(0);
             post.deletePost();
-            postRepository.deletePost(post);
+            postRepository.delete(post);
         }
         /**
          * 멤버 소유의 팀 삭제, 멤버 소속 탈퇴
