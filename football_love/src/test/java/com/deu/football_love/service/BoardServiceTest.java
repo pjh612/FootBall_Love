@@ -29,9 +29,6 @@ class BoardServiceTest {
     private BoardService boardService;
 
     @Autowired
-    private PostServiceImpl postService;
-
-    @Autowired
     private TeamService teamService;
 
     @Autowired
