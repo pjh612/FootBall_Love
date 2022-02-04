@@ -2,12 +2,14 @@ package com.deu.football_love.dto.post;
 
 import com.deu.football_love.domain.Post;
 import com.deu.football_love.dto.BaseDto;
+import com.deu.football_love.dto.comment.QueryCommentDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,11 +25,13 @@ public class QueryPostDto extends BaseDto {
 
     private Long boardId;
 
-    private Long teamId;
-
     private String title;
 
     private String content;
+
+    private Long likeCount;
+
+    private List<QueryCommentDto> comments = new ArrayList<>();
 
     private List<QueryPostImageDto> postImages = new ArrayList<>();
 
@@ -48,13 +52,11 @@ public class QueryPostDto extends BaseDto {
         this.authorNumber =post.getAuthor().getNumber();
         this.authorId = post.getAuthor().getId();
         this.boardId = post.getBoard().getId();
-        this.teamId = post.getBoard().getTeam().getId();
         this.setCreatedDate(post.getCreatedDate());
         this.setLastModifiedDate(post.getLastModifiedDate());
-        this.setCreatedBy(post.getCreatedBy());
-        this.setLastModifiedBy(post.getLastModifiedBy());
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.comments = post.getComments().stream().map(comment -> new QueryCommentDto(comment)).collect(Collectors.toList());
     }
 
     public static QueryPostDto from(Post post)

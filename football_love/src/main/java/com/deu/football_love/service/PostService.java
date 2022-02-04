@@ -9,9 +9,21 @@ public interface PostService {
 
     DeletePostResponse deletePost(Long postId);
 
-    ModifyPostResponse modifyPost(Long postId, UpdatePostRequest request);
+    public boolean isLiked(Long postId, Long memberNumber) {
+        return postLikeRepository.existsByMemberNumberAndPostId(memberNumber, postId);
+    }
 
-    QueryPostDto findPost(Long postId);
+    public LikePostResponse likePost(Long postId, Long memberNumber) {
+        Post findPost = postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException());
+        Member findMember = memberRepository.selectMember(memberNumber);
+        if (findMember == null)
+            throw new IllegalArgumentException("no such data");
+        if(isLiked(postId, memberNumber))
+            throw new LikeDuplicatedException("이미 추천한 게시글 입니다.");
+        PostLike like = new PostLike(findPost, findMember);
+        postLikeRepository.save(like);
+        return new LikePostResponse(true,"추천");
+    }
 
     List<QueryPostDto> findAllPostsByBoardId(Long boardId);
 
