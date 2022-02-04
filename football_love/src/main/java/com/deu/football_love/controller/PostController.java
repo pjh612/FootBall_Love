@@ -2,15 +2,17 @@ package com.deu.football_love.controller;
 
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.post.*;
-import com.deu.football_love.service.PostService;
-import com.deu.football_love.service.TeamService;
+import com.deu.football_love.dto.post.like.LikePostResponse;
+import com.deu.football_love.service.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 
 @RestController
@@ -27,9 +29,6 @@ public class PostController {
      */
     @PostMapping("/board/post")
     public ResponseEntity writePost(WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
-        log.info("writePostRequest = {}",writePostRequest);
-        log.info("loginInfo.Id = {}", loginInfo.getId());
-
         if (teamService.findTeamMemberByMemberId(writePostRequest.getTeamId(), loginInfo.getId()).size() == 0)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);
