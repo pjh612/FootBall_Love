@@ -70,6 +70,22 @@ public class TeamServiceImplTest {
     }
 
     @Test
+    public void findTeamByTeamNameTest() {
+        QueryTeamDto teamA = teamService.findTeamByName("teamA");
+        boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, teamA.getId()));
+        boardService.add(new AddBoardRequest("자유 게시판", BoardType.GENERAL, teamA.getId()));
+
+        QueryTeamDto findTeam = teamService.findTeamByName("teamA");
+
+        Assertions.assertEquals(2, findTeam.getBoards().size());
+        Assertions.assertEquals("공지사항", findTeam.getBoards().get(0).getBoardName());
+        Assertions.assertEquals("자유 게시판", findTeam.getBoards().get(1).getBoardName());
+        Assertions.assertEquals("teamA", findTeam.getName());
+        Assertions.assertEquals(1, findTeam.getTeamMembers().size());
+        Assertions.assertEquals("memberA", findTeam.getTeamMembers().get(0));
+    }
+
+    @Test
     public void findTeamMemberByMemberIdTest() {
         QueryTeamDto findTeam = teamService.findTeamByName("teamA");
         List<QueryTeamMemberDto> memberA = teamService.findTeamMemberByMemberId(findTeam.getId(), "memberA");
