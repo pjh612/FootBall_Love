@@ -39,6 +39,7 @@ public class TeamRepositoryImpl implements TeamRepository {
             return null;
         return findTeam.get(0);
     }
+
     @Override
     public List<TeamMember> selectTeamMember(Long teamId, Long memberNumber)
     {

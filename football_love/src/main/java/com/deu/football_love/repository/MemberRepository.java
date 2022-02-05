@@ -13,7 +13,7 @@ public interface MemberRepository {
 
     void deleteMember(Member member);
 
-    Member selectMember(Long id);
+    Member selectMember(Long number);
 
     List<QueryMemberDto> selectQueryMemberDto(Long number);
 

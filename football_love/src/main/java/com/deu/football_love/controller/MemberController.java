@@ -61,7 +61,12 @@ public class MemberController {
     } else {
       return new ResponseEntity<QueryMemberDto>(joinMember, HttpStatus.OK);
     }
-  }
+
+
+    @GetMapping("/loginInfo")
+    public List<QueryMemberDto> getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+        return memberService.findMemberDto(loginInfo.getNumber());
+    }
 
   @ApiOperation(value = "jwt 로그인 요청")
   @PostMapping("/login_jwt/{id}")
@@ -85,6 +90,7 @@ public class MemberController {
       redisService.setStringValue(loginResponse.getRefreshToken(), data,
           JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
       return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+
     }
   }
 
@@ -104,37 +110,36 @@ public class MemberController {
     return new ResponseEntity(HttpStatus.BAD_REQUEST);
   }
 
-  @ApiOperation(value = "로그아웃 요청")
-  @PostMapping("/logout_jwt")
-  public ResponseEntity<LoginResponse> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
-      @CookieValue(value = "accessToken") String accessToken,
-      @CookieValue(value = "refreshToken") String refreshToken) {
-    log.info("accessToken = {}", accessToken);
-    log.info("refreshToken = {}", refreshToken);
-    if (accessToken == null || !jwtTokenProvider.validateToken(accessToken) || refreshToken == null
-        || !jwtTokenProvider.validateToken(refreshToken)) {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @ApiOperation(value = "로그아웃 요청")
+    @PostMapping("/logout_jwt")
+    public ResponseEntity<LoginResponse> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
+                                                    @CookieValue(value = "accessToken") String accessToken
+            , @CookieValue(value = "refreshToken") String refreshToken
+    ) {
+        if (accessToken == null || !jwtTokenProvider.validateToken(accessToken) || refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
+        if (remainExpiration >= 1) {
+            redisService.del(refreshToken);
+            redisService.setStringValue(accessToken, "true", remainExpiration);
+            log.info("remain time  = {}", remainExpiration);
+            principal = null;
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
     }
-    Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
-    log.info("login info = {}", (principal));
 
-    if (remainExpiration >= 1) {
-      redisService.del(refreshToken);
-      redisService.setStringValue(accessToken, "true", remainExpiration);
-      log.info("remain time  = {}", remainExpiration);
-      return new ResponseEntity(HttpStatus.OK);
-    }
+    @ApiOperation(value = "아이디 중복확인 요청")
+    @GetMapping("/duplication/id")
+    public ResponseEntity isDuplicaitonId(@RequestParam String id) {
+        if (!memberService.isDuplicationId(id)) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+
     return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-  }
-
-  @ApiOperation(value = "아이디 중복확인 요청")
-  @GetMapping("/duplication/id")
-  public ResponseEntity isDuplicaitonId(@RequestParam String id) {
-    if (!memberService.isDuplicationId(id)) {
-      return new ResponseEntity(HttpStatus.OK);
-    } else {
-      return new ResponseEntity(HttpStatus.CONFLICT);
-    }
   }
 
   @ApiOperation(value = "이메일 중복확인 요청")

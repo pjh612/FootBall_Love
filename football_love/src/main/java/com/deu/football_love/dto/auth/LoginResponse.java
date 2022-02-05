@@ -1,11 +1,11 @@
 package com.deu.football_love.dto.auth;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data
-@ToString
+@Getter
 @NoArgsConstructor
 public class LoginResponse {
    private String result;

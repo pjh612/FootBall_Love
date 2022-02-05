@@ -139,38 +139,110 @@ public class MemberServiceImpl implements MemberService {
     return new QueryMemberDto(findMember);
   }
 
-  @Override
-  public boolean withdraw(String id) {
-    Member findMember = memberRepository.selectMemberById(id);
-    if (findMember == null || memberRepository.chkWithdraw(id) != null)
-      return false;
-    memberRepository.updateWithdraw(findMember);
-    // 게시물 삭제
-    while (findMember.getPosts().size() != 0) {
-      Post post = findMember.getPosts().get(0);
-      post.deletePost();
-      postRepository.deletePost(post);
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isDuplicationId(String id) {
+        long countId = memberRepository.countDuplicationId(id);
+        log.info("Id개수" + Long.toString(countId));
+        return countId != 0;
     }
-    /**
-     * 멤버 소유의 팀 삭제, 멤버 소속 탈퇴
-     */
-    List<TeamMember> teamMembers = findMember.getTeamMembers();
-    while (teamMembers.size() != 0) {
-      TeamMember curTeamMember = teamMembers.get(0);
-      if (curTeamMember.getType() == TeamMemberType.LEADER) {
-        teamService.disbandmentTeam(curTeamMember.getTeam().getId());
-      } else {
-        curTeamMember.deleteTeamMember();
-        teamRepository.deleteTeamMember(curTeamMember.getTeam().getId(),
-            curTeamMember.getMember().getNumber());
-      }
+
+    @Override
+    public boolean isDuplicationEmail(String email) {
+        long countEmail = memberRepository.countDuplicationEmail(email);
+        log.info("Email개수" + Long.toString(countEmail));
+        return countEmail != 0;
     }
-    // 사업자일 경우 컴퍼니 삭제
-    if (findMember.getMemberType() == MemberType.BUSINESS) {
-      findMember.getCompany().deleteCompany();
+
+    @Override
+    @Transactional(readOnly = true)
+    public QueryMemberDto findMember(Long number) {
+        Member member = memberRepository.selectMember(number);
+        return new QueryMemberDto(member);
     }
-    return true;
-  }
+
+    @Override
+    @Transactional(readOnly = true)
+    public QueryMemberDto findMemberById(String id) {
+        Member member = memberRepository.selectMemberById(id);
+        return new QueryMemberDto(member);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public LoginInfo findMemberById_jwt(String id) {
+        Member member = memberRepository.selectMemberById(id);
+        return new LoginInfo(member);
+    }
+
+    public List<QueryMemberDto> findMemberDto(Long number)
+    {
+        List<QueryMemberDto> queryMemberDtos = memberRepository.selectQueryMemberDto(number);
+        for (QueryMemberDto queryMemberDto : queryMemberDtos) {
+            log.info(queryMemberDto.getId());
+        };
+        return queryMemberDtos;
+    }
+
+    @Override
+    public QueryMemberDto modifyByMemberNumber(Long memberNum, UpdateMemberRequest request) {
+        Member findMember = memberRepository.selectMember(memberNum);
+        if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
+            findMember.setPwd(passwordEncoder.encode(request.getPwd()));
+        findMember.setEmail(request.getEmail());
+        findMember.setName(request.getName());
+        findMember.setNickname(request.getNickname());
+        findMember.setBirth(request.getBirth());
+        findMember.setAddress(request.getAddress());
+        findMember.setPhone(request.getPhone());
+        return new QueryMemberDto(findMember);
+    }
+
+    @Override
+    public QueryMemberDto modifyByMemberId(String memberId, UpdateMemberRequest request) {
+        Member findMember = memberRepository.selectMemberById(memberId);
+        if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
+            findMember.setPwd(passwordEncoder.encode(request.getPwd()));
+        findMember.setEmail(request.getEmail());
+        findMember.setName(request.getName());
+        findMember.setNickname(request.getNickname());
+        findMember.setBirth(request.getBirth());
+        findMember.setAddress(request.getAddress());
+        findMember.setPhone(request.getPhone());
+        return new QueryMemberDto(findMember);
+    }
+
+    @Override
+    public boolean withdraw(String id) {
+        Member findMember = memberRepository.selectMemberById(id);
+        if (findMember == null || memberRepository.chkWithdraw(id) != null)
+            return false;
+        memberRepository.updateWithdraw(findMember);
+        //게시물 삭제
+        while (findMember.getPosts().size() != 0) {
+            Post post = findMember.getPosts().get(0);
+            post.deletePost();
+            postRepository.delete(post);
+        }
+        /**
+         * 멤버 소유의 팀 삭제, 멤버 소속 탈퇴
+         */
+        List<TeamMember> teamMembers = findMember.getTeamMembers();
+        while (teamMembers.size() != 0) {
+            TeamMember curTeamMember = teamMembers.get(0);
+            if (curTeamMember.getType() == TeamMemberType.LEADER) {
+                teamService.disbandmentTeam(curTeamMember.getTeam().getId());
+            } else {
+                curTeamMember.deleteTeamMember();
+                teamRepository.deleteTeamMember(curTeamMember.getTeam().getId(), curTeamMember.getMember().getNumber());
+            }
+        }
+        //사업자일 경우 컴퍼니 삭제
+        if (findMember.getMemberType() == MemberType.BUSINESS) {
+            findMember.getCompany().deleteCompany();
+        }
+        return true;
+    }
 
   @Override
   @Transactional(readOnly = true)

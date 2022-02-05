@@ -41,7 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("https://127.0.0.1:3000");
         configuration.addAllowedOrigin("https://localhost:3000");
         configuration.addAllowedOrigin("https://dev.example.com:3000");
-        configuration.addAllowedOrigin("https://flove.fbl.p-e.kr");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

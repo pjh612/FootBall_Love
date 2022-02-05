@@ -80,20 +80,30 @@ public class Member extends BaseEntity {
   @OneToOne(mappedBy = "owner", orphanRemoval = true)
   private Company company;
 
-  @Builder(builderClassName = "MemberBuilder", builderMethodName = "memberBuilder")
-  public Member(Long number, String id, String pwd, String nickname, String name, LocalDate birth,
-      Address address, String email, String phone, MemberType memberType) {
-    this.number = number;
-    this.id = id;
-    this.pwd = pwd;
-    this.nickname = nickname;
-    this.name = name;
-    this.birth = birth;
-    this.address = address;
-    this.email = email;
-    this.phone = phone;
-    this.memberType = memberType;
-  }
+    @OneToMany(mappedBy = "writer")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<PostLike> likes = new ArrayList<>();
+
+  
+
+
+    @Builder(builderClassName = "MemberBuilder",
+            builderMethodName = "memberBuilder")
+    public Member(Long number, String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType memberType) {
+        this.number = number;
+        this.id = id;
+        this.pwd = pwd;
+        this.nickname = nickname;
+        this.name = name;
+        this.birth = birth;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.memberType = memberType;
+    }
+
 
   public void updateMember(UpdateMemberRequest request) {
     pwd = request.getPwd();

@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -73,7 +74,7 @@ public class StorageControllerTest {
         MemberJoinRequest request = new MemberJoinRequest("pjh612", "123", "jhjh", "박진형",
                 null, address, "pjh_jn@naver.com", "010-1234-5678", MemberType.NORMAL);
         QueryMemberDto join = memberService.join(request);
-        CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형");
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형","FC 진형 입니다");
         UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
         //팀 만들기
         mvc.perform(MockMvcRequestBuilders.post("/api/team")
@@ -110,7 +111,7 @@ public class StorageControllerTest {
                 .with(user(userDetails))
         ).andExpect(status().isOk());
 
-        List<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId());
+        Page<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId(), null);
         for (QueryPostDto post : postList) {
             Assertions.assertThat(post.getAuthorId()).isEqualTo("pjh612");
         }
