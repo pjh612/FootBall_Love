@@ -31,7 +31,7 @@ const NavbarItem = styled.div`
 
 const Item = styled.span`
   margin-left: 0;
-  font-size: 18px;
+  font-size: calc(12px + 0.3vw);
   margin: 0 20px;
   cursor: pointer;
   font-weight: 700;
@@ -42,7 +42,6 @@ export default function MenuBar() {
     <NavbarContainer>
       <NavbarWrapper>
         <NavbarItem>
-          <Item>소셜 매치</Item>
           <Item>구장 예약</Item>
           <Link
             to="/teammake"
@@ -50,13 +49,7 @@ export default function MenuBar() {
           >
             <Item>팀 만들기</Item>
           </Link>
-          <Link
-            to="/writeany"
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            <Item>글쓰기</Item>
-          </Link>
-          <Link to="/talk" style={{ textDecoration: "none", color: "black" }}>
+          <Link to="/board" style={{ textDecoration: "none", color: "black" }}>
             <Item>커뮤니티</Item>
           </Link>
         </NavbarItem>
