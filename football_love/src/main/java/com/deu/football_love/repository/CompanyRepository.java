@@ -1,12 +1,12 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.Company;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface CompanyRepository {
-    Company selectCompany(Long companyId);
-    List<Company> selectCompaniesById(String companyName);
-    Company insertCompany(Company company);
-    void deleteCompany(Company company);
+public interface CompanyRepository extends JpaRepository<Company,Long> {
+    List<Company> findAllByName(@Param("Name") String companyName);
 }

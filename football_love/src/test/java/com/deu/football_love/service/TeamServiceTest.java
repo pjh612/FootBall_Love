@@ -15,7 +15,9 @@ import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
+import com.deu.football_love.exception.NotTeamMemberException;
 import com.deu.football_love.repository.MemberRepository;
+import com.deu.football_love.repository.TeamMemberRepository;
 import com.deu.football_love.repository.TeamRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -36,9 +38,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Transactional
 @Slf4j
-public class TeamServiceImplTest {
+public class TeamServiceTest {
     @Autowired
     TeamRepository teamRepository;
+
+    @Autowired
+    TeamMemberRepository teamMemberRepository;
+
     @Autowired
     MemberRepository memberRepository;
     @Autowired
@@ -62,8 +68,8 @@ public class TeamServiceImplTest {
     @BeforeEach
     public void init() {
 
-        MemberJoinRequest memberADto = new MemberJoinRequest("memberA", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh612@naver.com", "01012341234", MemberType.NORMAL);
-        MemberJoinRequest memberBDto = new MemberJoinRequest("memberB", passwordEncoder.encode("1234"), "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
+        MemberJoinRequest memberADto = new MemberJoinRequest("memberA", "1234", "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh612@naver.com", "01012341234", MemberType.NORMAL);
+        MemberJoinRequest memberBDto = new MemberJoinRequest("memberB", "1234", "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
         memberService.join(memberADto);
         memberService.join(memberBDto);
         teamService.createNewTeam(memberADto.getId(), "teamA");
@@ -89,8 +95,8 @@ public class TeamServiceImplTest {
     @Test
     public void findTeamMemberByMemberIdTest() {
         QueryTeamDto findTeam = teamService.findTeamByName("teamA");
-        List<QueryTeamMemberDto> memberA = teamService.findTeamMemberByMemberId(findTeam.getId(), "memberA");
-        assertEquals(1, memberA.size());
+
+        assertDoesNotThrow(() -> teamService.findTeamMemberByTeamIdAndMemberId(findTeam.getId(), "memberA"));
     }
 
     @Test
@@ -99,7 +105,7 @@ public class TeamServiceImplTest {
         QueryTeamDto findTeam = teamService.findTeamByName("teamA");
         QueryMemberDto memberA = memberService.findMemberById("memberA");
         assertNotNull(findTeam);
-        assertEquals(1, teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
+        assertDoesNotThrow(() -> teamService.findTeamMemberByTeamIdAndMemberNumber(findTeam.getId(), memberA.getNumber()));
     }
 
     /**
@@ -113,34 +119,34 @@ public class TeamServiceImplTest {
         teamService.withdrawal(findTeam.getId(), "memberA");
 
         assertNotNull(findTeam);
-        assertEquals(0, teamService.findTeamMember(findTeam.getId(), memberA.getNumber()).size());
+        assertThrows(NotTeamMemberException.class, () -> teamService.findTeamMemberByTeamIdAndMemberNumber(findTeam.getId(), memberA.getNumber()));
     }
 
     @Test
     public void 회원_팀탈퇴_테스트() {
-        Team teamA = teamRepository.selectTeamByName("teamA");
+        Team teamA = teamRepository.findByName("teamA").get();
         Member memberB = memberRepository.selectMemberById("memberB");
         TeamMember teamMemberB = new TeamMember(teamA, memberB, TeamMemberType.COMMON);
 
-        teamRepository.insertNewTeamMember(teamMemberB);
+        teamMemberRepository.save(teamMemberB);
         teamService.withdrawal(teamA.getId(), "memberA");
 
         QueryMemberDto findMemberA = memberService.findMemberById("memberA");
         QueryMemberDto findMemberB = memberService.findMemberById("memberB");
-        List<TeamMember> findTeamMemberA = teamRepository.selectTeamMember(teamA.getId(), findMemberA.getNumber());
-        List<TeamMember> findTeamMemberB = teamRepository.selectTeamMember(teamA.getId(), findMemberB.getNumber());
+        ;
 
-        assertEquals(1, teamRepository.selectTeamMember(teamA.getId(), null).size());
-        assertEquals(0, findTeamMemberA.size());
-        assertEquals(1, findTeamMemberB.size());
-        assertNotNull(teamRepository.selectTeam(teamA.getId()));
+
+        assertEquals(1, teamMemberRepository.findTeamMembersByTeamId(teamA.getId()).size());
+        assertFalse(teamMemberRepository.findByTeamIdAndMemberNumber(teamA.getId(), findMemberA.getNumber()).isPresent());
+        assertTrue(teamMemberRepository.findByTeamIdAndMemberNumber(teamA.getId(), findMemberB.getNumber()).isPresent());
+        assertNotNull(teamRepository.findById(teamA.getId()));
         assertNotNull(memberRepository.selectMemberById("memberA"));
     }
 
     @Test
     public void 팀해체_테스트() {
 
-        Team findTeam = teamRepository.selectTeamByName("teamA");
+        Team findTeam = teamRepository.findByName("teamA").get();
         long teamId = findTeam.getId();
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
@@ -153,9 +159,9 @@ public class TeamServiceImplTest {
         teamService.disbandmentTeam(findTeam.getId());
 
 
-        assertNull(teamRepository.selectTeam(findTeam.getId()));
-        assertEquals(0, teamRepository.selectTeamMember(teamId, memberA.getNumber()).size());
-        assertEquals(0, teamRepository.selectTeamMember(teamId, memberB.getNumber()).size());
+        assertFalse(teamRepository.findById(findTeam.getId()).isPresent());
+        assertFalse(teamMemberRepository.findByTeamIdAndMemberNumber(teamId, memberA.getNumber()).isPresent());
+        assertFalse(teamMemberRepository.findByTeamIdAndMemberNumber(teamId, memberB.getNumber()).isPresent());
         assertNull(boardService.findById(boardA.getBoardId()));
         assertEquals(0, postService.findAllPostsByBoardId(boardA.getBoardId(), null).getSize());
         assertNotNull(memberRepository.selectMemberById("memberA"));
@@ -165,7 +171,7 @@ public class TeamServiceImplTest {
     @Test
     public void 팀해제Cascade_테스트() {
         Member findMember = memberRepository.selectMemberById("memberA");
-        Team findTeam = teamRepository.selectTeamByName("teamA");
+        Team findTeam = teamRepository.findByName("teamA").orElseThrow(() -> new IllegalArgumentException("no such team data"));
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
         AddBoardResponse addBoardResponse = boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
@@ -174,13 +180,14 @@ public class TeamServiceImplTest {
 
         teamService.disbandmentTeam(findTeam.getId());
 
-        assertEquals(0, teamService.findTeamMember(findTeam.getId(), null).size());
-        assertNull(teamService.findTeamByName("teamA"));
+        assertEquals(0, teamService.findTeamMembersByTeamId(findTeam.getId()).size());
+        assertThrows(IllegalArgumentException.class, () -> teamService.findTeamByName("teamA"));
         assertNull(boardService.findById(addBoardResponse.getBoardId()));
-        assertEquals(0, teamService.findTeamMember(findTeam.getId(), null).size());
         assertEquals(0, findTeam.getBoards().size());
         assertEquals(0, findMember.getPosts().size());
         assertThrows(IllegalArgumentException.class, () -> postService.findPost(post1.getPostId()));
         assertThrows(IllegalArgumentException.class, () -> postService.findPost(post2.getPostId()));
     }
+
+
 }
