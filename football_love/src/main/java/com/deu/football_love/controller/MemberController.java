@@ -61,6 +61,7 @@ public class MemberController {
     } else {
       return new ResponseEntity<QueryMemberDto>(joinMember, HttpStatus.OK);
     }
+  }
 
 
     @GetMapping("/loginInfo")
@@ -138,8 +139,6 @@ public class MemberController {
         } else {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
-
-    return new ResponseEntity(HttpStatus.UNAUTHORIZED);
   }
 
   @ApiOperation(value = "이메일 중복확인 요청")
