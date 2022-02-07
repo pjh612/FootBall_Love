@@ -1,5 +1,21 @@
 package com.deu.football_love.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.time.LocalDate;
+import javax.persistence.EntityManager;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.Team;
@@ -14,31 +30,18 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
-import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import com.deu.football_love.exception.NotTeamMemberException;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.TeamMemberRepository;
 import com.deu.football_love.repository.TeamRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
 @Transactional
 @Slf4j
 public class TeamServiceTest {
+
     @Autowired
     TeamRepository teamRepository;
 
@@ -68,8 +71,14 @@ public class TeamServiceTest {
     @BeforeEach
     public void init() {
 
-        MemberJoinRequest memberADto = new MemberJoinRequest("memberA", "1234", "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh612@naver.com", "01012341234", MemberType.NORMAL);
-        MemberJoinRequest memberBDto = new MemberJoinRequest("memberB", "1234", "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);
+    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
+        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
+        .type(MemberType.NORMAL).build();
+    MemberJoinRequest memberBDto = MemberJoinRequest.memberJoinRequestBuilder().id("memberB")
+        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp2@naver.com").phone("010-1111-2222")
+        .type(MemberType.NORMAL).build();;
         memberService.join(memberADto);
         memberService.join(memberBDto);
         teamService.createNewTeam(memberADto.getId(), "teamA");
