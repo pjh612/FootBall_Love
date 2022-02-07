@@ -40,7 +40,7 @@ public class CompanyService {
 
     @Transactional
     public AddCompanyResponse addCompany(String name, Long ownerNumber, Address location, String tel, String description) {
-        Member findMember = memberRepository.selectMember(ownerNumber);
+        Member findMember = memberRepository.findById(ownerNumber).orElseThrow(()->new IllegalArgumentException("no such member data."));
         Company newCompany = companyRepository.save(new Company(name, findMember, location, tel, description));
         findMember.setCompany(newCompany);
         return AddCompanyResponse.from(newCompany);

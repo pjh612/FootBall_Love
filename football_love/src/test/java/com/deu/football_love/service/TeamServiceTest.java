@@ -125,7 +125,7 @@ public class TeamServiceTest {
     @Test
     public void 회원_팀탈퇴_테스트() {
         Team teamA = teamRepository.findByName("teamA").get();
-        Member memberB = memberRepository.selectMemberById("memberB");
+        Member memberB = memberRepository.findById("memberB").get();
         TeamMember teamMemberB = new TeamMember(teamA, memberB, TeamMemberType.COMMON);
 
         teamMemberRepository.save(teamMemberB);
@@ -133,14 +133,11 @@ public class TeamServiceTest {
 
         QueryMemberDto findMemberA = memberService.findMemberById("memberA");
         QueryMemberDto findMemberB = memberService.findMemberById("memberB");
-        ;
-
-
         assertEquals(1, teamMemberRepository.findTeamMembersByTeamId(teamA.getId()).size());
         assertFalse(teamMemberRepository.findByTeamIdAndMemberNumber(teamA.getId(), findMemberA.getNumber()).isPresent());
         assertTrue(teamMemberRepository.findByTeamIdAndMemberNumber(teamA.getId(), findMemberB.getNumber()).isPresent());
         assertNotNull(teamRepository.findById(teamA.getId()));
-        assertNotNull(memberRepository.selectMemberById("memberA"));
+        assertNotNull(memberRepository.findById("memberA").get());
     }
 
     @Test
@@ -162,15 +159,15 @@ public class TeamServiceTest {
         assertFalse(teamRepository.findById(findTeam.getId()).isPresent());
         assertFalse(teamMemberRepository.findByTeamIdAndMemberNumber(teamId, memberA.getNumber()).isPresent());
         assertFalse(teamMemberRepository.findByTeamIdAndMemberNumber(teamId, memberB.getNumber()).isPresent());
-        assertNull(boardService.findById(boardA.getBoardId()));
+        assertThrows(IllegalArgumentException.class, () -> boardService.findById(boardA.getBoardId()));
         assertEquals(0, postService.findAllPostsByBoardId(boardA.getBoardId(), null).getSize());
-        assertNotNull(memberRepository.selectMemberById("memberA"));
-        assertNotNull(memberRepository.selectMemberById("memberB"));
+        assertNotNull(memberRepository.findById("memberA").get());
+        assertNotNull(memberRepository.findById("memberB").get());
     }
 
     @Test
     public void 팀해제Cascade_테스트() {
-        Member findMember = memberRepository.selectMemberById("memberA");
+        Member findMember = memberRepository.findById("memberA").get();
         Team findTeam = teamRepository.findByName("teamA").orElseThrow(() -> new IllegalArgumentException("no such team data"));
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
@@ -182,7 +179,7 @@ public class TeamServiceTest {
 
         assertEquals(0, teamService.findTeamMembersByTeamId(findTeam.getId()).size());
         assertThrows(IllegalArgumentException.class, () -> teamService.findTeamByName("teamA"));
-        assertNull(boardService.findById(addBoardResponse.getBoardId()));
+        assertThrows(IllegalArgumentException.class, () -> boardService.findById(addBoardResponse.getBoardId()));
         assertEquals(0, findTeam.getBoards().size());
         assertEquals(0, findMember.getPosts().size());
         assertThrows(IllegalArgumentException.class, () -> postService.findPost(post1.getPostId()));

@@ -41,7 +41,6 @@ public class TeamMemberRepositoryTest {
     private MemberService memberService;
 
     @Test
-    @Rollback(value = false)
     public void TeamMemberExistsTest() {
         MemberJoinRequest memberADto = new MemberJoinRequest("memberA", "1234", "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh612@naver.com", "01012341234", MemberType.NORMAL);
         MemberJoinRequest memberBDto = new MemberJoinRequest("memberB", "1234", "jinhyungPark", "jinhyungPark", LocalDate.now(), new Address("busan", "guemgangro", "46233"), "pjh_jn@naver.com", "01012341234", MemberType.NORMAL);

@@ -27,9 +27,7 @@ public class CommentService {
 
     public AddCommentResponse addComment(AddCommentRequest request) {
         Post findPost = postRepository.findById(request.getPostId()).orElseThrow(()->new IllegalArgumentException());
-        Member findMember = memberRepository.selectMember(request.getWriterNumber());
-        if (findMember == null)
-            return new AddCommentResponse(false, null);
+        Member findMember = memberRepository.findById(request.getWriterNumber()).orElseThrow(()->new IllegalArgumentException("no such member data."));;
         Comment comment = new Comment(findPost, findMember, request.getComment());
         commentRepository.save(comment);
         return new AddCommentResponse(true, comment.getId());

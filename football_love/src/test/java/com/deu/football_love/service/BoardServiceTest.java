@@ -66,7 +66,6 @@ class BoardServiceTest {
         AddBoardResponse response = boardService.add(request);
 
         boardService.delete(response.getBoardId());
-        BoardDto findBoard = boardService.findById(response.getBoardId());
-        Assertions.assertNull(findBoard);
+        Assertions.assertThrows(IllegalArgumentException.class, ()->boardService.findById(response.getBoardId()));
     }
 }

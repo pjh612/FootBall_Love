@@ -8,6 +8,7 @@ import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.repository.CompanyRepository;
 import com.deu.football_love.repository.MemberRepository;
+import com.deu.football_love.repository.WithdrawalMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.nio.channels.IllegalChannelGroupException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,7 +39,8 @@ class CompanyServiceTest {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private MemberService memberService;
-
+    @Autowired
+    private WithdrawalMemberRepository withdrawalMemberRepository;
     @Autowired
     private MemberRepository memberRepository;
 
@@ -61,9 +64,9 @@ class CompanyServiceTest {
         companyService.withdrawalCompany(newCompany.getCompanyId());
 
         List<QueryCompanyDto> findCompanies = companyService.findCompaniesByName("companyA");
-        QueryCompanyDto findCompany = companyService.findCompany(newCompany.getCompanyId());
-        Assertions.assertEquals(0, findCompanies.size());
-        Assertions.assertNull(findCompany);
+
+        Assertions.assertEquals(0,companyService.findCompaniesByName("companyA").size());
+                Assertions.assertThrows(IllegalArgumentException.class, ()-> companyService.findCompany(newCompany.getCompanyId()));
     }
 
     @Test
@@ -74,8 +77,8 @@ class CompanyServiceTest {
         AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
         memberService.withdraw("memberA");
-        Assertions.assertEquals(1, memberRepository.chkWithdraw("memberA"));
-        Assertions.assertNull(companyService.findCompany(newCompany.getCompanyId()));
+        Assertions.assertEquals(true, withdrawalMemberRepository.existsByMemberId("memberA"));
+        Assertions.assertThrows(IllegalArgumentException.class,()-> companyService.findCompany(newCompany.getCompanyId()));
     }
 
     /**

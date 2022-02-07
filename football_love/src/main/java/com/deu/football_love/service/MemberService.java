@@ -3,7 +3,9 @@ package com.deu.football_love.service;
 import java.util.Arrays;
 import java.util.List;
 
-import com.deu.football_love.repository.TeamMemberRepository;
+import com.deu.football_love.domain.WithdrawalMember;
+import com.deu.football_love.dto.company.QueryCompanyDto;
+import com.deu.football_love.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +21,6 @@ import com.deu.football_love.dto.auth.LoginResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.member.UpdateMemberRequest;
-import com.deu.football_love.repository.MemberRepository;
-import com.deu.football_love.repository.PostRepository;
-import com.deu.football_love.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,10 +36,12 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final TeamService teamService;
+    private final CompanyRepository companyRepository;
+    private final WithdrawalMemberRepository withdrawalMemberRepository;
 
     @Transactional(readOnly = true)
     public LoginResponse login_jwt(LoginRequest loginRequest) {
-        Member member = memberRepository.selectMemberById(loginRequest.getId());
+        Member member = memberRepository.findById(loginRequest.getId()).orElseThrow(()-> new IllegalArgumentException("no such member data."));
         if (member != null && member.getId().equals(loginRequest.getId())
                 && passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
             List<String> roleList = Arrays.asList(member.getMemberType().name());
@@ -61,59 +62,48 @@ public class MemberService {
                 .birth(joinRequest.getBirth()).email(joinRequest.getEmail()).id(joinRequest.getId())
                 .pwd(joinRequest.getPwd()).nickname(joinRequest.getNickname()).name(joinRequest.getName())
                 .phone(joinRequest.getPhone()).memberType(joinRequest.getType()).build();
-
-        Long number = memberRepository.insertMember(member);
-        member.setCreatedBy(number);
-
-        member.setLastModifiedBy(number);
+        memberRepository.save(member);
+        member.setCreatedBy(member.getNumber());
+        member.setLastModifiedBy(member.getNumber());
         QueryMemberDto memberResponse = new QueryMemberDto(member);
-
-        System.out.println("memberResponse = " + memberResponse);
         return memberResponse;
     }
 
     @Transactional(readOnly = true)
     public boolean isDuplicationId(String id) {
-        long countId = memberRepository.countDuplicationId(id);
-        log.info("Id개수" + Long.toString(countId));
-        return countId != 0;
+        return memberRepository.existsById(id);
     }
 
     public boolean isDuplicationEmail(String email) {
-        long countEmail = memberRepository.countDuplicationEmail(email);
-        log.info("Email개수" + Long.toString(countEmail));
-        return countEmail != 0;
+        return memberRepository.existsByEmail(email);
     }
 
     @Transactional(readOnly = true)
     public QueryMemberDto findMember(Long number) {
-        Member member = memberRepository.selectMember(number);
+        Member member = memberRepository.findById(number).orElseThrow(()->new IllegalArgumentException("no such member data."));
         return new QueryMemberDto(member);
     }
 
     @Transactional(readOnly = true)
     public QueryMemberDto findMemberById(String id) {
-        Member member = memberRepository.selectMemberById(id);
+        Member member = memberRepository.findById(id).orElseThrow(()->new IllegalArgumentException("no such member data."));
         return new QueryMemberDto(member);
     }
 
     @Transactional(readOnly = true)
     public LoginInfo findMemberById_jwt(String id) {
-        Member member = memberRepository.selectMemberById(id);
+        Member member = memberRepository.findById(id).orElseThrow(()->new IllegalArgumentException("no such member data."));
         return new LoginInfo(member);
     }
 
-    public List<QueryMemberDto> findMemberDto(Long number) {
-        List<QueryMemberDto> queryMemberDtos = memberRepository.selectQueryMemberDto(number);
-        for (QueryMemberDto queryMemberDto : queryMemberDtos) {
-            log.info(queryMemberDto.getId());
-        }
-        ;
-        return queryMemberDtos;
+    public QueryMemberDto findQueryMemberDtoByNumber(Long number) {
+        QueryMemberDto findMember = memberRepository.findQueryMemberDtoByNumber(number).orElseThrow(()->new IllegalArgumentException("no such member data."));
+        findMember.setTeams(teamMemberRepository.findQueryTeamMemberDtoByMemberNumber(number));
+        return findMember;
     }
 
     public QueryMemberDto modifyByMemberNumber(Long memberNum, UpdateMemberRequest request) {
-        Member findMember = memberRepository.selectMember(memberNum);
+        Member findMember = memberRepository.findById(memberNum).orElseThrow(()->new IllegalArgumentException("no such member data."));
         if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
             findMember.setPwd(passwordEncoder.encode(request.getPwd()));
         findMember.setEmail(request.getEmail());
@@ -124,7 +114,7 @@ public class MemberService {
     }
 
     public QueryMemberDto modifyByMemberId(String memberId, UpdateMemberRequest request) {
-        Member findMember = memberRepository.selectMemberById(memberId);
+        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("no such member data."));
         if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
             findMember.setPwd(passwordEncoder.encode(request.getPwd()));
         findMember.setEmail(request.getEmail());
@@ -135,11 +125,10 @@ public class MemberService {
     }
 
     public boolean withdraw(String id) {
-        Member findMember = memberRepository.selectMemberById(id);
-        if (findMember == null || memberRepository.chkWithdraw(id) != null)
+        Member findMember = memberRepository.findById(id).orElseThrow(()->new IllegalArgumentException("no such member data."));
+        if (withdrawalMemberRepository.existsByMemberId(id))
             return false;
-        memberRepository.updateWithdraw(findMember);
-        //게시물 삭제
+        withdrawalMemberRepository.save(new WithdrawalMember(findMember));
         while (findMember.getPosts().size() != 0) {
             Post post = findMember.getPosts().get(0);
             post.deletePost();
@@ -165,8 +154,8 @@ public class MemberService {
         return true;
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public TeamMemberType checkMemberAuthority(String memberId, String teamName) {
         return memberRepository.selectMemberAuthority(memberId, teamName);
-    }
+    }*/
 }
