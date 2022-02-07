@@ -4,32 +4,30 @@ import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.member.QueryMemberDto;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-public interface MemberRepository {
-    Long insertMember(Member member);
+public interface MemberRepository extends JpaRepository<Member,Long> {
 
-    void deleteMember(Member member);
+    @Query("select new com.deu.football_love.dto.member.QueryMemberDto(m)" +
+            " from Member m" +
+            " join m.company" +
+            " where m.number = :memberNumber")
+    Optional<QueryMemberDto> findQueryMemberDtoByNumber(@Param("memberNumber") Long number);
 
-    Member selectMember(Long number);
+    Optional<Member> findById(@Param("id") String id);
 
-    List<QueryMemberDto> selectQueryMemberDto(Long number);
+    boolean existsById(@Param("id") String id);
 
-    Member selectMemberById(String id);
+    boolean existsByEmail(@Param("email") String email);
 
-    long countDuplicationId(String id);
-
-    long countDuplicationEmail(String email);
-
-    //Member updateMember(JoinRequest joinRequest);
-
-    void updateWithdraw(Member member);
-
-    Long chkWithdraw(String id);
-
-    TeamMemberType selectMemberAuthority(String memberId, String teamId);
-
-    void deleteWithdrawalMemberByDate(LocalDateTime cur, Long day);
+    @Query("DELETE FROM WithdrawalMember wm WHERE wm.createdDate <= :threshold")
+    @Modifying
+    void deleteWithdrawalMemberByDate(@Param("threshold") LocalDateTime threshold);
 }

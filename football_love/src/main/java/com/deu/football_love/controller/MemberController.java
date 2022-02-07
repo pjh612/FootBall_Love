@@ -42,9 +42,9 @@ public class MemberController {
   private final RedisService redisService;
 
   @GetMapping("/{number}")
-  public List<QueryMemberDto> getMember(@PathVariable(name = "number") Long number) {
+  public QueryMemberDto getMember(@PathVariable(name = "number") Long number) {
     log.info(Long.toString(number));
-    return memberService.findMemberDto(number);
+    return memberService.findQueryMemberDtoByNumber(number);
   }
 
   @GetMapping("/auth")
@@ -65,8 +65,8 @@ public class MemberController {
 
 
     @GetMapping("/loginInfo")
-    public List<QueryMemberDto> getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
-        return memberService.findMemberDto(loginInfo.getNumber());
+    public QueryMemberDto getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+        return memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
     }
 
   @ApiOperation(value = "jwt 로그인 요청")

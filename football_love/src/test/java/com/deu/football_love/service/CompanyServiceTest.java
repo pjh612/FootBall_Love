@@ -17,6 +17,7 @@ import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.repository.CompanyRepository;
 import com.deu.football_love.repository.MemberRepository;
+import com.deu.football_love.repository.WithdrawalMemberRepository;
 import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
@@ -25,23 +26,25 @@ import lombok.RequiredArgsConstructor;
 class CompanyServiceTest {
 
 
-  @Autowired
-  EntityManager em;
-  @Autowired
-  CompanyService companyService;
-  @Autowired
-  CompanyRepository companyRepository;
-  @Autowired
-  private PasswordEncoder passwordEncoder;
-  @Autowired
-  private MemberService memberService;
 
-  @Autowired
-  private MemberRepository memberRepository;
+    @Autowired
+    EntityManager em;
+    @Autowired
+    CompanyService companyService;
+    @Autowired
+    CompanyRepository companyRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private WithdrawalMemberRepository withdrawalMemberRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
-  @Test
-  public void addAndFindCompanyTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
+    @Test
+    public void addAndFindCompanyTest() {
+       MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.NORMAL).build();
@@ -49,14 +52,14 @@ class CompanyServiceTest {
     AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
-    QueryCompanyDto findCompany = companyService.findCompany(newCompany.getCompanyId());
-    Assertions.assertEquals(newCompany.getCompanyId(), findCompany.getCompanyId());
+        QueryCompanyDto findCompany = companyService.findCompany(newCompany.getCompanyId());
+        Assertions.assertEquals(newCompany.getCompanyId(), findCompany.getCompanyId());
 
-  }
+    }
 
-  @Test
-  public void withdrawalCompanyTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
+    @Test
+    public void withdrawalCompanyTest() {
+       MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.NORMAL).build();
@@ -64,18 +67,18 @@ class CompanyServiceTest {
     AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
-    companyService.withdrawalCompany(newCompany.getCompanyId());
+        companyService.withdrawalCompany(newCompany.getCompanyId());
 
-    List<QueryCompanyDto> findCompanies = companyService.findCompaniesByName("companyA");
+        List<QueryCompanyDto> findCompanies = companyService.findCompaniesByName("companyA");
 
-    Assertions.assertEquals(0, findCompanies.size());
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> companyService.findCompany(newCompany.getCompanyId()));
-  }
+        Assertions.assertEquals(0,companyService.findCompaniesByName("companyA").size());
+                Assertions.assertThrows(IllegalArgumentException.class, ()-> companyService.findCompany(newCompany.getCompanyId()));
+    }
 
-  @Test
-  public void withdrawalCascadeTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
+    @Test
+    public void withdrawalCascadeTest()
+    {
+       MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.BUSINESS).build();
@@ -83,18 +86,17 @@ class CompanyServiceTest {
     AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
 
-    memberService.withdraw("memberA");
-    Assertions.assertEquals(1, memberRepository.chkWithdraw("memberA"));
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> companyService.findCompany(newCompany.getCompanyId()));
-  }
+        memberService.withdraw("memberA");
+        Assertions.assertEquals(true, withdrawalMemberRepository.existsByMemberId("memberA"));
+        Assertions.assertThrows(IllegalArgumentException.class,()-> companyService.findCompany(newCompany.getCompanyId()));
+    }
 
-  /**
-   * 전국 각지의 중복된 이름의 컴퍼니를 조회 한다.
-   */
-  @Test
-  public void findCompaniesByNameTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
+    /**
+     * 전국 각지의 중복된 이름의 컴퍼니를 조회 한다.
+     */
+    @Test
+    public void findCompaniesByNameTest() {
+     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.NORMAL).build();
@@ -125,11 +127,12 @@ class CompanyServiceTest {
     companyService.addCompany("companyA", memberD.getNumber(),
         new Address("ulsan", "sansanro", "56789"), "01012341234", "울산 삼산로에 위치한 풋살장");
 
-    List<QueryCompanyDto> result = companyService.findCompaniesByName("companyA");
+        List<QueryCompanyDto> result = companyService.findCompaniesByName("companyA");
 
-    Assertions.assertEquals(4, result.size());
-    for (QueryCompanyDto c : result) {
-      Assertions.assertEquals("companyA", c.getCompanyName());
+        Assertions.assertEquals(4, result.size());
+        for (QueryCompanyDto c : result) {
+            Assertions.assertEquals("companyA", c.getCompanyName());
+        }
     }
   }
 

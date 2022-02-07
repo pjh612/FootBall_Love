@@ -32,7 +32,7 @@ public class PostService {
     @SneakyThrows
     public WritePostResponse writePost(WritePostRequest request) {
         Post newPost = new Post();
-        Member findMember = memberRepository.selectMember(request.getAuthorNumber());
+        Member findMember = memberRepository.findById(request.getAuthorNumber()).orElseThrow(()->new IllegalArgumentException());
         Board findBoard = boardRepository.findById(request.getBoardId()).orElseThrow(()-> new IllegalArgumentException("no such board data."));
         newPost.setContent(request.getContent());
         newPost.setTitle(request.getTitle());
@@ -69,7 +69,7 @@ public class PostService {
 
     public LikePostResponse likePost(Long postId, Long memberNumber) {
         Post findPost = postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException());
-        Member findMember = memberRepository.selectMember(memberNumber);
+        Member findMember = memberRepository.findById(memberNumber).orElseThrow(()->new IllegalArgumentException("no such member data."));
         if (findMember == null)
             throw new IllegalArgumentException("no such data");
         if(isLiked(postId, memberNumber))

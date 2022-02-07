@@ -18,7 +18,8 @@ public class WithdrawalScheduleService {
     public void withdrawalProcess() {
         LocalDateTime cur = LocalDateTime.now();
         Long day = 15L;
-        memberRepository.deleteWithdrawalMemberByDate(cur, day);
+        LocalDateTime threshold = cur.minusDays(day);
+        memberRepository.deleteWithdrawalMemberByDate(threshold);
     }
 
 }

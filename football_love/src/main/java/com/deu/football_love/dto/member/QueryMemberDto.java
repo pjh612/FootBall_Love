@@ -43,8 +43,6 @@ public class QueryMemberDto extends BaseEntity {
 
 	private QueryCompanyDto company;
 
-
-
 	public QueryMemberDto(Member member) {
 		this.number = member.getNumber();
 		this.id = member.getId();
@@ -56,6 +54,8 @@ public class QueryMemberDto extends BaseEntity {
 		this.phone = member.getPhone();
 		this.type = member.getMemberType();
 		this.profileUri = member.getProfileImgUri();
+		if(member.getCompany() != null)
+		this.company = QueryCompanyDto.from(member.getCompany());
 		/*this.teams = member.getTeamMembers().stream().map(tm -> new TeamDto(tm.getTeam().getId(), tm.getTeam().getName(), tm.getType())).collect(Collectors.toList());
 		if (member.getCompany() != null)
 		this.company = QueryCompanyDto.from(member.getCompany());*/
