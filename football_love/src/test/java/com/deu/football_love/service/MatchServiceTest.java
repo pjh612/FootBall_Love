@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -120,8 +122,7 @@ public class MatchServiceTest {
     AddMatchResponse matchDto =
         matchService.addMatch(teamInfo.getTeamId(), stadiumInfo.getId(), LocalDateTime.now());
     matchService.cancelMatch(matchDto.getMatchId());
-    QueryMatchDto findMatchDto = matchService.findMatch(matchDto.getMatchId());
-    assertNull(findMatchDto);
+    Assertions.assertThrows(IllegalArgumentException.class, ()->matchService.findMatch(matchDto.getMatchId()));
   }
 
   @Test
