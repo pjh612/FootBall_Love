@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,14 @@ public class MemberTest {
 
   private final Address ADDRESS = new Address("양산", "행복길", "11");
 
-  private final MemberJoinRequest JOIN_REQUEST = new MemberJoinRequest("pjh612", "123", "jhjh",
-      "박진형", BIRTH_DAY, ADDRESS, "pjh_jn@naver.com", "010-1234-5678", MemberType.NORMAL);
+  private final MemberJoinRequest JOIN_REQUEST = MemberJoinRequest.memberJoinRequestBuilder()
+      .id("dbtlwns").name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
+      .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+
+  @BeforeEach
+  public void doBeforeEach() {
+    memberService.join(JOIN_REQUEST);
+  }
 
   @Test
   public void member_비밀번호_암호화_테스트() {
@@ -56,9 +63,10 @@ public class MemberTest {
 
   @Test
   public void 멤버_가입() {
-    MemberJoinRequest request =
-        new MemberJoinRequest("dbtlwns", "1234", "금꽁치", "유시준", LocalDate.of(1995, 5, 2),
-            new Address("1", "2", "3"), "simba0502@naver.com", "010-6779-3476", MemberType.NORMAL);
+    MemberJoinRequest request = MemberJoinRequest.memberJoinRequestBuilder().id("pjhpjh")
+        .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
+        .email("pjhCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+
     QueryMemberDto memberResponse = memberService.join(request);
     assertAll(() -> assertEquals(request.getId(), memberResponse.getId()),
         () -> assertEquals(request.getNickname(), memberResponse.getNickname()),
@@ -68,38 +76,30 @@ public class MemberTest {
 
   @Test
   public void 멤버_찾기() {
-    MemberJoinRequest joinRequest =
-        new MemberJoinRequest("dbtlwns", "1234", "금꽁치", "유시준", LocalDate.of(1995, 5, 2),
-            new Address("1", "2", "3"), "simba0502@naver.com", "010-6779-3476", MemberType.NORMAL);
-    memberService.join(joinRequest);
+
     String id = "dbtlwns";
     QueryMemberDto memberResponse = memberService.findMemberById(id);
-    assertAll(() -> assertEquals("dbtlwns", memberResponse.getId()),
-        () -> assertEquals("금꽁치", memberResponse.getNickname()),
-        () -> assertEquals("유시준", memberResponse.getName()),
-        () -> assertEquals("simba0502@naver.com", memberResponse.getEmail()));
+    assertAll(() -> assertEquals(JOIN_REQUEST.getId(), memberResponse.getId()),
+        () -> assertEquals(JOIN_REQUEST.getNickname(), memberResponse.getNickname()),
+        () -> assertEquals(JOIN_REQUEST.getName(), memberResponse.getName()),
+        () -> assertEquals(JOIN_REQUEST.getEmail(), memberResponse.getEmail()));
   }
 
   @Test
   public void 멤버_수정() {
-    memberService.join(JOIN_REQUEST);
     UpdateMemberRequest request =
         UpdateMemberRequest.builder().pwd("1111").nickname("jhjh").address(ADDRESS)
             .email("dbtlwns@naver.com").phone("updatedPhone").type(MemberType.NORMAL).build();
     QueryMemberDto memberResponse = memberService.modifyByMemberId(JOIN_REQUEST.getId(), request);
     assertAll(() -> assertEquals(JOIN_REQUEST.getId(), memberResponse.getId()),
         () -> assertEquals(request.getNickname(), memberResponse.getNickname()),
-        () -> assertEquals("박진형", memberResponse.getName()),
+        () -> assertEquals(JOIN_REQUEST.getName(), memberResponse.getName()),
         () -> assertEquals(request.getEmail(), memberResponse.getEmail()));
   }
 
   @DisplayName("아이디 중복확인 true일때 아이디 중복")
   @Test
   public void 멤버_아이디중복확인() {
-    MemberJoinRequest joinRequest =
-        new MemberJoinRequest("dbtlwns", "1234", "금꽁치", "유시준", LocalDate.of(1995, 5, 2),
-            new Address("1", "2", "3"), "simba0502@naver.com", "010-6779-3476", MemberType.NORMAL);
-    memberService.join(joinRequest);
     String id = "dbtlwns";
     assertTrue(memberService.isDuplicationId(id));
   }
@@ -107,21 +107,12 @@ public class MemberTest {
   @DisplayName("이메일 중복확인 true일때 이메일 중복")
   @Test
   public void 멤버_이메일중복확인() {
-    MemberJoinRequest joinRequest =
-        new MemberJoinRequest("dbtlwns", "1234", "금꽁치", "유시준", LocalDate.of(1995, 5, 2),
-            new Address("1", "2", "3"), "simba0502@naver.com", "010-6779-3476", MemberType.NORMAL);
-    memberService.join(joinRequest);
-    String email = "simba0502@naver.com";
+    String email = "fblCorp@naver.com";
     assertTrue(memberService.isDuplicationEmail(email));
   }
 
   @Test
   public void 멤버_그룹권한확인() {
-    MemberJoinRequest joinRequest =
-        new MemberJoinRequest("dbtlwns", "1234", "금꽁치", "유시준", LocalDate.of(1995, 5, 2),
-            new Address("1", "2", "3"), "simba0502@naver.com", "010-6779-3476", MemberType.NORMAL);
-    memberService.join(joinRequest);
-
     teamService.createNewTeam("dbtlwns", "FC Flow");
 
     String memberId = "dbtlwns";
@@ -132,10 +123,6 @@ public class MemberTest {
   @DisplayName("회원탈퇴 true일때 성공")
   @Test
   public void 멤버_탈퇴() {
-    MemberJoinRequest joinRequest =
-        new MemberJoinRequest("dbtlwns", "1234", "금꽁치", "유시준", LocalDate.of(1995, 5, 2),
-            new Address("1", "2", "3"), "simba0502@naver.com", "010-6779-3476", MemberType.NORMAL);
-    memberService.join(joinRequest);
-    assertTrue(memberService.withdraw(joinRequest.getId()));
+    assertTrue(memberService.withdraw(JOIN_REQUEST.getId()));
   }
 }
