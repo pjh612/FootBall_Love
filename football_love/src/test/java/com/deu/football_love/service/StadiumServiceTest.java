@@ -42,7 +42,7 @@ class StadiumServiceTest {
         AddStadiumResponse newStadium = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
 
 
-        Company company = companyRepository.selectCompany(companyA.getCompanyId());
+        Company company = companyRepository.findById(companyA.getCompanyId()).get();
 
         Assertions.assertNotNull(stadiumService.findStadium(newStadium.getId()));
         Assertions.assertEquals(newStadium.getId(), company.getStadiums().get(0).getId());
@@ -86,8 +86,6 @@ class StadiumServiceTest {
         AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(), new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
         AddStadiumResponse newStadium = stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
         stadiumService.deleteStadium(newStadium.getId());
-
-        QueryStadiumDto findStadium = stadiumService.findStadium(newStadium.getId());
-        Assertions.assertNull(findStadium);
+        Assertions.assertThrows(IllegalArgumentException.class , ()-> stadiumService.findStadium(newStadium.getId()));
     }
 }

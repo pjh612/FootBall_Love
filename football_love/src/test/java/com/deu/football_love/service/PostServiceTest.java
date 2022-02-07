@@ -126,7 +126,7 @@ public class PostServiceTest {
         WritePostResponse writePostResponse3 = postService.writePost(writePostRequest3);
         WritePostResponse writePostResponse4 = postService.writePost(writePostRequest4);
 
-        Board board = boardRepository.selectBoardById(findBoard.getBoardId());
+        Board board = boardRepository.findById(findBoard.getBoardId()).get();
         while (board.getPosts().size() != 0) {
             Post curPost = board.getPosts().get(0);
             curPost.deletePost();
@@ -134,7 +134,7 @@ public class PostServiceTest {
         }
         board.deleteBoard();
 
-        boardRepository.deleteBoard(board);
+        boardRepository.delete(board);
 
         Assertions.assertFalse(postRepository.findById(writePostResponse1.getPostId()).isPresent());
         Assertions.assertFalse(postRepository.findById(writePostResponse2.getPostId()).isPresent());

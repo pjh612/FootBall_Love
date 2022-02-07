@@ -23,7 +23,7 @@ import com.deu.football_love.dto.match.ModifyMatchRequest;
 import com.deu.football_love.dto.match.ModifyMatchResponse;
 import com.deu.football_love.dto.match.RemoveRequest;
 import com.deu.football_love.dto.match.ApplyMatchRequest;
-import com.deu.football_love.service.MatchServiceImpl;
+import com.deu.football_love.service.MatchService;
 import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
 
@@ -35,7 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MatchController {
 
-	private final MatchServiceImpl matchService;
+	private final MatchService matchService;
 
 	private final MemberService memberService;
 

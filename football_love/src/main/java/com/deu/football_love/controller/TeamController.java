@@ -92,10 +92,7 @@ public class TeamController {
     @DeleteMapping("/{teamId}/member/{memberId}")
     public ResponseEntity withdrawal(@PathVariable Long teamId, @PathVariable String memberId, @AuthenticationPrincipal LoginInfo loginInfo) {
         QueryTeamDto findTeam = teamService.findTeam(teamId);
-
-        if (findTeam == null || teamService.findTeamMemberByMemberId(teamId, memberId) == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-
+        QueryTeamMemberDto findTeamMember = teamService.findTeamMemberByTeamIdAndMemberId(teamId, memberId);
         if (!memberId.equals(loginInfo.getId())) // 관리자에 의해 강퇴
         {
             TeamMemberType authorityType = teamService.authorityCheck(teamId, loginInfo.getNumber());
@@ -112,8 +109,8 @@ public class TeamController {
     @DeleteMapping("/{teamId}")
     public ResponseEntity disbandment(@PathVariable Long teamId, @AuthenticationPrincipal LoginInfo loginInfo) {
         QueryTeamDto findTeam = teamService.findTeam(teamId);
-        List<QueryTeamMemberDto> findTeamMember = teamService.findTeamMember(teamId, loginInfo.getNumber());
-        if (findTeamMember.size() == 0 || findTeamMember.get(0).getAuthority() == TeamMemberType.COMMON)
+        QueryTeamMemberDto findTeamMember = teamService.findTeamMemberByTeamIdAndMemberNumber(teamId, loginInfo.getNumber());
+        if (findTeamMember.getAuthority() == TeamMemberType.COMMON)
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         DisbandmentTeamResponse response = teamService.disbandmentTeam(findTeam.getId());
         return new ResponseEntity(response, HttpStatus.OK);
@@ -134,5 +131,10 @@ public class TeamController {
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @ExceptionHandler({ IllegalArgumentException.class })
+    public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

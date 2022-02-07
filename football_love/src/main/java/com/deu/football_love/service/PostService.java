@@ -33,7 +33,7 @@ public class PostService {
     public WritePostResponse writePost(WritePostRequest request) {
         Post newPost = new Post();
         Member findMember = memberRepository.selectMember(request.getAuthorNumber());
-        Board findBoard = boardRepository.selectBoardById(request.getBoardId());
+        Board findBoard = boardRepository.findById(request.getBoardId()).orElseThrow(()-> new IllegalArgumentException("no such board data."));
         newPost.setContent(request.getContent());
         newPost.setTitle(request.getTitle());
         newPost.setAuthor(findMember);

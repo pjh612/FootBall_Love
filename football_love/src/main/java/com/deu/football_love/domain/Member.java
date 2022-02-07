@@ -91,8 +91,7 @@ public class Member extends BaseEntity {
 
     @Builder(builderClassName = "MemberBuilder",
             builderMethodName = "memberBuilder")
-    public Member(Long number, String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType memberType) {
-        this.number = number;
+    public Member(String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType memberType) {
         this.id = id;
         this.pwd = pwd;
         this.nickname = nickname;

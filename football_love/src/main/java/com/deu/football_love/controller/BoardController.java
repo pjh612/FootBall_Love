@@ -28,10 +28,8 @@ public class BoardController {
         TeamMemberType teamMemberType = teamService.authorityCheck(teamId, loginInfo.getNumber());
         if (teamMemberType != TeamMemberType.ADMIN && teamMemberType != TeamMemberType.LEADER)
             return new ResponseEntity("권한 없음", HttpStatus.FORBIDDEN);
-        if (boardService.add(request) != null)
-            return new ResponseEntity(HttpStatus.OK);
-        else
-            return new ResponseEntity("중복", HttpStatus.BAD_REQUEST);
+       boardService.add(request);
+       return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/team/{teamId}/board/{boardId}")
@@ -40,13 +38,11 @@ public class BoardController {
         if (teamMemberType != TeamMemberType.ADMIN && teamMemberType != TeamMemberType.LEADER)
             return new ResponseEntity(new DeleteBoardResponse(boardId, 403, "권한 없음"), HttpStatus.FORBIDDEN);
         DeleteBoardResponse response = boardService.delete(boardId);
-        if (response.getStatus() != 200)
-            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity serverException() {
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler({ IllegalArgumentException.class })
+    public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

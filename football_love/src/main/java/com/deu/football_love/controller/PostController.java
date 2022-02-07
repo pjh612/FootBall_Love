@@ -3,6 +3,7 @@ package com.deu.football_love.controller;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.post.*;
 import com.deu.football_love.dto.post.like.LikePostResponse;
+import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import com.deu.football_love.service.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,7 @@ public class PostController {
      */
     @PostMapping("/board/post")
     public ResponseEntity writePost(WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
-        if (teamService.findTeamMemberByMemberId(writePostRequest.getTeamId(), loginInfo.getId()).size() == 0)
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        QueryTeamMemberDto findTeamMember = teamService.findTeamMemberByTeamIdAndMemberId(writePostRequest.getTeamId(), loginInfo.getId());
         WritePostResponse writePostResponse = postService.writePost(writePostRequest);
         return new ResponseEntity(writePostResponse, HttpStatus.OK);
     }

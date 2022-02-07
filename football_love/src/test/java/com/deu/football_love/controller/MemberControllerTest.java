@@ -1,14 +1,16 @@
 package com.deu.football_love.controller;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.time.LocalDate;
 import javax.servlet.http.Cookie;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,7 @@ class MemberControllerTest {
 
   private final MemberJoinRequest JOIN_REQUEST = new MemberJoinRequest("pjh612", "123", "jhjh",
       "박진형", BIRTH_DAY, ADDRESS, "pjh_jn@naver.com", "010-1234-5678", MemberType.NORMAL);
+
 
   @DisplayName("정상적인 회원가입 테스트")
   @Test
