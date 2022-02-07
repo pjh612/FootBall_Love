@@ -36,7 +36,6 @@ public class TeamMemberRepositoryTest {
   private MemberService memberService;
 
   @Test
-  @Rollback(value = false)
   public void TeamMemberExistsTest() {
 
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")

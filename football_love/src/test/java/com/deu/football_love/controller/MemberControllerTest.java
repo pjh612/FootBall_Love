@@ -1,7 +1,6 @@
 package com.deu.football_love.controller;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -10,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.time.LocalDate;
 import javax.servlet.http.Cookie;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,10 +150,10 @@ class MemberControllerTest {
         .cookie(accessTokenCookie).cookie(refreshTokenCookie).with(csrf()))
         .andExpect(status().isOk()).andDo(print()).andReturn();
 
-    assertNull(logoutResponse.getResponse().getCookie(ACCESS_TOKEN));
-    assertNull(logoutResponse.getResponse().getCookie(REFRESH_TOKEN));
-    assertNull(redisService.getStringValue(refreshToken));
-    assertNotNull(redisService.getStringValue(accessToken));
+    Assertions.assertNull(logoutResponse.getResponse().getCookie(ACCESS_TOKEN));
+    Assertions.assertNull(logoutResponse.getResponse().getCookie(REFRESH_TOKEN));
+    Assertions.assertNull(redisService.getStringValue(refreshToken));
+    Assertions.assertNotNull(redisService.getStringValue(accessToken));
   }
 
   @DisplayName("email중복확인 테스트")

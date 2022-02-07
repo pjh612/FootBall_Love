@@ -190,7 +190,7 @@ public class PostServiceTest {
     WritePostResponse writePostResponse3 = postService.writePost(writePostRequest3);
     WritePostResponse writePostResponse4 = postService.writePost(writePostRequest4);
 
-    Member findMember = memberRepository.selectMemberById("memberA");
+    Member findMember = memberRepository.findById("memberA").get();
 
     // when
     memberService.withdraw(findMember.getId());

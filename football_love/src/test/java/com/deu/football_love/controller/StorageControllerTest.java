@@ -108,7 +108,7 @@ public class StorageControllerTest {
 
     Page<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId(), null);
     for (QueryPostDto post : postList) {
-      Assertions.assertThat(post.getAuthorId()).isEqualTo("pjh612");
+      Assertions.assertThat(post.getAuthorId()).isEqualTo("dbtlwns");
     }
 
   }
