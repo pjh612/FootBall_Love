@@ -7,7 +7,6 @@ const UserMenuList = ({ setOpenMenu }) => {
   // MenuName & Link
   const ListMenu = [
     ["나의 프로필", "/profile"],
-    ["나의 팀", "/myteam"],
     ["로그아웃", "logout"],
   ];
   const navigate = useNavigate();

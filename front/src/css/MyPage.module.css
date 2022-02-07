@@ -1,0 +1,76 @@
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffeead;
+}
+
+.select_wrapper {
+  width: 100%;
+  margin-top: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  animation: animation 1s;
+}
+
+.select_one_wrapper {
+  width: 22.22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 4px solid black;
+  border-radius: 25px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px 0 20px 0;
+  cursor: pointer;
+}
+
+.select_icon {
+  width: 100px;
+  height: 100px;
+}
+
+.select_icon:hover {
+  width: 90px;
+  height: 90px;
+}
+
+.select_title {
+  margin-top: 30px;
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+@keyframes animation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    height: 110vh;
+  }
+  .select_one_wrapper {
+    width: 90%;
+    margin: 0;
+    margin-top: 30px;
+  }
+
+  .select_wrapper {
+    margin-top: 50px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .select_icon:hover {
+    width: 100px;
+    height: 100px;
+  }
+}
