@@ -13,6 +13,13 @@ export function sendJoinData(data) {
   });
 }
 
+export function logoutRequest() {
+  return axios({
+    method: "post",
+    url: `https://flove.fbl.p-e.kr/api/member/logout_jwt`,
+  });
+}
+
 export function sendLoginData(data) {
   const jsonData = convertToJsonData(data);
   return axios({
@@ -25,10 +32,10 @@ export function sendLoginData(data) {
   });
 }
 
-export function getUserInfo(key) {
+export function getUserInfo() {
   return axios({
     method: "get",
-    url: `https://flove.fbl.p-e.kr/api/member/${key}`,
+    url: `/api/member/loginInfo`,
   });
 }
 

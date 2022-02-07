@@ -1,0 +1,78 @@
+.wrapper {
+  min-width: 250px;
+  width: 100%;
+  display: flex;
+  background-color: #d9534f;
+}
+
+.ad_wrapper {
+  display: flex;
+  flex-direction: column;
+  padding-left: 15vw;
+  animation: slider 1.6s;
+}
+
+.ad {
+  font-size: 85px;
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+  width: 300px;
+  margin-top: 100px;
+  line-height: 85px;
+}
+
+.sub_ad {
+  margin-top: 20px;
+  font-size: 40px;
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+  width: 350px;
+  line-height: 60px;
+}
+
+.third_ad {
+  margin-top: 15px;
+  font-weight: 600;
+  font-size: 17px;
+  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+  width: 400px;
+  line-height: 30px;
+}
+
+.soccer_img {
+  margin-left: 16vw;
+  width: 550px;
+  height: 600px;
+}
+
+@keyframes slider {
+  from {
+    padding-left: 0vw;
+    opacity: 0;
+  }
+  to {
+    padding-left: 15vw;
+    opacity: 1;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .wrapper {
+    padding-bottom: 61px;
+  }
+  .soccer_img {
+    display: none;
+  }
+
+  .ad {
+    width: 100%;
+    font-size: calc(6.5vw);
+    font-weight: 800;
+  }
+  .sub_ad {
+    width: 100%;
+    font-size: calc(4.5vw);
+  }
+  .third_ad {
+    width: 100%;
+    font-size: calc(3vw);
+  }
+}

@@ -45,9 +45,10 @@ const Join = () => {
           justifyContents: "center",
           flexDirection: "column",
           alignItems: "center",
-          width: "450px",
+          width: "100%",
           paddingTop: "50px",
           paddingBottom: "50px",
+          background: "#FFEEAD",
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "black" }}>
@@ -69,6 +70,7 @@ const Join = () => {
             id="name"
             label="이름"
             variant="outlined"
+            color="dark"
             fullWidth
             name="name"
             sx={{
@@ -83,6 +85,7 @@ const Join = () => {
             type="birth"
             name="birth"
             margin="normal"
+            color="dark"
             fullWidth
             sx={{
               marginTop: "20px",
@@ -95,6 +98,7 @@ const Join = () => {
             variant="outlined"
             name="id"
             margin="normal"
+            color="dark"
             fullWidth
             sx={{
               marginTop: "40px",
@@ -108,6 +112,7 @@ const Join = () => {
             type="password"
             name="pwd"
             margin="normal"
+            color="dark"
             fullWidth
             sx={{
               marginTop: "20px",
@@ -119,6 +124,7 @@ const Join = () => {
             label="닉네임"
             variant="outlined"
             name="nickname"
+            color="dark"
             margin="normal"
             fullWidth
             sx={{
@@ -131,6 +137,7 @@ const Join = () => {
             label="휴대폰번호"
             variant="outlined"
             name="phone"
+            color="dark"
             margin="normal"
             fullWidth
             sx={{
@@ -143,6 +150,7 @@ const Join = () => {
             label="이메일"
             variant="outlined"
             name="email"
+            color="dark"
             margin="normal"
             fullWidth
             sx={{
@@ -155,6 +163,7 @@ const Join = () => {
             label="주소"
             variant="outlined"
             name="address"
+            color="dark"
             margin="normal"
             fullWidth
             sx={{
@@ -166,7 +175,8 @@ const Join = () => {
           <Button
             type="submit"
             fullWidth
-            variant="contained"
+            variant="outlined"
+            color="dark"
             sx={{ mt: 3, mb: 2 }}
           >
             가입하기

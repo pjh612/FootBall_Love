@@ -12,7 +12,6 @@ const ProfileImgAddBtn = () => {
     const newImg = e.target.files[0];
     const formData = new FormData();
     formData.append("file", newImg);
-    console.log(1);
     try {
       const profileUri = await postUserImg(formData).then((res) => res.data);
       dispatch(updateUserProfileUri(profileUri));

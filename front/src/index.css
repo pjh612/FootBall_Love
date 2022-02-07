@@ -1,12 +1,4 @@
-/* Black Han Sans Font IMPORT */
-@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap");
-/* Naum Gothic 400 */
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap");
-@font-face {
-  font-family: "SF";
-  src: url("./Font/SF-Pro.ttf") format("truetype");
-}
-@import url("https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@500&family=Nanum+Gothic:wght@400;800&display=swap");
 
 #root,
 .screen,

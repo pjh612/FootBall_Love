@@ -11,18 +11,29 @@ const Write = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("content", e.target.content.value);
-    formData.append("title", e.target.content.value);
-    formData.append("authorId", user.number);
-    formData.append("boardId", 0);
-    formData.append("teamId", user.teams[0].teamId);
+    const content = e.target.content.value;
+    const title = e.target.content.value;
+    const authorNumber = user.number;
+    const teamId = user.teams[0].teamId;
+    const images = e.target.img.files.file;
+
+    formData.append("content", content);
+    formData.append("title", title);
+    formData.append("authorNumber", authorNumber);
+    formData.append("boardId", 7);
+    formData.append("teamId", teamId);
     for (let i = 0; i < e.target.img.files; i++) {
-      formData.append("images[" + i + "]", e.target.img.files.file[i]);
+      formData.append("images[" + i + "]", images[i]);
     }
-    postUserPost(formData);
-    console.log(e.target.title.value); // 글제목
-    console.log(e.target.content.value); // 글내용
-    console.log(e.target.img.files); // 업로드파일
+    postUserPost(formData)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+
+    console.log(content);
+    console.log(title);
+    console.log(authorNumber);
+    console.log(teamId);
+    console.log(images);
   };
 
   return (
