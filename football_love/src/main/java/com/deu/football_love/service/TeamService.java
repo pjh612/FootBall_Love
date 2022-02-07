@@ -35,9 +35,7 @@ public class TeamService {
 
     public CreateTeamResponse createNewTeam(String creator, String teamName) {
         Team team = new Team();
-        Member findMember = memberRepository.selectMemberById(creator);
-        if (findMember == null)
-            return null;
+        Member findMember = memberRepository.findById(creator).orElseThrow(()->new IllegalArgumentException("no such member data."));;
         TeamMember teamMember = new TeamMember(team, findMember, TeamMemberType.LEADER);
         team.setName(teamName);
         teamMember.setTeam(team);
@@ -65,15 +63,13 @@ public class TeamService {
     public ApplicationJoinTeamDto findApplication(Long teamId, String memberId) {
         ApplicationJoinTeam application = applicationJoinTeamRepository.findByTeamIdAndMemberId(teamId, memberId)
                 .orElseThrow(()->new IllegalArgumentException("no such Team data"));
-        if (application == null)
-            return null;
         return new ApplicationJoinTeamDto(application);
     }
 
     public void applyToTeam(Long teamId, String memberId, String message) {
 
         Team findTeam = teamRepository.findById(teamId).orElseThrow(()->new IllegalArgumentException("no such Team data"));
-        Member findMember = memberRepository.selectMemberById(memberId);
+        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("no such member data."));
 
         ApplicationJoinTeam application = new ApplicationJoinTeam(findTeam, findMember, message);
         findTeam.getApplicationJoinTeams().add(application);
@@ -86,9 +82,7 @@ public class TeamService {
         ApplicationJoinTeam findApplication = applicationJoinTeamRepository.findByTeamIdAndMemberId(teamId, memberId)
                 .orElseThrow(()->new IllegalArgumentException("no such Team data"));;
         Team findTeam = teamRepository.findById(teamId).orElseThrow(()->new IllegalArgumentException("no such Team data"));
-        Member findMember = memberRepository.selectMemberById(memberId);
-        if (findMember == null)
-            return null;
+        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("no such member data."));;
         findApplication.delete();
         applicationJoinTeamRepository.delete(findApplication);
         TeamMember newTeamMember = new TeamMember(findTeam, findMember, TeamMemberType.COMMON);
@@ -105,6 +99,14 @@ public class TeamService {
     @Transactional(readOnly = true)
     public TeamMemberType authorityCheck(Long teamId, Long memberNumber) {
         Optional<TeamMember> findTeamMember = teamMemberRepository.findByTeamIdAndMemberNumber(teamId, memberNumber);
+        if (!findTeamMember.isPresent())
+            return TeamMemberType.NONE;
+        return findTeamMember.get().getType();
+    }
+
+    @Transactional(readOnly = true)
+    public TeamMemberType authorityCheck(String teamName, String memberId) {
+        Optional<TeamMember> findTeamMember = teamMemberRepository.findByTeamNameAndMemberId(teamName, memberId);
         if (!findTeamMember.isPresent())
             return TeamMemberType.NONE;
         return findTeamMember.get().getType();
@@ -130,7 +132,7 @@ public class TeamService {
     }
 
     public void withdrawal(Long teamId, String memberId) {
-        Member findMember = memberRepository.selectMemberById(memberId);
+        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("no such member data."));;
         if(!teamMemberRepository.existsByTeamIdAndMemberId(teamId, memberId))
             throw new NotTeamMemberException("no such team_member data");
         teamMemberRepository.deleteByTeamIdAndMemberNumber(teamId, findMember.getNumber());
@@ -160,7 +162,7 @@ public class TeamService {
     }
 
     public UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, TeamMemberType authorityType) {
-        Member findMember = memberRepository.selectMemberById(memberId);
+        Member findMember = memberRepository.findById(memberId).orElseThrow(()->new IllegalArgumentException("no such member data."));;
         TeamMember teamMember = teamMemberRepository.findByTeamIdAndMemberNumber(teamId, findMember.getNumber())
                 .orElseThrow(() -> new IllegalArgumentException("no such team_member data"));
         teamMember.setType(authorityType);

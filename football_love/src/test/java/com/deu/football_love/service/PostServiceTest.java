@@ -166,7 +166,7 @@ public class PostServiceTest {
         WritePostResponse writePostResponse3 = postService.writePost(writePostRequest3);
         WritePostResponse writePostResponse4 = postService.writePost(writePostRequest4);
 
-        Member findMember = memberRepository.selectMemberById("memberA");
+        Member findMember = memberRepository.findById("memberA").get();
 
         //when
         memberService.withdraw(findMember.getId());
@@ -239,9 +239,7 @@ public class PostServiceTest {
 
         Page<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId(),null);
 
-        BoardDto byId = boardService.findById(findBoard.getBoardId());
-
-        Assertions.assertNull(byId);
+        Assertions.assertThrows(IllegalArgumentException.class, ()->boardService.findById(findBoard.getBoardId()));
         Assertions.assertEquals(0, postList.getTotalElements());
 
     }

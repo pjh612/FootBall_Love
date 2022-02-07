@@ -40,7 +40,7 @@ public class GcpStorageService {
 
     public String updateProfileImg(MultipartFile file, String userId) throws IOException {
         InputStream targetStream = new ByteArrayInputStream(file.getBytes());
-        Member findMember = memberRepository.selectMemberById(userId);
+        Member findMember = memberRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("no such member data."));;
         String imgName;
         if (findMember.getProfileImgUri() != null)
             imgName = findMember.getProfileImgUri();

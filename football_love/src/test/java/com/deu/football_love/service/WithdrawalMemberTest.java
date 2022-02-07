@@ -4,6 +4,7 @@ import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.repository.MemberRepository;
+import com.deu.football_love.repository.WithdrawalMemberRepository;
 import com.deu.football_love.service.schedule.WithdrawalScheduleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class WithdrawalMemberTest {
 
     @Autowired
     WithdrawalScheduleService withdrawalScheduleService;
+
+    @Autowired
+    WithdrawalMemberRepository withdrawalMemberRepository;
 
     @Autowired
     EntityManager em;
@@ -63,12 +67,14 @@ public class WithdrawalMemberTest {
         memberService.withdraw("pjh612");
         memberService.withdraw("pjh581");
         LocalDateTime cur = LocalDateTime.now().plusDays(15);
-        memberRepository.deleteWithdrawalMemberByDate(cur, 16L);
-        Assertions.assertEquals(1, memberRepository.chkWithdraw(memberA.getId()));
-        Assertions.assertEquals(1, memberRepository.chkWithdraw(memberB.getId()));
+        LocalDateTime threshold = cur.minusDays(16L);
+        memberRepository.deleteWithdrawalMemberByDate(threshold);
+        Assertions.assertEquals(true, withdrawalMemberRepository.existsByMemberId(memberA.getId()));
+        Assertions.assertEquals(true, withdrawalMemberRepository.existsByMemberId(memberB.getId()));
 
-        memberRepository.deleteWithdrawalMemberByDate(cur, 14L);
-        Assertions.assertNull(memberRepository.chkWithdraw(memberA.getId()));
-        Assertions.assertNull(memberRepository.chkWithdraw(memberB.getId()));
+        threshold = cur.minusDays(14L);
+        memberRepository.deleteWithdrawalMemberByDate(threshold);
+        Assertions.assertFalse(withdrawalMemberRepository.existsByMemberId(memberA.getId()));
+        Assertions.assertFalse(withdrawalMemberRepository.existsByMemberId(memberB.getId()));
     }
 }
