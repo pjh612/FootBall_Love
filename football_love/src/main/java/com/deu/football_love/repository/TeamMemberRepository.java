@@ -1,6 +1,8 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.TeamMember;
+import com.deu.football_love.dto.team.QueryTeamDto;
+import com.deu.football_love.dto.team.QueryTeamListItemDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -59,4 +61,11 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
             " join tm.team" +
             " where tm.member.number = :memberNumber")
     List<QueryTeamMemberDto> findQueryTeamMemberDtoByMemberNumber(@Param("memberNumber") Long memberNumber);
+
+
+    @Query("SELECT new com.deu.football_love.dto.team.QueryTeamListItemDto(t.id, t.name, tm.type, t.teamMembers.size, t.profileImgUri) FROM TeamMember tm JOIN tm.member m JOIN tm.team t WHERE tm.member.number=:memberNumber")
+    List<QueryTeamListItemDto> findAllTeamByMemberNumber(@Param("memberNumber") Long memberNumber);
+
+    @Query("SELECT count(tm) FROM TeamMember tm JOIN tm.team WHERE tm.team.id=:teamId")
+    Long countTeamMembersByTeamId(@Param("teamId") Long teamId);
 }

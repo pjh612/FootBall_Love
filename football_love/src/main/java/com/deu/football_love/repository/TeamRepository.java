@@ -3,7 +3,9 @@ package com.deu.football_love.repository;
 import com.deu.football_love.domain.ApplicationJoinTeam;
 import com.deu.football_love.domain.Team;
 import com.deu.football_love.domain.TeamMember;
+import com.deu.football_love.dto.team.QueryTeamDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;

@@ -22,6 +22,12 @@ public class Team extends BaseEntity {
     @Column(name = "team_name", unique = true)
     private String name;
 
+    @Column(name = "team_introduce")
+    private String introduce;
+
+    @Column(name="team_profile_img_uri")
+    private String profileImgUri;
+
     @OneToMany(mappedBy = "team")
     private List<TeamMember> teamMembers = new ArrayList<>();
 
