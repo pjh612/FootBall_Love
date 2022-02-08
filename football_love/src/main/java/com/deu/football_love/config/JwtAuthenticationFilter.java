@@ -31,14 +31,24 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         if (cookies != null && jwtTokenProvider.getCookie((HttpServletRequest) request, JwtTokenProvider.ACCESS_TOKEN_NAME) != null)
             accessToken = jwtTokenProvider.getCookie((HttpServletRequest) request, JwtTokenProvider.ACCESS_TOKEN_NAME).getValue();
         if (!jwtTokenProvider.isLoggedOut(accessToken)) {
+            log.info("로그아웃안됨");
             try {
                 if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
+                    log.info("유효한 토큰");
                     Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
+                else
+                {
+                    log.info("만료된 토큰");
+                }
             } catch (ExpiredJwtException e) {
-                //재발급
+                log.info("만료 exception!");
             }
+        }
+        else {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            log.info("로그아웃 됨");
         }
         filterChain.doFilter(request, response);
     }
