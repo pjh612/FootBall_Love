@@ -16,7 +16,7 @@ export default function NavBar() {
   return (
     <div className={styles.wrapper}>
       <Logo></Logo>
-      <MenuList active={active}></MenuList>
+      <MenuList active={active} setActive={setActive}></MenuList>
       <button onClick={toggle} className={styles.hamburger}>
         <img src={Hambergur}></img>
       </button>

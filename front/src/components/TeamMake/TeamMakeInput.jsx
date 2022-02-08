@@ -7,6 +7,9 @@ import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { updateUserAction } from "../../action/createAction";
+import { getUserInfo } from "../../axios/axios";
 
 const Div = styled.div`
   width: 100vw;
@@ -27,6 +30,18 @@ const Div2 = styled.div`
 `;
 
 const TeamInput = () => {
+  const dispatch = useDispatch();
+  async function refresh() {
+    try {
+      const userInfo = await getUserInfo().then((res) => res.data);
+      const action = updateUserAction(userInfo);
+      dispatch(action);
+    } catch (err) {
+      console.log("로그인에러 [쿠키의 값이 유효하지 않습니다]");
+      console.log(err.response);
+      console.log(err);
+    }
+  }
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -36,11 +51,14 @@ const TeamInput = () => {
       teamIntroduce: e.target.teamIntroduce.value,
     };
     postTeamInfo(data)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        console.log("팀 생성 완료");
+        refresh();
         navigate("/");
       })
       .catch((err) => {
+        console.log("팀 생성 실패");
+        console.log(err.response);
         console.error(err);
       });
   };

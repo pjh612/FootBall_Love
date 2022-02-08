@@ -9,15 +9,15 @@ import TeamPage from "./components/TeamPage/TeamPage";
 import Board from "./components/Board/Board";
 import Write from "./components/Board/WritePage";
 import MyPage from "./components/MyPage/MyPage";
+import TeamList from "./components/TeamListPage/TeamList";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { updateUserAction } from "./action/createAction";
 
 // import WriteMatchContainer from "./components/WriteMatch/WriteContainer";
 // import WriteAnyContainer from "./components/WriteAny/WriteAnyContainer";
-// import { getUserInfo } from "./axios/axios";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { getUserInfo } from "./axios/axios";
-import { updateUserAction } from "./action/createAction";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { useEffect } from "react";
 // import {useState} from "react";
@@ -35,17 +35,20 @@ function App() {
       },
     },
   });
+
   useEffect(() => {
-    async function login() {
+    async function refresh() {
       try {
-        const userInfo = await getUserInfo().then((res) => res.data[0]);
+        const userInfo = await getUserInfo().then((res) => res.data);
         const action = updateUserAction(userInfo);
         dispatch(action);
       } catch (err) {
+        console.log("로그인에러 [쿠키의 값이 유효하지 않습니다]");
+        console.log(err.response);
         console.log(err);
       }
     }
-    login();
+    refresh();
   }, []);
 
   return (
@@ -64,6 +67,7 @@ function App() {
             <Route path="/teampage" element={<TeamPage></TeamPage>} />
             <Route path="/board" element={<Board></Board>} />
             <Route path="/myPage" element={<MyPage />} />
+            <Route path="/teamlist" element={<TeamList />} />
             <Route path="/board/write" element={<Write></Write>}></Route>
             {/* <Route
             path="/writeany"

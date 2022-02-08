@@ -20,7 +20,7 @@ export default function MyPage() {
           </div>
           <div
             className={styles.select_one_wrapper}
-            onClick={() => navigate("/teampage")}
+            onClick={() => navigate("/teamlist")}
           >
             <img className={styles.select_icon} src={Team}></img>
             <span className={styles.select_title}>나의 팀</span>

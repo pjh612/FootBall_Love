@@ -23,12 +23,13 @@ const Login = () => {
         (res) => res.data.memberNumber
       );
       console.log(loginKey);
-      const userInfo = await getUserInfo().then((res) => res.data[0]);
+      const userInfo = await getUserInfo().then((res) => res.data);
       const action = updateUserAction(userInfo);
       dispatch(action);
       navigate("/");
     } catch (err) {
-      console.log("error!");
+      console.log("로그인 에러 [ID, 비밀번호 정보가 올바르지 않습니다.]");
+      console.log(err.response);
       console.log(err);
     }
   }
