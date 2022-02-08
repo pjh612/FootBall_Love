@@ -1,8 +1,11 @@
 import { useSelector } from "react-redux";
 
-const useUser = () => {
+export const useUser = () => {
   const user = useSelector((state) => state.userReducer.user);
   return user;
 };
 
-export default useUser;
+export const useTeam = () => {
+  const teams = useSelector((state) => state.userReducer.user.teams);
+  return teams;
+};

@@ -13,7 +13,11 @@ const Logout = () => {
         dispatch(logoutAction());
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log("로그아웃 요청 에러");
+        console.log(err.response);
+        console.log(err);
+      });
   }, []);
 
   return <></>;

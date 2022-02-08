@@ -62,3 +62,10 @@ export function postTeamInfo(data) {
     data: data,
   });
 }
+
+// export function getTeamInfo(teamId) [
+//   return axios({
+//     method: "get",
+//     url:
+//   })
+// ]
