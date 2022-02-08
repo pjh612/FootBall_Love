@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.deu.football_love.domain.WithdrawalMember;
-import com.deu.football_love.dto.company.QueryCompanyDto;
 import com.deu.football_love.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -98,7 +97,9 @@ public class MemberService {
 
     public QueryMemberDto findQueryMemberDtoByNumber(Long number) {
         QueryMemberDto findMember = memberRepository.findQueryMemberDtoByNumber(number).orElseThrow(()->new IllegalArgumentException("no such member data."));
+        log.info("findMember number = {}",findMember.getNumber());
         findMember.setTeams(teamMemberRepository.findQueryTeamMemberDtoByMemberNumber(number));
+        log.info("setTeam 완료");
         return findMember;
     }
 

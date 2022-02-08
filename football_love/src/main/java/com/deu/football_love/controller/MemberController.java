@@ -5,19 +5,13 @@ import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import io.swagger.models.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.deu.football_love.config.JwtTokenProvider;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.auth.LoginRequest;
@@ -65,8 +59,15 @@ public class MemberController {
 
 
     @GetMapping("/loginInfo")
-    public QueryMemberDto getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
-        return memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
+    public ResponseEntity getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+      if(loginInfo == null)
+        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+      else {
+        log.info("login Info at getMember = {} {}",loginInfo.getNumber(),loginInfo.getId());
+        QueryMemberDto queryMemberDtoByNumber = memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
+        log.info("조회 결과 id = {}", queryMemberDtoByNumber.getId());
+        return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
+      }
     }
 
   @ApiOperation(value = "jwt 로그인 요청")
@@ -90,6 +91,7 @@ public class MemberController {
       response.addHeader("Set-Cookie", refreshTokenCookie.toString());
       redisService.setStringValue(loginResponse.getRefreshToken(), data,
           JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
+      System.out.println("로그인 성공");
       return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
 
     }
@@ -117,15 +119,19 @@ public class MemberController {
                                                     @CookieValue(value = "accessToken") String accessToken
             , @CookieValue(value = "refreshToken") String refreshToken
     ) {
+        log.info("컨트롤러 진입");
         if (accessToken == null || !jwtTokenProvider.validateToken(accessToken) || refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        log.info("access Token = {} ", accessToken);
+        log.info("accessToken validate = {}",jwtTokenProvider.validateToken(accessToken));
         Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
         if (remainExpiration >= 1) {
+          log.info("블랙리스트 등록");
             redisService.del(refreshToken);
             redisService.setStringValue(accessToken, "true", remainExpiration);
             log.info("remain time  = {}", remainExpiration);
-            principal = null;
+
             return new ResponseEntity(HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.UNAUTHORIZED);
@@ -178,8 +184,9 @@ public class MemberController {
 
 
 
-  /*
-   * @ExceptionHandler(Exception.class) public ResponseEntity serverException() { return new
-   * ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR); }
-   */
+  @ExceptionHandler({ IllegalArgumentException.class })
+  public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
+    log.info(ex.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+  }
 }

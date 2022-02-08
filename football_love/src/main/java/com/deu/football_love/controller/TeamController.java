@@ -6,6 +6,7 @@ import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.team.*;
 import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -133,6 +134,11 @@ public class TeamController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    @GetMapping("/list")
+    public ResponseEntity getMyTeamList(@AuthenticationPrincipal LoginInfo loginInfo)
+    {
+        return new ResponseEntity(teamService.findAllTeamByMemberNumber(loginInfo.getNumber()),HttpStatus.OK);
+    }
     @ExceptionHandler({ IllegalArgumentException.class })
     public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

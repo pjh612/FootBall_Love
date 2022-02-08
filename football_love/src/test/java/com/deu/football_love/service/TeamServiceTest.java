@@ -8,7 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.EntityManager;
+
+import com.deu.football_love.dto.team.CreateTeamResponse;
+import com.deu.football_love.dto.team.QueryTeamListItemDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -195,5 +199,47 @@ public class TeamServiceTest {
         assertThrows(IllegalArgumentException.class, () -> postService.findPost(post2.getPostId()));
     }
 
+    /**
+     * teamA(memberA) pjh
+     * teamC(PJH) kjh memberA
+     * teamD(KJH) pjh
+     */
+    @Test
+    public void 회원소속_팀_전체조회()
+    {
+        MemberJoinRequest joinPJH = MemberJoinRequest.memberJoinRequestBuilder().id("pjh")
+                .name("박진형").pwd("1234").nickname("박진형닉네임").address(new Address("양산", "행복길", "11"))
+                .birth(LocalDate.of(2000, 1, 1)).email("fblpjh@naver.com").phone("010-1111-2222")
+                .type(MemberType.NORMAL).build();
+        MemberJoinRequest joinKJH = MemberJoinRequest.memberJoinRequestBuilder().id("kjh")
+                .name("김진형").pwd("1234").nickname("김진형닉네임").address(new Address("양산", "행복길", "11"))
+                .birth(LocalDate.of(2000, 1, 1)).email("fblkjh@naver.com").phone("010-1111-2222")
+                .type(MemberType.NORMAL).build();
+        QueryMemberDto findPJH = memberService.join(joinPJH);
+        memberService.join(joinKJH);
+        QueryTeamDto teamA = teamService.findTeamByName("teamA");
+        CreateTeamResponse teamC = teamService.createNewTeam(joinPJH.getId(), "teamC");
+        CreateTeamResponse teamD = teamService.createNewTeam(joinKJH.getId(), "teamD");
+
+        teamService.applyToTeam(teamC.getTeamId(), "kjh", "hi");
+        teamService.acceptApplication(teamC.getTeamId(), "kjh");
+
+        teamService.applyToTeam(teamD.getTeamId(), "pjh", "hi");
+        teamService.acceptApplication(teamD.getTeamId(), "pjh");
+
+        teamService.applyToTeam(teamA.getId(), "pjh", "hi");
+        teamService.acceptApplication(teamA.getId(), "pjh");
+
+        teamService.applyToTeam(teamC.getTeamId(), "memberA", "hi");
+        teamService.acceptApplication(teamC.getTeamId(), "memberA");
+
+        log.info("########################### 쿼리 시작 #############################");
+        em.flush();
+        em.clear();
+        List<QueryTeamListItemDto> result = teamService.findAllTeamByMemberNumber(findPJH.getNumber());
+        for (QueryTeamListItemDto item : result) {
+            log.info("teamId={}, teamName={}, teamMemberTotal = {}, MyAuthority = {}",item.getTeamId(),item.getTeamName(),item.getTotalMemberCount(),item.getAuthority());
+        }
+    }
 
 }

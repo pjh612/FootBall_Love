@@ -169,4 +169,10 @@ public class TeamService {
         return new UpdateAuthorityResponse(teamId, memberId, authorityType);
     }
 
+    public List<QueryTeamListItemDto> findAllTeamByMemberNumber(Long memberNumber)
+    {
+        List<QueryTeamListItemDto> findTeams = teamMemberRepository.findAllTeamByMemberNumber(memberNumber);
+        return findTeams;
+    }
+
 }

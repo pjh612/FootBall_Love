@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select new com.deu.football_love.dto.member.QueryMemberDto(m)" +
             " from Member m" +
-            " join m.company" +
+            " left outer join m.company" +
             " where m.number = :memberNumber")
     Optional<QueryMemberDto> findQueryMemberDtoByNumber(@Param("memberNumber") Long number);
 
@@ -30,4 +30,5 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query("DELETE FROM WithdrawalMember wm WHERE wm.createdDate <= :threshold")
     @Modifying
     void deleteWithdrawalMemberByDate(@Param("threshold") LocalDateTime threshold);
+
 }
