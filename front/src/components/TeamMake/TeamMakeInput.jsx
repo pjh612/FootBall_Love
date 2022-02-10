@@ -8,8 +8,8 @@ import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { updateUserAction } from "../../action/createAction";
-import { getUserInfo } from "../../axios/axios";
+import { updateTeamAction } from "../../action/createAction";
+import { getTeamInfo } from "../../axios/axios";
 
 const Div = styled.div`
   width: 100vw;
@@ -31,13 +31,14 @@ const Div2 = styled.div`
 
 const TeamInput = () => {
   const dispatch = useDispatch();
-  async function refresh() {
+
+  async function refreshTeamInfo() {
     try {
-      const userInfo = await getUserInfo().then((res) => res.data);
-      const action = updateUserAction(userInfo);
+      const teamInfo = await getTeamInfo().then((res) => res.data);
+      const action = updateTeamAction(teamInfo);
       dispatch(action);
     } catch (err) {
-      console.log("로그인에러 [쿠키의 값이 유효하지 않습니다]");
+      console.log("팀 리스트를 갱신하는데 실패하였습니다.");
       console.log(err.response);
       console.log(err);
     }
@@ -53,7 +54,7 @@ const TeamInput = () => {
     postTeamInfo(data)
       .then(() => {
         console.log("팀 생성 완료");
-        refresh();
+        refreshTeamInfo();
         navigate("/");
       })
       .catch((err) => {

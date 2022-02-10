@@ -63,6 +63,13 @@ export function postTeamInfo(data) {
   });
 }
 
+export function getTeamInfo() {
+  return axios({
+    method: "get",
+    url: "https://flove.fbl.p-e.kr/api/team/list",
+  });
+}
+
 // export function getTeamInfo(teamId) [
 //   return axios({
 //     method: "get",

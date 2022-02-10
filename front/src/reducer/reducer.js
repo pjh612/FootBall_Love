@@ -20,6 +20,12 @@ function userReducer(state, action) {
         draft.user.profileUri = newUri;
       });
 
+    case "UPDATE_TEAMINFO":
+      return produce(state, (draft) => {
+        const newTeamInfo = action.teaminfo;
+        draft.user.teams = newTeamInfo;
+      });
+
     case "LOGOUT":
       return produce(state, (draft) => {
         draft.user = null;

@@ -2,10 +2,10 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { getUserInfo, sendLoginData } from "../../axios/axios";
+import { getUserInfo, sendLoginData, getTeamInfo } from "../../axios/axios";
 import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import Avatar from "@mui/material/Avatar";
-import { updateUserAction } from "../../action/createAction";
+import { updateUserAction, updateTeamAction } from "../../action/createAction";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Div, Div2 } from "./styled";
@@ -24,8 +24,11 @@ const Login = () => {
       );
       console.log(loginKey);
       const userInfo = await getUserInfo().then((res) => res.data);
-      const action = updateUserAction(userInfo);
-      dispatch(action);
+      const teamInfo = await getTeamInfo().then((res) => res.data);
+      const useraction = updateUserAction(userInfo);
+      const teamaction = updateTeamAction(teamInfo);
+      dispatch(useraction);
+      dispatch(teamaction);
       navigate("/");
     } catch (err) {
       console.log("로그인 에러 [ID, 비밀번호 정보가 올바르지 않습니다.]");

@@ -4,15 +4,17 @@ import { useTeam } from "../../hooks/useUser";
 
 export default function TeamList() {
   const teams = useTeam();
-  let teamList;
+  console.log(teams);
+  let teamList = null;
 
-  if (teams.size() === 0) {
-    teamList = null;
+  if (teams.length === 0) {
+    console.log("팀이 아직 없습니다.");
   } else {
     teamList = teams.map((team) => {
-      let imageSrc = team.imageSrc ? team.imageSrc : Temp;
+      console.log(team);
+      let imageSrc = team.profileImgUri ? team.profileImgUri : Temp;
       return (
-        <div className={styles.team_one_wrapper}>
+        <div key={team.teamName} className={styles.team_one_wrapper}>
           <img className={styles.team_image} src={imageSrc}></img>
           <span className={styles.team_name}>{team.teamName}</span>
         </div>

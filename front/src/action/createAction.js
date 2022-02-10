@@ -12,10 +12,22 @@ function updateUserProfileUri(newUri) {
   };
 }
 
+function updateTeamAction(newTeaminfo) {
+  return {
+    type: "UPDATE_TEAMINFO",
+    teaminfo: newTeaminfo,
+  };
+}
+
 function logoutAction() {
   return {
     type: "LOGOUT",
   };
 }
 
-export { updateUserAction, updateUserProfileUri, logoutAction };
+export {
+  updateUserAction,
+  updateUserProfileUri,
+  updateTeamAction,
+  logoutAction,
+};
