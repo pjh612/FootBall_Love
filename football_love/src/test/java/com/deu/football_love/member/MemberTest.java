@@ -113,7 +113,7 @@ public class MemberTest {
 
   @Test
   public void 멤버_그룹권한확인() {
-    teamService.createNewTeam("dbtlwns", "FC Flow");
+    teamService.createNewTeam("dbtlwns", "FC Flow", "팀 FC Flow 소개");
 
     String memberId = "dbtlwns";
     String teamName = "FC Flow";

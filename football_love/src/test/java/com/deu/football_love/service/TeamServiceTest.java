@@ -85,7 +85,7 @@ public class TeamServiceTest {
         .type(MemberType.NORMAL).build();;
         memberService.join(memberADto);
         memberService.join(memberBDto);
-        teamService.createNewTeam(memberADto.getId(), "teamA");
+        teamService.createNewTeam(memberADto.getId(), "teamA","팀 소개 입니다.");
 
     }
 
@@ -218,8 +218,8 @@ public class TeamServiceTest {
         QueryMemberDto findPJH = memberService.join(joinPJH);
         memberService.join(joinKJH);
         QueryTeamDto teamA = teamService.findTeamByName("teamA");
-        CreateTeamResponse teamC = teamService.createNewTeam(joinPJH.getId(), "teamC");
-        CreateTeamResponse teamD = teamService.createNewTeam(joinKJH.getId(), "teamD");
+        CreateTeamResponse teamC = teamService.createNewTeam(joinPJH.getId(), "teamC","팀 C 소개");
+        CreateTeamResponse teamD = teamService.createNewTeam(joinKJH.getId(), "teamD","팀 D 소개");
 
         teamService.applyToTeam(teamC.getTeamId(), "kjh", "hi");
         teamService.acceptApplication(teamC.getTeamId(), "kjh");
