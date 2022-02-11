@@ -1,7 +1,9 @@
 package com.deu.football_love.service;
 
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.Team;
 import com.deu.football_love.repository.MemberRepository;
+import com.deu.football_love.repository.TeamRepository;
 import com.google.cloud.WriteChannel;
 import com.google.cloud.storage.Acl;
 import com.google.cloud.storage.BlobInfo;
@@ -36,36 +38,50 @@ public class GcpStorageService {
     @Value("${spring.cloud.gcp.storage.postBucketName}")
     private String postBucketName;
 
+    @Value("${spring.cloud.gcp.storage.team-profile-bucket-name}")
+    private String teamProfileBucketName;
+
     private final MemberRepository memberRepository;
 
+    private final TeamRepository teamRepository;
+
     public String updateProfileImg(MultipartFile file, String userId) throws IOException {
-        InputStream targetStream = new ByteArrayInputStream(file.getBytes());
-        Member findMember = memberRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("no such member data."));;
-        String imgName;
-        if (findMember.getProfileImgUri() != null)
-            imgName = findMember.getProfileImgUri();
-        else
-            imgName = UUID.randomUUID().toString();
+        Member findMember = memberRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("no such member data."));
+        String imgName = findMember.getProfileImgUri() != null ? findMember.getProfileImgUri() : UUID.randomUUID().toString();
         BlobInfo blobInfo = BlobInfo.newBuilder(profileBucketName, imgName)
                 .setContentType(file.getContentType())
                 .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
                 .build();
         try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.md5Match())) {
-            ByteStreams.copy(targetStream, Channels.newOutputStream(writer));
+            ByteStreams.copy(new ByteArrayInputStream(file.getBytes()), Channels.newOutputStream(writer));
         }
         findMember.updateProfileImgUri(imgName);
         return findMember.getProfileImgUri();
     }
 
+    public String updateTeamProfileImg(MultipartFile file, Long teamId) throws IOException {
+
+        Team findTeam = teamRepository.findById(teamId).orElseThrow(() -> new IllegalArgumentException("no such team data."));
+        String imgName = findTeam.getProfileImgUri() != null ?findTeam.getProfileImgUri() : UUID.randomUUID().toString();
+        BlobInfo blobInfo = BlobInfo.newBuilder(teamProfileBucketName, imgName)
+                .setContentType(file.getContentType())
+                .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
+                .build();
+        try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.md5Match())) {
+            ByteStreams.copy(new ByteArrayInputStream(file.getBytes()), Channels.newOutputStream(writer));
+        }
+        return imgName;
+    }
+
+
     public String updatePostImg(MultipartFile file) throws IOException {
-        InputStream targetStream = new ByteArrayInputStream(file.getBytes());
         String imgName = UUID.randomUUID().toString();
         BlobInfo blobInfo = BlobInfo.newBuilder(postBucketName, imgName)
                 .setContentType(file.getContentType())
                 .setAcl(new ArrayList<>(Arrays.asList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))))
                 .build();
         try (WriteChannel writer = storage.writer(blobInfo, Storage.BlobWriteOption.md5Match())) {
-            ByteStreams.copy(targetStream, Channels.newOutputStream(writer));
+            ByteStreams.copy(new ByteArrayInputStream(file.getBytes()), Channels.newOutputStream(writer));
         }
         return imgName;
     }

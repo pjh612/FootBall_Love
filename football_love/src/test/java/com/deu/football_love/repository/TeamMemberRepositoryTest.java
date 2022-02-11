@@ -48,7 +48,7 @@ public class TeamMemberRepositoryTest {
         .type(MemberType.NORMAL).build();
     QueryMemberDto joinResponse = memberService.join(memberADto);
     QueryMemberDto joinResponse2 = memberService.join(memberBDto);
-    CreateTeamResponse createTeamResponse = teamService.createNewTeam(memberADto.getId(), "teamA");
+    CreateTeamResponse createTeamResponse = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
 
     /*
      * TeamMember newTeamMember = new TeamMember(teamRepository.findByName("teamA").get(),

@@ -72,7 +72,7 @@ public class PostControllerTest {
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp@naver.com").phone("010-1111-2222")
         .type(MemberType.NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
     BoardDto findBoard = boardService.findById(boardService

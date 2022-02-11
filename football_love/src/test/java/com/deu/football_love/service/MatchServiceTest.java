@@ -52,7 +52,7 @@ public class MatchServiceTest {
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.BUSINESS).build();
     QueryMemberDto memberInfo = memberService.join(joinInfo);
-    CreateTeamResponse teamInfo = teamService.createNewTeam(memberInfo.getId(), "FC FLOW");
+    CreateTeamResponse teamInfo = teamService.createNewTeam(memberInfo.getId(), "FC FLOW","팀 FC FLOW 소개");
 
     Address address = new Address("1", "1", "9");
     AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo.getNumber(),
@@ -77,14 +77,14 @@ public class MatchServiceTest {
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.BUSINESS).build();
     QueryMemberDto memberInfo1 = memberService.join(joinInfo1);
-    CreateTeamResponse teamInfo1 = teamService.createNewTeam(memberInfo1.getId(), "FC FLOW");
+    CreateTeamResponse teamInfo1 = teamService.createNewTeam(memberInfo1.getId(), "FC FLOW","팀 FC FLOW 소개");
 
     MemberJoinRequest joinInfo2 = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns2")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp2@naver.com").phone("010-1111-2222")
         .type(MemberType.NORMAL).build();
     QueryMemberDto memberInfo2 = memberService.join(joinInfo2);
-    CreateTeamResponse teamInfo2 = teamService.createNewTeam(memberInfo2.getId(), "FC LOL");
+    CreateTeamResponse teamInfo2 = teamService.createNewTeam(memberInfo2.getId(), "FC LOL","팀 FC FLOW 소개");
 
     Address address = new Address("1", "1", "9");
     AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo1.getNumber(),
@@ -111,7 +111,7 @@ public class MatchServiceTest {
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.BUSINESS).build();
     QueryMemberDto memberInfo = memberService.join(joinInfo);
-    CreateTeamResponse teamInfo = teamService.createNewTeam(memberInfo.getId(), "FC FLOW");
+    CreateTeamResponse teamInfo = teamService.createNewTeam(memberInfo.getId(), "FC FLOW","팀 FC FLOW 소개");
 
     Address address = new Address("1", "1", "9");
     AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo.getNumber(),
@@ -132,7 +132,7 @@ public class MatchServiceTest {
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
         .type(MemberType.BUSINESS).build();
     QueryMemberDto memberInfo = memberService.join(joinInfo);
-    CreateTeamResponse teamInfo = teamService.createNewTeam(memberInfo.getId(), "FC FLOW");
+    CreateTeamResponse teamInfo = teamService.createNewTeam(memberInfo.getId(), "FC FLOW","팀 FC FLOW 소개");
 
     Address address = new Address("1", "1", "9");
     AddCompanyResponse companyInfo = companyService.addCompany("(주)아프리카TV", memberInfo.getNumber(),
