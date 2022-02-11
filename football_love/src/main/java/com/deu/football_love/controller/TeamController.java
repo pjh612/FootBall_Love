@@ -6,7 +6,6 @@ import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.team.*;
 import com.deu.football_love.service.MemberService;
 import com.deu.football_love.service.TeamService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RequestMapping("/api/team")
 @RequiredArgsConstructor
@@ -51,7 +49,7 @@ public class TeamController {
      **/
     @PostMapping
     public ResponseEntity add(@Valid @RequestBody CreateTeamRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
-        CreateTeamResponse response = teamService.createNewTeam(loginInfo.getId(), request.getTeamName());
+        CreateTeamResponse response = teamService.createNewTeam(loginInfo.getId(), request.getTeamName(),request.getTeamIntroduce());
         if (response == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         return new ResponseEntity(response, HttpStatus.OK);
@@ -139,6 +137,20 @@ public class TeamController {
     {
         return new ResponseEntity(teamService.findAllTeamByMemberNumber(loginInfo.getNumber()),HttpStatus.OK);
     }
+
+    /**
+     * 팀 프로필 변경
+     */
+    @PostMapping("/profile")
+    public ResponseEntity updateTeamProfile(@ModelAttribute UpdateTeamProfileRequest request, @AuthenticationPrincipal LoginInfo loginInfo)
+    {
+        TeamMemberType authority = teamService.authorityCheck(request.getTeamId(), loginInfo.getNumber());
+        if (authority != TeamMemberType.LEADER)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        teamService.updateTeamProfile(request.getTeamId(), request.getProfileImg(), request.getIntroduce());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @ExceptionHandler({ IllegalArgumentException.class })
     public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

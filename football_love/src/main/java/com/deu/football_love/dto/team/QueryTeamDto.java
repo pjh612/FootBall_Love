@@ -14,6 +14,8 @@ public class QueryTeamDto extends BaseDto {
 
     private Long id;
     private String name;
+    private String profileImgUri;
+    private String introduce;
     private List<String> teamMembers = new ArrayList<>();
     private List<BoardDto> boards = new ArrayList<>();
     public QueryTeamDto(Long id, String name, List<TeamMember> teamMembers) {
@@ -25,6 +27,8 @@ public class QueryTeamDto extends BaseDto {
     public QueryTeamDto(Team team) {
         this.id = team.getId();
         this.name = team.getName();
+        this.profileImgUri = team.getProfileImgUri();
+        this.introduce = team.getIntroduce();
         team.getTeamMembers().forEach(teamMember ->{this.teamMembers.add(teamMember.getMember().getId());});
         boards = team.getBoards().stream().map(board -> new BoardDto(board)).collect(Collectors.toList());
      /*   setCreatedDate(team.getCreatedDate());

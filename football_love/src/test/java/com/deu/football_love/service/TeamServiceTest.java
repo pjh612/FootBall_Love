@@ -242,4 +242,19 @@ public class TeamServiceTest {
         }
     }
 
+    /**
+     * 프로필 사진 변경이 없을 때, 팀 소개가 잘 업데이트 되는지 확인
+     */
+    @Test
+    public void 팀_프로필_업데이트_테스트()
+    {
+        QueryTeamDto findTeam = teamService.findTeamByName("teamA");
+        Long teamId = findTeam.getId();
+        String introduce = "수정된 팀 소개 입니다.";
+
+        teamService.updateTeamProfile(teamId, null, introduce);
+        QueryTeamDto team = teamService.findTeam(findTeam.getId());
+        Assertions.assertEquals(introduce, team.getIntroduce());
+    }
+
 }
