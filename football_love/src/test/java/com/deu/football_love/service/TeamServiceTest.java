@@ -85,7 +85,7 @@ public class TeamServiceTest {
         .type(MemberType.NORMAL).build();;
         memberService.join(memberADto);
         memberService.join(memberBDto);
-        teamService.createNewTeam(memberADto.getId(), "teamA");
+        teamService.createNewTeam(memberADto.getId(), "teamA","팀 소개 입니다.");
 
     }
 
@@ -218,8 +218,8 @@ public class TeamServiceTest {
         QueryMemberDto findPJH = memberService.join(joinPJH);
         memberService.join(joinKJH);
         QueryTeamDto teamA = teamService.findTeamByName("teamA");
-        CreateTeamResponse teamC = teamService.createNewTeam(joinPJH.getId(), "teamC");
-        CreateTeamResponse teamD = teamService.createNewTeam(joinKJH.getId(), "teamD");
+        CreateTeamResponse teamC = teamService.createNewTeam(joinPJH.getId(), "teamC","팀 C 소개");
+        CreateTeamResponse teamD = teamService.createNewTeam(joinKJH.getId(), "teamD","팀 D 소개");
 
         teamService.applyToTeam(teamC.getTeamId(), "kjh", "hi");
         teamService.acceptApplication(teamC.getTeamId(), "kjh");
@@ -240,6 +240,21 @@ public class TeamServiceTest {
         for (QueryTeamListItemDto item : result) {
             log.info("teamId={}, teamName={}, teamMemberTotal = {}, MyAuthority = {}",item.getTeamId(),item.getTeamName(),item.getTotalMemberCount(),item.getAuthority());
         }
+    }
+
+    /**
+     * 프로필 사진 변경이 없을 때, 팀 소개가 잘 업데이트 되는지 확인
+     */
+    @Test
+    public void 팀_프로필_업데이트_테스트()
+    {
+        QueryTeamDto findTeam = teamService.findTeamByName("teamA");
+        Long teamId = findTeam.getId();
+        String introduce = "수정된 팀 소개 입니다.";
+
+        teamService.updateTeamProfile(teamId, null, introduce);
+        QueryTeamDto team = teamService.findTeam(findTeam.getId());
+        Assertions.assertEquals(introduce, team.getIntroduce());
     }
 
 }

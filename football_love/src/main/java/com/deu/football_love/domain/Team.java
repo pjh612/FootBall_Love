@@ -45,4 +45,9 @@ public class Team extends BaseEntity {
 
     @OneToMany(mappedBy = "team")
     private List<Board> boards = new ArrayList<>();
+
+    public void updateTeamProfile(String profileImgUri, String introduce){
+        this.profileImgUri = profileImgUri;
+        this.introduce = introduce;
+    }
 }
