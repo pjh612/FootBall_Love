@@ -41,11 +41,11 @@ public class TeamMemberRepositoryTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     MemberJoinRequest memberBDto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns2")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp2@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto joinResponse = memberService.join(memberADto);
     QueryMemberDto joinResponse2 = memberService.join(memberBDto);
     CreateTeamResponse createTeamResponse = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");

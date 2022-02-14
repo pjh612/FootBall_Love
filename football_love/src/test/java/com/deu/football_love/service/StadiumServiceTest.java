@@ -38,7 +38,7 @@ class StadiumServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
@@ -57,7 +57,7 @@ class StadiumServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
@@ -76,7 +76,7 @@ class StadiumServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
@@ -102,7 +102,7 @@ class StadiumServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
