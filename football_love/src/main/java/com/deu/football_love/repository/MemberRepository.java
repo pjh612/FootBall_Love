@@ -21,6 +21,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             " where m.number = :memberNumber")
     Optional<QueryMemberDto> findQueryMemberDtoByNumber(@Param("memberNumber") Long number);
 
+    @Query("select m" +
+        " from Member m" +
+        " JOIN FETCH m.company" +
+        " where m.id = :id")
+    Optional<Member> findByIdWithJoinCompany(@Param("Id") String id);
+
     Optional<Member> findById(@Param("id") String id);
 
     boolean existsById(@Param("id") String id);
