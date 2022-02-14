@@ -1,5 +1,6 @@
 package com.deu.football_love.domain;
 
+import com.deu.football_love.dto.company.UpdateCompanyRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,5 +49,13 @@ public class Company extends BaseEntity {
     {
         owner.setCompany(null);
         this.owner = null;
+    }
+
+    public void update(UpdateCompanyRequest request)
+    {
+        name = request.getName();
+        location = request.getLocation();
+        tel = request.getTel();
+        description = request.getDescription();
     }
 }

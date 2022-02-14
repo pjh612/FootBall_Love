@@ -45,7 +45,7 @@ public class MemberTest {
 
   private final MemberJoinRequest JOIN_REQUEST = MemberJoinRequest.memberJoinRequestBuilder()
       .id("dbtlwns").name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-      .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+      .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
   @BeforeEach
   public void doBeforeEach() {
@@ -65,7 +65,7 @@ public class MemberTest {
   public void 멤버_가입() {
     MemberJoinRequest request = MemberJoinRequest.memberJoinRequestBuilder().id("pjhpjh")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("pjhCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("pjhCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     QueryMemberDto memberResponse = memberService.join(request);
     assertAll(() -> assertEquals(request.getId(), memberResponse.getId()),
@@ -89,7 +89,7 @@ public class MemberTest {
   public void 멤버_수정() {
     UpdateMemberRequest request =
         UpdateMemberRequest.builder().pwd("1111").nickname("jhjh").address(ADDRESS)
-            .email("dbtlwns@naver.com").phone("updatedPhone").type(MemberType.NORMAL).build();
+            .email("dbtlwns@naver.com").phone("updatedPhone").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberResponse = memberService.modifyByMemberId(JOIN_REQUEST.getId(), request);
     assertAll(() -> assertEquals(JOIN_REQUEST.getId(), memberResponse.getId()),
         () -> assertEquals(request.getNickname(), memberResponse.getNickname()),
