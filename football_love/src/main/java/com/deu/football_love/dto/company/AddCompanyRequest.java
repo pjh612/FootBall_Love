@@ -20,10 +20,6 @@ public class AddCompanyRequest {
     private String companyName;
 	
 	@NotNull
-	@Positive
-    private Long ownerNumber;
-	
-	@NotNull
     private Address location;
 	
 	@NotNull
@@ -35,9 +31,8 @@ public class AddCompanyRequest {
 	@Size(min=1,max=100)
     private String description;
 
-    public AddCompanyRequest(String name, Long ownerNumber, Address location, String tel, String description) {
+    public AddCompanyRequest(String name, Address location, String tel, String description) {
         this.companyName = name;
-        this.ownerNumber = ownerNumber;
         this.location = location;
         this.tel = tel;
         this.description = description;
