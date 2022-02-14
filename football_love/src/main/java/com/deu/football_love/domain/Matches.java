@@ -17,11 +17,11 @@ public class Matches extends com.deu.football_love.domain.BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
-    private com.deu.football_love.domain.Team team;
+    private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stadium_id")
-    private com.deu.football_love.domain.Stadium stadium;
+    private Stadium stadium;
 
     @Column(name = "matches_reservation_time")
     private LocalDateTime reservationTime;

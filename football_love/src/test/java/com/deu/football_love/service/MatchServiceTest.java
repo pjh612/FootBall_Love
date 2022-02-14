@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.deu.football_love.repository.StadiumRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -40,6 +42,9 @@ public class MatchServiceTest {
 
   @Autowired
   private MemberService memberService;
+
+  @Autowired
+  private StadiumRepository stadiumRepository;
 
   @Autowired
   private StadiumService stadiumService;
@@ -161,5 +166,32 @@ public class MatchServiceTest {
         () -> assertTrue(matchDto.getTeamName().equals(findMatchDto.getTeamName())),
         () -> assertNotEquals(matchDto.getStadiumId(), findMatchDto.getStadiumId()),
         () -> assertNotEquals(matchDto.getReservation_time(), findMatchDto.getReservation_time()));
+  }
+
+  @Test
+  public void 매치_리스트_조회() {
+    MemberJoinRequest joinRequestA = MemberJoinRequest.memberJoinRequestBuilder().id("company")
+        .name("박진형").pwd("1234").nickname("사업자A").address(new Address("부산", "행복길", "11"))
+        .birth(LocalDate.of(2000, 1, 1)).email("business_a@naver.com").phone("010-1111-2222")
+        .type(MemberType.ROLE_BUSINESS).build();
+    MemberJoinRequest joinRequestB = MemberJoinRequest.memberJoinRequestBuilder().id("ROLE_NORMAL")
+        .name("유시준").pwd("1234").nickname("일반회원A").address(new Address("부산", "행복길", "11"))
+        .birth(LocalDate.of(2000, 1, 1)).email("normal_a@naver.com").phone("010-1111-2223")
+        .type(MemberType.ROLE_NORMAL).build();
+    QueryMemberDto businessMember = memberService.join(joinRequestA);
+    QueryMemberDto normalMember = memberService.join(joinRequestB);
+    CreateTeamResponse teamA = teamService.createNewTeam(normalMember.getId(), "teamA", "팀 A 소개");
+    AddCompanyResponse companyA = companyService
+        .addCompany("companyA", businessMember.getNumber(), new Address("부산", "행복길", "11"),
+            "010-1111-2222", "A급 경기장을 보유한 companyA입니다.");
+    AddStadiumResponse stadiumA = stadiumService
+        .addStadium(companyA.getCompanyId(), "천연잔디", "5x5", 60000L);
+    AddStadiumResponse stadiumB = stadiumService
+        .addStadium(companyA.getCompanyId(), "인조잔디", "5x5", 50000L);
+    matchService.addMatch(teamA.getTeamId(), stadiumA.getId(), LocalDateTime.now());
+    matchService.addMatch(teamA.getTeamId(), stadiumB.getId(), LocalDateTime.now());
+
+    List<QueryMatchDto> matchList = matchService.findAllByCompanyId(companyA.getCompanyId());
+    Assertions.assertEquals(2, matchList.size());
   }
 }
