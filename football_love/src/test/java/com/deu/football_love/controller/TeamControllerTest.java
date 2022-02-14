@@ -38,7 +38,7 @@ public class TeamControllerTest {
   //
   // Address address = new Address("busan", "guemgangro", "46233");
   // MemberJoinRequest request = new MemberJoinRequest("pjh612","123","jhjh","박진형",
-  // null, address, "pjh_jn@naver.com","01021042419", MemberType.NORMAL);
+  // null, address, "pjh_jn@naver.com","01021042419", MemberType.ROLE_NORMAL);
   // QueryMemberDto join = memberService.join(request);
   // CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형","반갑습니다.");
   // UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
@@ -73,7 +73,7 @@ public class TeamControllerTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     memberService.join(memberADto);
     teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeamByName("teamA");
@@ -101,7 +101,7 @@ public class TeamControllerTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     memberService.join(memberADto);
     teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeamByName("teamA");

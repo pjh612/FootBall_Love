@@ -72,7 +72,7 @@ public class StorageControllerTest {
     MemberJoinRequest request = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto join = memberService.join(request);
     CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형", "FC 진형 입니다");
     UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());

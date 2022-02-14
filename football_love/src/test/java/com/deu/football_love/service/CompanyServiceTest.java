@@ -47,7 +47,7 @@ class CompanyServiceTest {
        MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
@@ -62,7 +62,7 @@ class CompanyServiceTest {
        MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
@@ -81,7 +81,7 @@ class CompanyServiceTest {
        MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.BUSINESS).build();
+        .type(MemberType.ROLE_BUSINESS).build();
     QueryMemberDto memberA = memberService.join(memberADto);
     AddCompanyResponse newCompany = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
@@ -99,19 +99,19 @@ class CompanyServiceTest {
      MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     MemberJoinRequest memberBDto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns2")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp2@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     MemberJoinRequest memberCDto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns3")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp3@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     MemberJoinRequest memberDDto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns4")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp4@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
 
     QueryMemberDto memberA = memberService.join(memberADto);
     QueryMemberDto memberB = memberService.join(memberBDto);
