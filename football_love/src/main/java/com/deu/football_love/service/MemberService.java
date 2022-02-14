@@ -159,7 +159,7 @@ public class MemberService {
       }
     }
     // 사업자일 경우 컴퍼니 삭제
-    if (findMember.getMemberType() == MemberType.BUSINESS) {
+    if (findMember.getMemberType() == MemberType.ROLE_BUSINESS) {
       findMember.getCompany().deleteCompany();
     }
     return true;

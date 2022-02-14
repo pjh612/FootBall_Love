@@ -78,11 +78,11 @@ public class TeamServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     MemberJoinRequest memberBDto = MemberJoinRequest.memberJoinRequestBuilder().id("memberB")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp2@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();;
+        .type(MemberType.ROLE_NORMAL).build();;
         memberService.join(memberADto);
         memberService.join(memberBDto);
         teamService.createNewTeam(memberADto.getId(), "teamA","팀 소개 입니다.");
@@ -210,11 +210,11 @@ public class TeamServiceTest {
         MemberJoinRequest joinPJH = MemberJoinRequest.memberJoinRequestBuilder().id("pjh")
                 .name("박진형").pwd("1234").nickname("박진형닉네임").address(new Address("양산", "행복길", "11"))
                 .birth(LocalDate.of(2000, 1, 1)).email("fblpjh@naver.com").phone("010-1111-2222")
-                .type(MemberType.NORMAL).build();
+                .type(MemberType.ROLE_NORMAL).build();
         MemberJoinRequest joinKJH = MemberJoinRequest.memberJoinRequestBuilder().id("kjh")
                 .name("김진형").pwd("1234").nickname("김진형닉네임").address(new Address("양산", "행복길", "11"))
                 .birth(LocalDate.of(2000, 1, 1)).email("fblkjh@naver.com").phone("010-1111-2222")
-                .type(MemberType.NORMAL).build();
+                .type(MemberType.ROLE_NORMAL).build();
         QueryMemberDto findPJH = memberService.join(joinPJH);
         memberService.join(joinKJH);
         QueryTeamDto teamA = teamService.findTeamByName("teamA");

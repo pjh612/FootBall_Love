@@ -1,6 +1,7 @@
 package com.deu.football_love.dto.auth;
 
 import com.deu.football_love.domain.Member;
+import com.deu.football_love.domain.type.MemberType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,7 +19,7 @@ public class LoginInfo implements UserDetails {
     private String name;
     private String password;
     private Collection<GrantedAuthority> roles;
-
+    private Long companyId;
     public LoginInfo() {
         this.number= -1L;
         this.number = -1L;
@@ -33,6 +34,9 @@ public class LoginInfo implements UserDetails {
         //this.password = member.getPwd();
         roles = new ArrayList<GrantedAuthority>();
         roles.add(new SimpleGrantedAuthority(member.getMemberType().name()));
+        if(member.getMemberType() == MemberType.ROLE_BUSINESS)
+            companyId = member.getCompany().getId();
+
     }
 
     public boolean isLoggedIn() {

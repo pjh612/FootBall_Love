@@ -72,7 +72,7 @@ class MemberControllerTest {
   public void join() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     mvc.perform(MockMvcRequestBuilders.post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(joinRequest)).with(csrf())).andExpect(status().isOk())
@@ -85,7 +85,7 @@ class MemberControllerTest {
         .andExpect(jsonPath("$.birth", is("2000-01-01")))
         .andExpect(jsonPath("$.email", is(joinRequest.getEmail())))
         .andExpect(jsonPath("$.phone", is(joinRequest.getPhone())))
-        .andExpect(jsonPath("$.type", is("NORMAL"))).andDo(print());
+        .andExpect(jsonPath("$.type", is("ROLE_NORMAL"))).andDo(print());
   }
 
   @DisplayName("파라미터중 null이 있는 회원가입 테스트")
@@ -93,7 +93,7 @@ class MemberControllerTest {
   public void testNotNullJoin() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY).email("fblCorp@naver.com")
-        .phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     mvc.perform(MockMvcRequestBuilders.post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(joinRequest)).with(csrf()))
@@ -105,7 +105,7 @@ class MemberControllerTest {
   public void testPhoneRegexpJoin() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-22221").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-22221").type(MemberType.ROLE_NORMAL).build();
 
     mvc.perform(MockMvcRequestBuilders.post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(joinRequest)).with(csrf()))
@@ -117,7 +117,7 @@ class MemberControllerTest {
   public void testEmptyStringArgsJoin() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     mvc.perform(MockMvcRequestBuilders.post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(joinRequest)).with(csrf()))
@@ -129,7 +129,7 @@ class MemberControllerTest {
   public void loginTest() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     LoginRequest loginRequest = new LoginRequest(joinRequest.getId(), joinRequest.getPwd());
     QueryMemberDto join = memberService.join(joinRequest);
@@ -161,7 +161,7 @@ class MemberControllerTest {
   public void chkEmailDuplication() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     QueryMemberDto join = memberService.join(joinRequest);
     mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/duplication/email")
@@ -179,7 +179,7 @@ class MemberControllerTest {
   public void chkIdDuplication() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     QueryMemberDto join = memberService.join(joinRequest);
     mvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/duplication/id")
@@ -197,14 +197,14 @@ class MemberControllerTest {
   public void modifyMemberInfoTest() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     QueryMemberDto join = memberService.join(joinRequest);
     UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
 
     UpdateMemberRequest updateRequest =
         UpdateMemberRequest.builder().pwd("1111").nickname("updatedNickName").address(ADDRESS)
-            .email("fblCorp11@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+            .email("fblCorp11@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
     mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/" + join.getId())
         .contentType(MediaType.APPLICATION_JSON).with(user(userDetails)).with(csrf())
@@ -219,7 +219,7 @@ class MemberControllerTest {
   public void withdrawMemberTest() throws Exception {
     MemberJoinRequest joinRequest = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
         .name("유시준").pwd("1234").nickname("개발고수").address(ADDRESS).birth(BIRTH_DAY)
-        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.NORMAL).build();
+        .email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto join = memberService.join(joinRequest);
     UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
     mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/withdrawals/" + join.getId())

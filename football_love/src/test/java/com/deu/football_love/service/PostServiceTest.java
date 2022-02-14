@@ -70,7 +70,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
 
@@ -93,7 +93,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -121,7 +121,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -168,7 +168,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -208,7 +208,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -247,7 +247,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -284,7 +284,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -316,7 +316,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     CreateTeamResponse teamB = teamService.createNewTeam(memberADto.getId(), "teamB","팀 B 소개");
@@ -370,7 +370,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -407,7 +407,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
@@ -431,7 +431,7 @@ public class PostServiceTest {
     MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
         .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
         .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.NORMAL).build();
+        .type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
