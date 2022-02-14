@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/", // 아웃풋 될 경로
+    "noImplicitAny": false, // 음.. 암시적 any 타입의 표현식 및 선언에서 오류를 발생시킬지?
+    "module": "es2015",
+    "target": "es5",
+    "jsx": "react-jsx",
+    "allowJs": true, // .js 파일도 함께 컴파일 할지 여부
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "lib": ["DOM", "es2015"]
+  }
+}

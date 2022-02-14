@@ -1,0 +1,45 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 58px;
+  min-height: 100vh;
+  background-color: aquamarine;
+}
+
+.teamImage {
+  width: 400px;
+  height: 570px;
+}
+
+.info_wrapper {
+  width: calc(70vw - 400px);
+  display: flex;
+  flex-direction: column;
+  padding-left: 5vw;
+}
+
+.title {
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+  font-size: 33px;
+  font-weight: 700;
+}
+
+.name {
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.introduce {
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.parse_wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
