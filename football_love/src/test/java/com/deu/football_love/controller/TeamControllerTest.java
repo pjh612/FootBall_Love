@@ -38,7 +38,7 @@ public class TeamControllerTest {
   //
   // Address address = new Address("busan", "guemgangro", "46233");
   // MemberJoinRequest request = new MemberJoinRequest("pjh612","123","jhjh","박진형",
-  // null, address, "pjh_jn@naver.com","01021042419", MemberType.NORMAL);
+  // null, address, "pjh_jn@naver.com","01021042419", MemberType.ROLE_NORMAL);
   // QueryMemberDto join = memberService.join(request);
   // CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형","반갑습니다.");
   // UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
