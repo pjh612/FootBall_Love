@@ -8,6 +8,7 @@ import com.deu.football_love.dto.stadium.RemoveStadiumResponse;
 import com.deu.football_love.dto.stadium.QueryStadiumDto;
 import com.deu.football_love.repository.CompanyRepository;
 import com.deu.football_love.repository.StadiumRepository;
+import com.deu.football_love.repository.StadiumRepository.StadiumId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,15 @@ public class StadiumService {
     public List<QueryStadiumDto> findAllStadiumByCompanyId(Long companyId) {
         List<QueryStadiumDto> collect = stadiumRepository.selectAllStadiumByCompanyId(companyId).stream().map(s -> new QueryStadiumDto(s.getId(), s.getType(), s.getSize(), s.getCost())).collect(Collectors.toList());
         return collect;
+    }
+
+    public List<StadiumId> findAllStadiumIdsByCompanyId(Long companyId) {
+        List<StadiumId> stadiumIdList = stadiumRepository.findAllIdsByCompanyId(companyId);
+        return stadiumIdList;
+    }
+        public List<Stadium> findAllStadiumsByCompanyId(Long companyId) {
+            List<Stadium> stadiums = stadiumRepository.findAllByCompanyId(companyId);
+            return stadiums;
     }
 
     public AddStadiumResponse addStadium(Long companyId, String type, String size, Long cost) {
