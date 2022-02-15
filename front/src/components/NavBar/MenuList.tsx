@@ -52,7 +52,7 @@ export default function MenuList({ active, setActive }: any) {
       >
         팀만들기
       </button>
-      {user ? (
+      {user.number ? (
         <button
           onClick={() => {
             setActive(!active);

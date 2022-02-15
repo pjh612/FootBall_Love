@@ -76,10 +76,14 @@ export function getDetailTeamInfo(teamId) {
     url: `https://flove.fbl.p-e.kr/api/team/${teamId}`,
   });
 }
-
-// export function getTeamInfo(teamId) [
-//   return axios({
-//     method: "get",
-//     url:
-//   })
-// ]
+// {
+//   boards: [],
+//   createdDate: null,
+//   createdBy: null,
+//   id: number,
+//   introduce: String,
+//   lastModifiedBy: null,
+//   lastModifiedDate: null,
+//   name: "teamName",
+//   profileImgUri: null,
+// }
