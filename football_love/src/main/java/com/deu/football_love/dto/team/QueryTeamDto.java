@@ -18,6 +18,7 @@ public class QueryTeamDto extends BaseDto {
     private String introduce;
     private List<String> teamMembers = new ArrayList<>();
     private List<BoardDto> boards = new ArrayList<>();
+
     public QueryTeamDto(Long id, String name, List<TeamMember> teamMembers) {
         this.id = id;
         this.name = name;
