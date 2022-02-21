@@ -76,14 +76,22 @@ export function getDetailTeamInfo(teamId) {
     url: `https://flove.fbl.p-e.kr/api/team/${teamId}`,
   });
 }
-// {
-//   boards: [],
-//   createdDate: null,
-//   createdBy: null,
-//   id: number,
-//   introduce: String,
-//   lastModifiedBy: null,
-//   lastModifiedDate: null,
-//   name: "teamName",
-//   profileImgUri: null,
-// }
+
+export function makeBoardRequest(teamId, data) {
+  return axios({
+    method: 'post',
+    url: `https://flove.fbl.p-e.kr/api/team/${teamId}/board`,
+    data: data,
+  });
+}
+
+export function getTeamBoardPosts(boardId) {
+  return axios({
+    method: 'get',
+    params: {
+      page: 0,
+      size: 10,
+    },
+    url: `https://flove.fbl.p-e.kr/api/board/${boardId}/post`,
+  });
+}

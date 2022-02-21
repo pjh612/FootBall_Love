@@ -5,7 +5,7 @@ const TeamPageImage = ({ teamUri }: any) => {
     <>
       <img
         className={styles.teamImage}
-        src="https://i.annihil.us/u/prod/marvel/i/mg/c/f0/6169eecb78c4c/clean.jpg"
+        src={teamUri ? teamUri : 'https://i.annihil.us/u/prod/marvel/i/mg/c/f0/6169eecb78c4c/clean.jpg'}
       ></img>
     </>
   );

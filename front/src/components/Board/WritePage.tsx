@@ -1,14 +1,16 @@
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { RootState } from '../../reducer/index';
+
 import { postUserPost } from '../../axios/axios';
-import { useSelector } from 'react-redux';
+import { useUser } from '../../hooks/useUser';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Write = () => {
-  const user = useSelector((state: RootState) => {
-    return state.userReducer.user;
-  });
+  const user = useUser();
+  const navigate = useNavigate();
+  const TeamId = useParams().id;
+  const BoardId = useParams().boardNumber;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,9 +18,11 @@ const Write = () => {
     const content = e.target.content.value;
     const title = e.target.content.value;
     const authorNumber = user.number;
-    const teamId = user.teams[0].teamId;
+    const teamId = TeamId;
     const images = e.target.img.files.file;
-    const boardId = '7';
+    const boardId = BoardId;
+    console.log(teamId);
+    console.log(boardId);
     formData.append('content', content);
     formData.append('title', title);
     formData.append('authorNumber', authorNumber);
@@ -28,14 +32,8 @@ const Write = () => {
       formData.append('images[' + i + ']', images[i]);
     }
     postUserPost(formData)
-      .then((res) => console.log(res))
+      .then(() => navigate(-1))
       .catch((err) => console.log(err));
-
-    console.log(content);
-    console.log(title);
-    console.log(authorNumber);
-    console.log(teamId);
-    console.log(images);
   };
 
   return (
