@@ -23,9 +23,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m" +
         " from Member m" +
-        " JOIN FETCH m.company" +
-        " where m.id = :id")
-    Optional<Member> findByIdWithJoinCompany(@Param("Id") String id);
+        " LEFT OUTER JOIN FETCH m.company" +
+        " WHERE m.id = :id")
+    Optional<Member> findByIdWithJoinCompany(@Param("id") String id);
 
     Optional<Member> findById(@Param("id") String id);
 
