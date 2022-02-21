@@ -10,6 +10,8 @@ import Board from './components/Board/Board';
 import Write from './components/Board/WritePage';
 import MyPage from './components/MyPage/MyPage';
 import TeamList from './components/TeamListPage/TeamList';
+import BoardPage from './components/TeamPage/TeamBoardPage';
+
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserAction, updateTeamAction } from './action/createAction';
@@ -17,6 +19,7 @@ import { updateUserAction, updateTeamAction } from './action/createAction';
 import { getUserInfo, getTeamInfo } from './axios/axios';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TeamBoardPage from './components/TeamPage/TeamBoardPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -61,8 +64,9 @@ function App() {
             <Route path="/board" element={<Board></Board>} />
             <Route path="/myPage" element={<MyPage />} />
             <Route path="/teamlist" element={<TeamList />} />
-            <Route path="/board/write" element={<Write></Write>}></Route>
+            <Route path="/teams/:id/:boardNumber/write" element={<Write></Write>}></Route>
             <Route path="/teams/:id" element={<TeamPage></TeamPage>}></Route>
+            <Route path="/teams/:id/:boardNumber" element={<TeamBoardPage></TeamBoardPage>}></Route>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
