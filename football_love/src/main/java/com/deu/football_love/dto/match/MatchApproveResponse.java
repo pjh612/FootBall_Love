@@ -1,23 +1,32 @@
 package com.deu.football_love.dto.match;
 
+import com.deu.football_love.dto.team.QueryTeamDto;
 import java.time.LocalDateTime;
 
 import com.deu.football_love.domain.MatchApplication;
 import com.deu.football_love.domain.Matches;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MatchApproveResponse {
 	private Long matchId;
-	private Long matchApplicationId;
 	private Long stadiumId;
-	private Boolean approval;
-	private LocalDateTime reservation_time;
-	
-	public static MatchApproveResponse from(Matches match,MatchApplication matchApplication) {
-		return new MatchApproveResponse(match.getId(), matchApplication.getId(),match.getStadium().getId(),match.getApproval(),match.getReservationTime());
+	private LocalDateTime reservationTime;
+	private Long homeTeamId;
+	private Long awayTeamId;
+
+	public MatchApproveResponse(Long matchId, Long stadiumId, LocalDateTime reservationTime, Long homeTeamId, Long awayTeamId)
+	{
+		this.matchId = matchId;
+		this.stadiumId= stadiumId;
+		this.reservationTime = reservationTime;
+		this.homeTeamId = homeTeamId;
+		this.awayTeamId = awayTeamId;
 	}
+
 }
