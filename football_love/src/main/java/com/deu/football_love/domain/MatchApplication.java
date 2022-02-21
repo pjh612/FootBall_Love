@@ -1,5 +1,6 @@
 package com.deu.football_love.domain;
 
+import com.deu.football_love.domain.type.MatchApplicationState;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,8 +28,17 @@ public class MatchApplication extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "matches_id")
-	private Matches matches;
+	private Matches match;
 
-	@Column(name = "applicaiton_approval")
-	private Boolean approval;
+	@Column(name = "applicaiton_state")
+	private MatchApplicationState state;
+
+	@Column(name = "application_refuse_message")
+	private String refuseMessage;
+
+	public void refuse(String refuseMessage)
+	{
+		this.state = MatchApplicationState.REFUSED;
+		this.refuseMessage = refuseMessage;
+	}
 }
