@@ -70,9 +70,8 @@ public class CompanyService {
     return new WithdrawalCompanyResponse(companyId, findCompany.getName());
   }
 
-  public void updateCompany(UpdateCompanyRequest request) {
-    Company company = companyRepository.findById(request.getCompanyId())
-        .orElseThrow(() -> new IllegalArgumentException("no such company data."));
+  public void updateCompany(Long companyId, UpdateCompanyRequest request) {
+    Company company = companyRepository.findById(companyId).orElseThrow(() -> new IllegalArgumentException("no such company data."));
     company.update(request);
   }
 }

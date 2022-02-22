@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UpdateCompanyRequest {
 
-  private Long companyId;
-
   @Size(min=1,max=36)
   private String name;
 

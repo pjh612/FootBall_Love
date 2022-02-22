@@ -56,7 +56,7 @@ public class CompanyController {
   @PutMapping
   @PreAuthorize("hasRole('BUSINESS')")
   public ResponseEntity update(@RequestBody UpdateCompanyRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
-    companyService.updateCompany(request);
+    companyService.updateCompany(loginInfo.getCompanyId(), request);
     return new ResponseEntity(HttpStatus.OK);
   }
 
