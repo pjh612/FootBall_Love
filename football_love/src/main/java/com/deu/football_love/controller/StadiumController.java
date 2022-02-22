@@ -43,11 +43,12 @@ public class StadiumController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity add(@Valid @RequestBody AddStadiumRequest request) {
-        AddStadiumResponse response = stadiumService.addStadium(request.getCompanyId(), request.getType(), request.getSize(), request.getCost());
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+  @PostMapping
+  @PreAuthorize("hasRole('BUSINESS')")
+  public ResponseEntity add(@Valid @RequestBody AddStadiumRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+    AddStadiumResponse response = stadiumService.addStadium(loginInfo.getCompanyId(), request.getType(), request.getSize(), request.getCost());
+    return new ResponseEntity(response, HttpStatus.OK);
+  }
 
   @DeleteMapping
   @PreAuthorize("hasRole('BUSINESS')")
