@@ -11,14 +11,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
-import com.deu.football_love.domain.Board;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.Post;
+import com.deu.football_love.domain.TeamBoard;
 import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.board.AddBoardRequest;
-import com.deu.football_love.dto.board.AddBoardResponse;
-import com.deu.football_love.dto.board.BoardDto;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardRequest;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardResponse;
+import com.deu.football_love.dto.Teamboard.TeamBoardDto;
 import com.deu.football_love.dto.comment.AddCommentRequest;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
@@ -28,9 +28,9 @@ import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.team.CreateTeamResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
 import com.deu.football_love.exception.LikeDuplicatedException;
-import com.deu.football_love.repository.BoardRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostRepository;
+import com.deu.football_love.repository.TeamBoardRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
@@ -42,7 +42,7 @@ public class PostServiceTest {
   private EntityManager em;
 
   @Autowired
-  private BoardService boardService;
+  private TeamBoardService boardService;
 
   @Autowired
   private PostService postService;
@@ -57,7 +57,7 @@ public class PostServiceTest {
   private MemberRepository memberRepository;
 
   @Autowired
-  private BoardRepository boardRepository;
+  private TeamBoardRepository boardRepository;
 
   @Autowired
   private PostRepository postRepository;
@@ -67,22 +67,21 @@ public class PostServiceTest {
 
   @Test
   public void addPostTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
 
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
 
-    BoardDto findBoard = boardService.findById(response.getBoardId());
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
 
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title", "hi", null);
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
     QueryPostDto findPost = postService.findPost(writePostResponse.getPostId());
     Assertions.assertNotNull(findPost);
@@ -90,27 +89,25 @@ public class PostServiceTest {
 
   @Test
   public void deletePostTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
     QueryPostDto findPost = postService.findPost(writePostResponse.getPostId());
     Assertions.assertNotNull(findPost);
 
     postService.deletePost(findPost.getId());
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> postService.findPost(writePostResponse.getPostId()));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> postService.findPost(writePostResponse.getPostId()));
   }
 
   /**
@@ -118,32 +115,31 @@ public class PostServiceTest {
    */
   @Test
   public void cascadeBoardTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
-    WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title2", "hi", null);
-    WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title3", "hi", null);
-    WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title4", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest1 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    WritePostRequest writePostRequest2 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title2", "hi", null);
+    WritePostRequest writePostRequest3 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title3", "hi", null);
+    WritePostRequest writePostRequest4 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title4", "hi", null);
 
     WritePostResponse writePostResponse1 = postService.writePost(writePostRequest1);
     WritePostResponse writePostResponse2 = postService.writePost(writePostRequest2);
     WritePostResponse writePostResponse3 = postService.writePost(writePostRequest3);
     WritePostResponse writePostResponse4 = postService.writePost(writePostRequest4);
 
-    Board board = boardRepository.findById(findBoard.getBoardId()).get();
+    TeamBoard board = boardRepository.findById(findBoard.getBoardId()).get();
     while (board.getPosts().size() != 0) {
       Post curPost = board.getPosts().get(0);
       curPost.deletePost();
@@ -165,25 +161,24 @@ public class PostServiceTest {
   @Test
   public void cascadeMemberTest() {
     // given
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("memberA")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("memberA").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
-    WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title2", "hi", null);
-    WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title3", "hi", null);
-    WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title4", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest1 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    WritePostRequest writePostRequest2 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title2", "hi", null);
+    WritePostRequest writePostRequest3 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title3", "hi", null);
+    WritePostRequest writePostRequest4 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title4", "hi", null);
 
     WritePostResponse writePostResponse1 = postService.writePost(writePostRequest1);
     WritePostResponse writePostResponse2 = postService.writePost(writePostRequest2);
@@ -205,22 +200,21 @@ public class PostServiceTest {
 
   @Test
   public void findAllPostByBoardIdTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
 
     Long postId = 0L;
     for (int i = 0; i < 100; i++) {
-      WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-          findBoard.getBoardId(), teamA.getTeamId(), "title" + Integer.toString(i), "hi" + i, null);
+      WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(),
+          "title" + Integer.toString(i), "hi" + i, null);
       WritePostResponse writePostResponse = postService.writePost(writePostRequest);
       postId = writePostResponse.getPostId();
     }
@@ -244,25 +238,24 @@ public class PostServiceTest {
    */
   @Test
   public void deleteBoardCascadeTest() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest1 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
-    WritePostRequest writePostRequest2 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title2", "hi", null);
-    WritePostRequest writePostRequest3 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title3", "hi", null);
-    WritePostRequest writePostRequest4 = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title4", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest1 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    WritePostRequest writePostRequest2 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title2", "hi", null);
+    WritePostRequest writePostRequest3 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title3", "hi", null);
+    WritePostRequest writePostRequest4 =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title4", "hi", null);
 
     postService.writePost(writePostRequest1);
     postService.writePost(writePostRequest2);
@@ -273,27 +266,25 @@ public class PostServiceTest {
 
     Page<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId(), null);
 
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> boardService.findById(findBoard.getBoardId()));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> boardService.findById(findBoard.getBoardId()));
     Assertions.assertEquals(0, postList.getTotalElements());
 
   }
 
   @Test
   void findPost() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
 
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
@@ -313,33 +304,30 @@ public class PostServiceTest {
    */
   @Test
   void findAllPostsByMemberId() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
-    CreateTeamResponse teamB = teamService.createNewTeam(memberADto.getId(), "teamB","팀 B 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
+    CreateTeamResponse teamB = teamService.createNewTeam(memberADto.getId(), "teamB", "팀 B 소개");
     QueryTeamDto findTeamA = teamService.findTeam(teamA.getTeamId());
     QueryTeamDto findTeamB = teamService.findTeam(teamB.getTeamId());
 
     Assertions.assertNotNull(findTeamA);
     Assertions.assertNotNull(findTeamB);
 
-    AddBoardRequest addBoardRequestA =
-        new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardRequest addBoardRequestB =
-        new AddBoardRequest("boardB", BoardType.NOTICE, teamB.getTeamId());
-    AddBoardResponse addBoardResponseA = boardService.add(addBoardRequestA);
-    AddBoardResponse addBoardResponseB = boardService.add(addBoardRequestB);
+    AddTeamBoardRequest addBoardRequestA = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardRequest addBoardRequestB = new AddTeamBoardRequest("boardB", BoardType.NOTICE, teamB.getTeamId());
+    AddTeamBoardResponse addBoardResponseA = boardService.add(addBoardRequestA);
+    AddTeamBoardResponse addBoardResponseB = boardService.add(addBoardRequestB);
 
-    BoardDto findBoardA = boardService.findById(addBoardResponseA.getBoardId());
-    BoardDto findBoardB = boardService.findById(addBoardResponseB.getBoardId());
+    TeamBoardDto findBoardA = boardService.findById(addBoardResponseA.getBoardId());
+    TeamBoardDto findBoardB = boardService.findById(addBoardResponseB.getBoardId());
 
-    WritePostRequest writePostRequestA = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoardA.getBoardId(), teamA.getTeamId(), "title1", "this is teamA board A post", null);
-    WritePostRequest writePostRequestB = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoardB.getBoardId(), teamB.getTeamId(), "title2", "this is teamB board B post", null);
+    WritePostRequest writePostRequestA = new WritePostRequest(memberJoinResponse.getNumber(), findBoardA.getBoardId(), teamA.getTeamId(), "title1",
+        "this is teamA board A post", null);
+    WritePostRequest writePostRequestB = new WritePostRequest(memberJoinResponse.getNumber(), findBoardB.getBoardId(), teamB.getTeamId(), "title2",
+        "this is teamB board B post", null);
 
     postService.writePost(writePostRequestA);
     postService.writePost(writePostRequestB);
@@ -349,15 +337,13 @@ public class PostServiceTest {
     Assertions.assertEquals(2, findPosts.size());
     Assertions.assertEquals(writePostRequestA.getTitle(), findPosts.get(0).getTitle());
     Assertions.assertEquals(writePostRequestA.getContent(), findPosts.get(0).getContent());
-    Assertions.assertEquals(writePostRequestA.getAuthorNumber(),
-        findPosts.get(0).getAuthorNumber());
+    Assertions.assertEquals(writePostRequestA.getAuthorNumber(), findPosts.get(0).getAuthorNumber());
     Assertions.assertEquals(writePostRequestA.getBoardId(), findPosts.get(0).getBoardId());
     Assertions.assertEquals(memberADto.getId(), findPosts.get(0).getAuthorId());
 
     Assertions.assertEquals(writePostRequestB.getTitle(), findPosts.get(1).getTitle());
     Assertions.assertEquals(writePostRequestB.getContent(), findPosts.get(1).getContent());
-    Assertions.assertEquals(writePostRequestB.getAuthorNumber(),
-        findPosts.get(1).getAuthorNumber());
+    Assertions.assertEquals(writePostRequestB.getAuthorNumber(), findPosts.get(1).getAuthorNumber());
     Assertions.assertEquals(writePostRequestB.getBoardId(), findPosts.get(1).getBoardId());
     Assertions.assertEquals(memberADto.getId(), findPosts.get(1).getAuthorId());
   }
@@ -367,26 +353,23 @@ public class PostServiceTest {
    */
   @Test
   void findPostWithComment() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
 
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
-    commentService.addComment(new AddCommentRequest(writePostResponse.getPostId(),
-        memberJoinResponse.getNumber(), "댓글 테스트"));
-    commentService.addComment(new AddCommentRequest(writePostResponse.getPostId(),
-        memberJoinResponse.getNumber(), "댓글 테스트2"));
+    commentService.addComment(new AddCommentRequest(writePostResponse.getPostId(), memberJoinResponse.getNumber(), "댓글 테스트"));
+    commentService.addComment(new AddCommentRequest(writePostResponse.getPostId(), memberJoinResponse.getNumber(), "댓글 테스트2"));
 
     QueryPostDto findPost = postService.findPost(writePostResponse.getPostId());
 
@@ -404,18 +387,17 @@ public class PostServiceTest {
   @Test
   public void likePostTest() {
     // given
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    BoardDto findBoard = boardService.findById(boardService
-        .add(new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId())).getBoardId());
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    TeamBoardDto findBoard =
+        boardService.findById(boardService.add(new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId())).getBoardId());
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
     // when
@@ -428,26 +410,24 @@ public class PostServiceTest {
   @Test
   public void likeDoublePostTest() {
     // given
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    BoardDto findBoard = boardService.findById(boardService
-        .add(new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId())).getBoardId());
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    TeamBoardDto findBoard =
+        boardService.findById(boardService.add(new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId())).getBoardId());
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
     // when
     postService.likePost(writePostResponse.getPostId(), memberJoinResponse.getNumber());
 
     // then
-    Assertions.assertThrows(LikeDuplicatedException.class,
-        () -> postService.likePost(writePostResponse.getPostId(), memberJoinResponse.getNumber()));
+    Assertions.assertThrows(LikeDuplicatedException.class, () -> postService.likePost(writePostResponse.getPostId(), memberJoinResponse.getNumber()));
 
 
   }

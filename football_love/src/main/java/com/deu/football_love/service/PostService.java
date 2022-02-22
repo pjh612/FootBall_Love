@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import com.deu.football_love.domain.Board;
+import com.deu.football_love.domain.TeamBoard;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.Post;
 import com.deu.football_love.domain.PostImage;
@@ -21,7 +21,7 @@ import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.post.like.LikePostResponse;
 import com.deu.football_love.exception.LikeDuplicatedException;
-import com.deu.football_love.repository.BoardRepository;
+import com.deu.football_love.repository.TeamBoardRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostImageRepository;
 import com.deu.football_love.repository.PostLikeRepository;
@@ -39,7 +39,7 @@ public class PostService {
   private final PostRepository postRepository;
   private final PostLikeRepository postLikeRepository;
   private final PostImageRepository postImageRepository;
-  private final BoardRepository boardRepository;
+  private final TeamBoardRepository boardRepository;
   private final MemberRepository memberRepository;
   private final GcpStorageService gcpStorageService;
 
@@ -48,7 +48,7 @@ public class PostService {
     Post newPost = new Post();
     Member findMember = memberRepository.findById(request.getAuthorNumber())
         .orElseThrow(() -> new IllegalArgumentException());
-    Board findBoard = boardRepository.findById(request.getBoardId())
+    TeamBoard findBoard = boardRepository.findById(request.getBoardId())
         .orElseThrow(() -> new IllegalArgumentException("no such board data."));
     newPost.setContent(request.getContent());
     newPost.setTitle(request.getTitle());

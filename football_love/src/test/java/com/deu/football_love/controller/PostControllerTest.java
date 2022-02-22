@@ -20,16 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.board.AddBoardRequest;
-import com.deu.football_love.dto.board.BoardDto;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardRequest;
+import com.deu.football_love.dto.Teamboard.TeamBoardDto;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.team.CreateTeamResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
-import com.deu.football_love.service.BoardService;
 import com.deu.football_love.service.MemberService;
+import com.deu.football_love.service.TeamBoardService;
 import com.deu.football_love.service.PostService;
 import com.deu.football_love.service.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +47,7 @@ public class PostControllerTest {
   private TeamService teamService;
 
   @Autowired
-  private BoardService boardService;
+  private TeamBoardService boardService;
 
   @Autowired
   private PostService postService;
@@ -67,16 +67,15 @@ public class PostControllerTest {
 
   @BeforeEach
   public void before() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
     CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    BoardDto findBoard = boardService.findById(boardService
-        .add(new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId())).getBoardId());
+    TeamBoardDto findBoard =
+        boardService.findById(boardService.add(new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId())).getBoardId());
     writerNumber = memberJoinResponse.getNumber();
     writerId = memberJoinResponse.getId();
     boardId = findBoard.getBoardId();
@@ -87,44 +86,35 @@ public class PostControllerTest {
   @DisplayName("글 쓰기 테스트")
   @Test
   public void addPost() throws Exception {
-    WritePostRequest writePostRequest =
-        new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
+    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
-    mvc.perform(multipart("/api/board/post").param("title", writePostRequest.getTitle())
-        .param("content", writePostRequest.getContent())
-        .param("teamId", Long.toString(writePostRequest.getTeamId()))
-        .param("boardId", Long.toString(writePostRequest.getBoardId()))
-        .param("authorNumber", Long.toString(writerNumber)).with(user(userDetails)))
-        .andExpect(status().isOk());
+    mvc.perform(multipart("/api/board/post").param("title", writePostRequest.getTitle()).param("content", writePostRequest.getContent())
+        .param("teamId", Long.toString(writePostRequest.getTeamId())).param("boardId", Long.toString(writePostRequest.getBoardId()))
+        .param("authorNumber", Long.toString(writerNumber)).with(user(userDetails))).andExpect(status().isOk());
   }
 
   @DisplayName("글 추천 테스트")
   @Test
   public void likePost() throws Exception {
-    WritePostRequest writePostRequest =
-        new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
+    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
-    mvc.perform(MockMvcRequestBuilders
-        .post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
+    mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
         .andExpect(status().isOk());
   }
 
   @DisplayName("글 추천 중복 테스트")
   @Test
   public void DuplicatingLikePost() throws Exception {
-    WritePostRequest writePostRequest =
-        new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
+    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
-    mvc.perform(MockMvcRequestBuilders
-        .post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
+    mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
         .andExpect(status().isOk());
 
-    mvc.perform(MockMvcRequestBuilders
-        .post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
+    mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
         .andExpect(status().isConflict()).andDo(print());
   }
 }

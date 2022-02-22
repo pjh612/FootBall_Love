@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.board.AddBoardRequest;
-import com.deu.football_love.dto.board.AddBoardResponse;
-import com.deu.football_love.dto.board.BoardDto;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardRequest;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardResponse;
+import com.deu.football_love.dto.Teamboard.TeamBoardDto;
 import com.deu.football_love.dto.comment.AddCommentRequest;
 import com.deu.football_love.dto.comment.AddCommentResponse;
 import com.deu.football_love.dto.comment.QueryCommentDto;
@@ -34,7 +34,7 @@ class CommentServiceTest {
   PostRepository postRepository;
 
   @Autowired
-  BoardService boardService;
+  TeamBoardService boardService;
 
   @Autowired
   PostService postService;
@@ -53,19 +53,18 @@ class CommentServiceTest {
 
   @BeforeEach
   void before() {
-    MemberJoinRequest memberADto = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest memberADto =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns1").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp1@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto memberJoinResponse = memberService.join(memberADto);
-    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA","팀 A 소개");
+    CreateTeamResponse teamA = teamService.createNewTeam(memberADto.getId(), "teamA", "팀 A 소개");
     QueryTeamDto findTeam = teamService.findTeam(teamA.getTeamId());
     Assertions.assertNotNull(findTeam);
-    AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
-    AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest = new WritePostRequest(memberJoinResponse.getNumber(),
-        findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
+    AddTeamBoardResponse response = boardService.add(request);
+    TeamBoardDto findBoard = boardService.findById(response.getBoardId());
+    WritePostRequest writePostRequest =
+        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
     WritePostResponse writePostResponse = postService.writePost(writePostRequest);
     postId = writePostResponse.getPostId();
     writerNumber = memberJoinResponse.getNumber();
@@ -87,8 +86,7 @@ class CommentServiceTest {
     AddCommentRequest request = new AddCommentRequest(postId, writerNumber, comment);
     AddCommentResponse addCommentResponse = commentService.addComment(request);
 
-    QueryCommentDto findComment =
-        commentService.findCommentByCommentId(addCommentResponse.getCommentId());
+    QueryCommentDto findComment = commentService.findCommentByCommentId(addCommentResponse.getCommentId());
 
     Assertions.assertEquals(comment, findComment.getComment());
     Assertions.assertEquals(writerNumber, findComment.getWriterNumber());
@@ -126,10 +124,8 @@ class CommentServiceTest {
     AddCommentRequest request = new AddCommentRequest(postId, writerNumber, comment);
     AddCommentResponse addCommentResponse = commentService.addComment(request);
 
-    commentService.updateCommentByCommentId(
-        new UpdateCommentRequest(addCommentResponse.getCommentId(), AfterUpdateComment));
-    QueryCommentDto findComment =
-        commentService.findCommentByCommentId(addCommentResponse.getCommentId());
+    commentService.updateCommentByCommentId(new UpdateCommentRequest(addCommentResponse.getCommentId(), AfterUpdateComment));
+    QueryCommentDto findComment = commentService.findCommentByCommentId(addCommentResponse.getCommentId());
     Assertions.assertEquals(AfterUpdateComment, findComment.getComment());
     Assertions.assertEquals(writerNumber, findComment.getWriterNumber());
     Assertions.assertEquals(postId, findComment.getPostId());
@@ -143,7 +139,6 @@ class CommentServiceTest {
     AddCommentResponse addCommentResponse = commentService.addComment(request);
 
     commentService.deleteCommentByCommentId(addCommentResponse.getCommentId());
-    Assertions.assertThrows(IllegalArgumentException.class,
-        () -> commentService.findCommentByCommentId(addCommentResponse.getCommentId()));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> commentService.findCommentByCommentId(addCommentResponse.getCommentId()));
   }
 }

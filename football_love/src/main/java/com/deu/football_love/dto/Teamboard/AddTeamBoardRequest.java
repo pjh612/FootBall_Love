@@ -1,4 +1,4 @@
-package com.deu.football_love.dto.board;
+package com.deu.football_love.dto.Teamboard;
 
 import com.deu.football_love.domain.type.BoardType;
 import lombok.AccessLevel;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AddBoardRequest {
+public class AddTeamBoardRequest {
 	@NotNull
 	@Size(min=1,max=30)
     private String boardName;
@@ -23,7 +23,7 @@ public class AddBoardRequest {
     @Positive
     private Long teamId;
 
-    public AddBoardRequest(String boardName, BoardType boardType, Long teamId) {
+    public AddTeamBoardRequest(String boardName, BoardType boardType, Long teamId) {
         this.boardName = boardName;
         this.boardType = boardType;
         this.teamId = teamId;

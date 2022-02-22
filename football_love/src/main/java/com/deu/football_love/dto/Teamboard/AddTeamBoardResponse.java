@@ -1,19 +1,19 @@
-package com.deu.football_love.dto.board;
+package com.deu.football_love.dto.Teamboard;
 
-import com.deu.football_love.domain.Board;
+import com.deu.football_love.domain.TeamBoard;
 import lombok.Getter;
 
 @Getter
-public class AddBoardResponse {
-    private Long boardId;
+public class AddTeamBoardResponse {
+  private Long boardId;
 
-    public AddBoardResponse(Long boardId) {
-        this.boardId = boardId;
-    }
+  public AddTeamBoardResponse(Long boardId) {
+    this.boardId = boardId;
+  }
 
-    public static AddBoardResponse from(Board board)
-    {
-        return new AddBoardResponse(board.getId());
-    }
+  public static AddTeamBoardResponse from(TeamBoard board) {
+
+    return new AddTeamBoardResponse(board.getId());
+  }
 
 }

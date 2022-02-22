@@ -1,45 +1,30 @@
 package com.deu.football_love.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import com.deu.football_love.domain.type.BoardType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
-public class Board extends BaseEntity {
+public class TeamBoard extends Board {
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "team_id", referencedColumnName = "team_id")
+  private Team team;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "board_id")
-    private Long id;
+  public TeamBoard(String boardName, BoardType boardType) {
+    super(boardName, boardType);
+  }
 
-    @Column(name = "board_name")
-    private String boardName;
+  public void deleteBoard() {
+    team.getBoards().remove(this);
+    this.team = null;
+  }
 
-    @Column(name = "board_type")
-    private BoardType boardType;
-
-    @OneToMany(mappedBy = "id")
-    private List<Post> posts = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", referencedColumnName = "team_id")
-    private Team team;
-
-    public Board(String boardName, BoardType boardType) {
-        this.boardName = boardName;
-        this.boardType = boardType;
-    }
-
-    public void deleteBoard() {
-        team.getBoards().remove(this);
-        this.team = null;
-    }
 }
