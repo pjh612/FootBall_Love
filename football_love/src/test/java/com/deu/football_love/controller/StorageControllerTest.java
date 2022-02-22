@@ -23,15 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
-import com.deu.football_love.dto.board.AddBoardRequest;
-import com.deu.football_love.dto.board.BoardDto;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardRequest;
+import com.deu.football_love.dto.Teamboard.TeamBoardDto;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.QueryPostDto;
 import com.deu.football_love.dto.team.CreateTeamRequest;
 import com.deu.football_love.dto.team.QueryTeamDto;
-import com.deu.football_love.service.BoardService;
 import com.deu.football_love.service.MemberService;
+import com.deu.football_love.service.TeamBoardService;
 import com.deu.football_love.service.PostService;
 import com.deu.football_love.service.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +54,7 @@ public class StorageControllerTest {
   TeamService teamService;
 
   @Autowired
-  BoardService boardService;
+  TeamBoardService boardService;
 
   @Autowired
   UserDetailsService userDetailsService;
@@ -69,41 +69,33 @@ public class StorageControllerTest {
     Address address = new Address("busan", "guemgangro", "46233");
 
     // 회원 가입
-    MemberJoinRequest request = MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns")
-        .name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
-        .birth(LocalDate.of(2000, 1, 1)).email("fblCorp@naver.com").phone("010-1111-2222")
-        .type(MemberType.ROLE_NORMAL).build();
+    MemberJoinRequest request =
+        MemberJoinRequest.memberJoinRequestBuilder().id("dbtlwns").name("유시준").pwd("1234").nickname("개발고수").address(new Address("양산", "행복길", "11"))
+            .birth(LocalDate.of(2000, 1, 1)).email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto join = memberService.join(request);
     CreateTeamRequest createTeamRequest = new CreateTeamRequest("FC진형", "FC 진형 입니다");
     UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
     // 팀 만들기
-    mvc.perform(MockMvcRequestBuilders.post("/api/team").with(user(userDetails))
-        .contentType("application/json").content(mapper.writeValueAsString(createTeamRequest)))
-        .andExpect(status().isOk());
+    mvc.perform(MockMvcRequestBuilders.post("/api/team").with(user(userDetails)).contentType("application/json")
+        .content(mapper.writeValueAsString(createTeamRequest))).andExpect(status().isOk());
 
 
     // 게시판 만들기
     QueryTeamDto findTeam = teamService.findTeamByName("FC진형");
-    AddBoardRequest addBoardRequest =
-        new AddBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId());
-    mvc.perform(MockMvcRequestBuilders.post("/api/team/{teamId}/board", findTeam.getId())
-        .with(user(userDetails)).contentType("application/json")
-        .content(mapper.writeValueAsString(addBoardRequest))).andExpect(status().isOk())
-        .andDo(print());
+    AddTeamBoardRequest addBoardRequest = new AddTeamBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId());
+    mvc.perform(MockMvcRequestBuilders.post("/api/team/{teamId}/board", findTeam.getId()).with(user(userDetails)).contentType("application/json")
+        .content(mapper.writeValueAsString(addBoardRequest))).andExpect(status().isOk()).andDo(print());
 
 
     // 게시판 글쓰기
-    BoardDto findBoard = boardService.findByTeamIdAndBoardName(findTeam.getId(), "공지사항");
+    TeamBoardDto findBoard = boardService.findByTeamIdAndBoardName(findTeam.getId(), "공지사항");
     String title = "제목 입니다.";
     String content = "내용 입니다.";
     File file = new File("src/test/resources/test.JPG");
     String mimeType = Files.probeContentType(file.toPath());
-    MockMultipartFile image = new MockMultipartFile("images[0]", "test.JPG", mimeType,
-        new FileInputStream(new File("src/test/resources/test.JPG")));
-    mvc.perform(multipart("/api/board/post").file(image).param("title", title)
-        .param("content", content).param("teamId", findTeam.getId().toString())
-        .param("boardId", findBoard.getBoardId().toString())
-        .param("authorNumber", join.getNumber().toString()).with(user(userDetails)))
+    MockMultipartFile image = new MockMultipartFile("images[0]", "test.JPG", mimeType, new FileInputStream(new File("src/test/resources/test.JPG")));
+    mvc.perform(multipart("/api/board/post").file(image).param("title", title).param("content", content).param("teamId", findTeam.getId().toString())
+        .param("boardId", findBoard.getBoardId().toString()).param("authorNumber", join.getNumber().toString()).with(user(userDetails)))
         .andExpect(status().isOk());
 
     Page<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId(), null);

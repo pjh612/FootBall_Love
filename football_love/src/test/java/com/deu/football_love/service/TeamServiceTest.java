@@ -27,8 +27,8 @@ import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.domain.type.TeamMemberType;
-import com.deu.football_love.dto.board.AddBoardRequest;
-import com.deu.football_love.dto.board.AddBoardResponse;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardRequest;
+import com.deu.football_love.dto.Teamboard.AddTeamBoardResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.post.WritePostRequest;
@@ -63,7 +63,7 @@ public class TeamServiceTest {
     MemberService memberService;
 
     @Autowired
-    BoardService boardService;
+    TeamBoardService boardService;
 
     @Autowired
     PostService postService;
@@ -92,8 +92,8 @@ public class TeamServiceTest {
     @Test
     public void findTeamByTeamNameTest() {
         QueryTeamDto teamA = teamService.findTeamByName("teamA");
-        boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, teamA.getId()));
-        boardService.add(new AddBoardRequest("자유 게시판", BoardType.GENERAL, teamA.getId()));
+        boardService.add(new AddTeamBoardRequest("공지사항", BoardType.NOTICE, teamA.getId()));
+        boardService.add(new AddTeamBoardRequest("자유 게시판", BoardType.GENERAL, teamA.getId()));
 
         QueryTeamDto findTeam = teamService.findTeamByName("teamA");
 
@@ -163,7 +163,7 @@ public class TeamServiceTest {
 
         QueryMemberDto memberA = memberService.findMemberById("memberA");
         QueryMemberDto memberB = memberService.findMemberById("memberB");
-        AddBoardResponse boardA = boardService.add(new AddBoardRequest("boardA", BoardType.NOTICE, teamId));
+        AddTeamBoardResponse boardA = boardService.add(new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamId));
         postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(), teamId, "hello", "content", null));
         postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(), teamId, "hello", "content", null));
         teamService.disbandmentTeam(findTeam.getId());
@@ -184,7 +184,7 @@ public class TeamServiceTest {
         Team findTeam = teamRepository.findByName("teamA").orElseThrow(() -> new IllegalArgumentException("no such team data"));
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
-        AddBoardResponse addBoardResponse = boardService.add(new AddBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
+        AddTeamBoardResponse addBoardResponse = boardService.add(new AddTeamBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
         WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), findTeam.getId(), "안녕하세요", "가입인사 합니다.", null));
         WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), findTeam.getId(), "안녕하세요 팀장입니다.", "내일 집합이요", null));
 

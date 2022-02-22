@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@500&family=Nanum+Gothic:wght@400;800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@500&family=Nanum+Gothic:wght@400;800&display=swap');
 
 #root,
 .screen,
@@ -8,14 +8,7 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: auto;
   /* background-image: url(https://meadlight.com/assets/images/texture.jpg); */
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 
 ul,
@@ -23,14 +16,4 @@ ol,
 li {
   list-style: none;
   padding: 0;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-div {
-  display: block;
 }

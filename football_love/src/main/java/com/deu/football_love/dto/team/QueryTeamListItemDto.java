@@ -15,6 +15,15 @@ public class QueryTeamListItemDto {
   private Long totalMemberCount;
   private String profileImgUri;
 
+  public QueryTeamListItemDto(Long teamId, String teamName, TeamMemberType authority,
+      int totalMemberCount, String profileImgUri) {
+    this.teamId = teamId;
+    this.teamName = teamName;
+    this.authority = authority;
+    this.totalMemberCount = Long.valueOf(totalMemberCount);
+    this.profileImgUri = profileImgUri;
+  }
+
   private QueryTeamListItemDto(TeamMember teamMember) {
     this.teamId = teamMember.getTeam().getId();
     this.teamName = teamMember.getTeam().getName();
