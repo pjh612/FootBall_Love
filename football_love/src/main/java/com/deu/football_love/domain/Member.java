@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -57,6 +59,7 @@ public class Member extends BaseEntity {
   private String phone;
 
   @Column(name = "member_type")
+  @Enumerated(EnumType.STRING)
   private MemberType memberType;
 
   @Column(name = "member_profile_img_uri")

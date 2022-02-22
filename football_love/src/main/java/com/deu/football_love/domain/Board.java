@@ -24,6 +24,7 @@ public class Board extends BaseEntity {
     private String boardName;
 
     @Column(name = "board_type")
+    @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
     @OneToMany(mappedBy = "id")

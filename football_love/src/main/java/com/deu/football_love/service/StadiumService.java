@@ -3,6 +3,7 @@ package com.deu.football_love.service;
 
 import com.deu.football_love.domain.Company;
 import com.deu.football_love.domain.Stadium;
+import com.deu.football_love.domain.type.StadiumFieldType;
 import com.deu.football_love.dto.stadium.AddStadiumResponse;
 import com.deu.football_love.dto.stadium.RemoveStadiumResponse;
 import com.deu.football_love.dto.stadium.QueryStadiumDto;
@@ -44,15 +45,13 @@ public class StadiumService {
             return stadiums;
     }
 
-    public AddStadiumResponse addStadium(Long companyId, String type, String size, Long cost) {
-        Company findCompany = companyRepository.findById(companyId).orElseThrow(()-> new IllegalArgumentException("no such company data."));
-        if (findCompany == null)
-            return null;
-        Stadium newStadium = new Stadium(type, size, cost, findCompany);
-        findCompany.getStadiums().add(newStadium);
-        stadiumRepository.save(newStadium);
-        return AddStadiumResponse.from(newStadium);
-    }
+  public AddStadiumResponse addStadium(Long companyId, StadiumFieldType type, String size, Long cost) {
+    Company findCompany = companyRepository.findById(companyId).orElseThrow(() -> new IllegalArgumentException("no such company data."));
+    Stadium newStadium = new Stadium(type, size, cost, findCompany);
+    findCompany.getStadiums().add(newStadium);
+    stadiumRepository.save(newStadium);
+    return AddStadiumResponse.from(newStadium);
+  }
 
     public RemoveStadiumResponse deleteStadium(Long stadiumId) {
         Stadium findStadium = stadiumRepository.findById(stadiumId).orElseThrow(()-> new IllegalArgumentException("no such stadium data"));
