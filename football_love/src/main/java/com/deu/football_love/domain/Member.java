@@ -32,7 +32,6 @@ public class Member extends BaseEntity {
   @Column(name = "member_number")
   private Long number;
 
-
   @Column(name = "member_id", length = 20, unique = true)
   private String id;
 

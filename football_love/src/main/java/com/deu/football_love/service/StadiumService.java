@@ -22,28 +22,30 @@ import java.util.stream.Collectors;
 @Transactional
 public class StadiumService {
 
-    private final StadiumRepository stadiumRepository;
-    private final CompanyRepository companyRepository;
+  private final StadiumRepository stadiumRepository;
+  private final CompanyRepository companyRepository;
 
-    @Transactional(readOnly = true)
-    public QueryStadiumDto findStadium(Long stadiumId) {
-        Stadium findStadium = stadiumRepository.findById(stadiumId).orElseThrow(()-> new IllegalArgumentException("no such stadium data"));
-        return QueryStadiumDto.from(findStadium);
-    }
+  @Transactional(readOnly = true)
+  public QueryStadiumDto findStadium(Long stadiumId) {
+    Stadium findStadium = stadiumRepository.findById(stadiumId).orElseThrow(() -> new IllegalArgumentException("no such stadium data"));
+    return QueryStadiumDto.from(findStadium);
+  }
 
-    public List<QueryStadiumDto> findAllStadiumByCompanyId(Long companyId) {
-        List<QueryStadiumDto> collect = stadiumRepository.selectAllStadiumByCompanyId(companyId).stream().map(s -> new QueryStadiumDto(s.getId(), s.getType(), s.getSize(), s.getCost())).collect(Collectors.toList());
-        return collect;
-    }
+  public List<QueryStadiumDto> findAllStadiumByCompanyId(Long companyId) {
+    List<QueryStadiumDto> collect = stadiumRepository.selectAllStadiumByCompanyId(companyId).stream()
+        .map(s -> new QueryStadiumDto(s.getId(), s.getType(), s.getSize(), s.getCost())).collect(Collectors.toList());
+    return collect;
+  }
 
-    public List<StadiumId> findAllStadiumIdsByCompanyId(Long companyId) {
-        List<StadiumId> stadiumIdList = stadiumRepository.findAllIdsByCompanyId(companyId);
-        return stadiumIdList;
-    }
-        public List<Stadium> findAllStadiumsByCompanyId(Long companyId) {
-            List<Stadium> stadiums = stadiumRepository.findAllByCompanyId(companyId);
-            return stadiums;
-    }
+  public List<StadiumId> findAllStadiumIdsByCompanyId(Long companyId) {
+    List<StadiumId> stadiumIdList = stadiumRepository.findAllIdsByCompanyId(companyId);
+    return stadiumIdList;
+  }
+
+  public List<Stadium> findAllStadiumsByCompanyId(Long companyId) {
+    List<Stadium> stadiums = stadiumRepository.findAllByCompanyId(companyId);
+    return stadiums;
+  }
 
   public AddStadiumResponse addStadium(Long companyId, StadiumFieldType type, String size, Long cost) {
     Company findCompany = companyRepository.findById(companyId).orElseThrow(() -> new IllegalArgumentException("no such company data."));

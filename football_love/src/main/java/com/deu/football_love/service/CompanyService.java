@@ -51,21 +51,18 @@ public class CompanyService {
 
   public AddCompanyResponse addCompany(String name, Long ownerNumber, Address location, String tel,
       String description) {
-    Member findMember = memberRepository.findById(ownerNumber)
-        .orElseThrow(() -> new IllegalArgumentException("no such member data."));
+    Member findMember = memberRepository.findById(ownerNumber).orElseThrow(() -> new IllegalArgumentException("no such member data."));
     if (companyRepository.existsByMemberNumber(ownerNumber)) {
       throw new IllegalArgumentException("already have company.");
     }
-    Company newCompany = companyRepository
-        .save(new Company(name, findMember, location, tel, description));
+    Company newCompany = companyRepository.save(new Company(name, findMember, location, tel, description));
     findMember.setCompany(newCompany);
     return AddCompanyResponse.from(newCompany);
   }
 
 
   public WithdrawalCompanyResponse withdrawalCompany(Long companyId) {
-    Company findCompany = companyRepository.findById(companyId)
-        .orElseThrow(() -> new IllegalArgumentException("no such company data."));
+    Company findCompany = companyRepository.findById(companyId).orElseThrow(() -> new IllegalArgumentException("no such company data."));
     companyRepository.delete(findCompany);
     return new WithdrawalCompanyResponse(companyId, findCompany.getName());
   }

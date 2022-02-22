@@ -25,23 +25,19 @@ import javax.validation.Valid;
 @Slf4j
 public class StadiumController {
 
-    private final StadiumService stadiumService;
+  private final StadiumService stadiumService;
 
-    @GetMapping("/{stadiumId}")
-    public ResponseEntity findOne(@PathVariable Long stadiumId) {
-        QueryStadiumDto response = stadiumService.findStadium(stadiumId);
-        if (response == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+  @GetMapping("/{stadiumId}")
+  public ResponseEntity findOne(@PathVariable Long stadiumId) {
+    QueryStadiumDto response = stadiumService.findStadium(stadiumId);
+    return new ResponseEntity(response, HttpStatus.OK);
+  }
 
-    @GetMapping("/{companyId}")
-    public ResponseEntity findAll(@PathVariable Long companyId) {
-        List<QueryStadiumDto> response = stadiumService.findAllStadiumByCompanyId(companyId);
-        if (response == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        return new ResponseEntity(response, HttpStatus.OK);
-    }
+  @GetMapping("/{companyId}")
+  public ResponseEntity findAll(@PathVariable Long companyId) {
+    List<QueryStadiumDto> response = stadiumService.findAllStadiumByCompanyId(companyId);
+    return new ResponseEntity(response, HttpStatus.OK);
+  }
 
   @PostMapping
   @PreAuthorize("hasRole('BUSINESS')")
