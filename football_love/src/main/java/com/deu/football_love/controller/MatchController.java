@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,6 +60,7 @@ public class MatchController {
 
   @ApiOperation("매치생성")
   @PostMapping
+  @PreAuthorize("hasRole('BUSINESS')")
   public ResponseEntity<AddMatchResponse> add(@Valid @RequestBody AddMatchRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
     AddMatchResponse matchResponse = matchService.addMatch(request.getStadiumId(), loginInfo.getCompanyId(), request.getReservationTime());
     return new ResponseEntity<AddMatchResponse>(matchResponse, HttpStatus.OK);

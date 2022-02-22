@@ -40,17 +40,16 @@ public class CompanyController {
   }
 
   @DeleteMapping
+  @PreAuthorize("hasRole('BUSINESS')")
   public ResponseEntity withdrawal(@Valid @RequestBody WithdrawalCompanyRequest request) {
     WithdrawalCompanyResponse response = companyService.withdrawalCompany(request.getCompanyId());
     return new ResponseEntity(response, HttpStatus.OK);
   }
 
-
   @GetMapping("/match")
   @PreAuthorize("hasRole('BUSINESS')")
   public ResponseEntity getCompanyMatchList(@AuthenticationPrincipal LoginInfo loginInfo) {
-    return new ResponseEntity(matchService.findAllByCompanyId(loginInfo.getNumber()),
-        HttpStatus.OK);
+    return new ResponseEntity(matchService.findAllByCompanyId(loginInfo.getNumber()), HttpStatus.OK);
   }
 
   @PutMapping
