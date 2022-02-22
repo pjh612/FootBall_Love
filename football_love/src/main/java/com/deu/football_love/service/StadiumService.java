@@ -53,9 +53,10 @@ public class StadiumService {
     return AddStadiumResponse.from(newStadium);
   }
 
-    public RemoveStadiumResponse deleteStadium(Long stadiumId) {
-        Stadium findStadium = stadiumRepository.findById(stadiumId).orElseThrow(()-> new IllegalArgumentException("no such stadium data"));
-        stadiumRepository.delete(findStadium);
-        return new RemoveStadiumResponse(stadiumId);
-    }
+  public RemoveStadiumResponse deleteStadium(Long stadiumId, Long companyId) {
+    Stadium findStadium = stadiumRepository.findByCompanyIdAndStadiumId(stadiumId, companyId)
+        .orElseThrow(() -> new IllegalArgumentException("no such stadium data or it is not yours."));
+    stadiumRepository.delete(findStadium);
+    return new RemoveStadiumResponse(stadiumId);
+  }
 }
