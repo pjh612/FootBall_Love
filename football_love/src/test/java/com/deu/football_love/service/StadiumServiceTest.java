@@ -66,7 +66,7 @@ class StadiumServiceTest {
 
     QueryStadiumDto findStadium = stadiumService.findStadium(newStadium.getId());
     Assertions.assertEquals(newStadium.getId(), findStadium.getId());
-    Assertions.assertEquals("인조잔디", findStadium.getType());
+    Assertions.assertEquals(StadiumFieldType.ARTIFICIAL_TURF, findStadium.getType());
     Assertions.assertEquals("최대 4 : 4", findStadium.getSize());
     Assertions.assertEquals(55000L, findStadium.getCost());
   }

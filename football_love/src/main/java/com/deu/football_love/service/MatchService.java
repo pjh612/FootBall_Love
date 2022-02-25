@@ -107,7 +107,7 @@ public class MatchService {
    * Company에게 매치를 등록
    */
   public AddMatchResponse addMatch(Long stadiumId, Long companyId, LocalDateTime reservationTime) {
-    Stadium findStadium = stadiumRepository.findByCompanyIdAndStadiumId(companyId, stadiumId)
+    Stadium findStadium = stadiumRepository.findByCompanyIdAndStadiumId(stadiumId, companyId)
         .orElseThrow(() -> new IllegalArgumentException("no such stadium data"));
     Matches newMatch = new Matches();
     newMatch.setState(MatchState.EMPTY);

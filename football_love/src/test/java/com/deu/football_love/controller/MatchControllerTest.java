@@ -125,7 +125,7 @@ class MatchControllerTest {
         .andExpect(status().isOk()).andDo(print());
     mvc.perform(MockMvcRequestBuilders.post("/api/match").with(user(loginUserA))
         .contentType("application/json").content(mapper.writeValueAsString(addMatchRequest)))
-        .andExpect(status().isBadRequest()).andDo(print());
+        .andExpect(status().isForbidden()).andDo(print());
   }
 
   /**
