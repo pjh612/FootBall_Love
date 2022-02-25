@@ -1,5 +1,6 @@
 package com.deu.football_love.domain;
 
+import com.deu.football_love.domain.type.StadiumFieldType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public class Stadium extends BaseEntity {
     private Long id;
 
     @Column(name = "stadium_type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private StadiumFieldType type;
 
     @Column(name = "stadium_size")
     private String size;
@@ -34,7 +36,7 @@ public class Stadium extends BaseEntity {
     @OneToMany(mappedBy = "stadium")
     private List<Matches> matches = new ArrayList<>();
 
-    public Stadium(String type, String size, Long cost, Company company) {
+    public Stadium(StadiumFieldType type, String size, Long cost, Company company) {
         this.type = type;
         this.size = size;
         this.cost = cost;

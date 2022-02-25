@@ -1,5 +1,6 @@
 package com.deu.football_love.dto.stadium;
 
+import com.deu.football_love.domain.type.StadiumFieldType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -8,12 +9,9 @@ import lombok.Getter;
 
 @Getter
 public class AddStadiumRequest {
-	@Positive
-	@NotNull
-	private Long companyId;
 
 	@NotNull
-	private String type; // type StadiumType Enum으로 변경해야함
+	private StadiumFieldType type;
 
 	@NotNull
 	@Size(min = 1, max = 15)
@@ -23,8 +21,7 @@ public class AddStadiumRequest {
 	@NotNull
 	private Long cost;
 
-	public AddStadiumRequest(Long companyId, String type, String size, Long cost) {
-		this.companyId = companyId;
+	public AddStadiumRequest(StadiumFieldType type, String size, Long cost) {
 		this.type = type;
 		this.size = size;
 		this.cost = cost;

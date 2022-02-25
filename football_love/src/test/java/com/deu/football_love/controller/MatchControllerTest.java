@@ -9,6 +9,7 @@ import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.MatchApplicationState;
 import com.deu.football_love.domain.type.MatchState;
 import com.deu.football_love.domain.type.MemberType;
+import com.deu.football_love.domain.type.StadiumFieldType;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.company.AddCompanyResponse;
 import com.deu.football_love.dto.match.AddMatchRequest;
@@ -34,7 +35,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -102,7 +102,7 @@ class MatchControllerTest {
     memberCInfo = memberService.join(joinC);
     companyInfo = companyService.addCompany("companyA", memberCInfo.getNumber(),
         new Address("city", "street", "zipcode"), "010-1234-1234", "companyA description");
-    stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "풋살장", "30*50", 120000L);
+    stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "30*50", 120000L);
     teamAInfo = teamService.createNewTeam(memberAInfo.getId(), "teamA", "팀 A 소개");
     teamBInfo = teamService.createNewTeam(memberBInfo.getId(), "teamB", "팀 B 소개");
     loginUserA = (LoginInfo) userDetailsService.loadUserByUsername("memberA");
@@ -125,7 +125,7 @@ class MatchControllerTest {
         .andExpect(status().isOk()).andDo(print());
     mvc.perform(MockMvcRequestBuilders.post("/api/match").with(user(loginUserA))
         .contentType("application/json").content(mapper.writeValueAsString(addMatchRequest)))
-        .andExpect(status().isBadRequest()).andDo(print());
+        .andExpect(status().isForbidden()).andDo(print());
   }
 
   /**

@@ -1,6 +1,7 @@
 package com.deu.football_love.dto.stadium;
 
 import com.deu.football_love.domain.Stadium;
+import com.deu.football_love.domain.type.StadiumFieldType;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -8,11 +9,11 @@ import lombok.ToString;
 @ToString
 public class QueryStadiumDto {
     private Long id;
-    private String type;
+    private StadiumFieldType type;
     private String size;
     private Long cost;
 
-    public QueryStadiumDto(Long id, String type, String size, Long cost) {
+    public QueryStadiumDto(Long id, StadiumFieldType type, String size, Long cost) {
         this.id = id;
         this.type = type;
         this.size = size;

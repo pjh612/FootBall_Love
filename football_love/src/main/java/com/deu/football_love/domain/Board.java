@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -31,6 +33,7 @@ public class Board extends BaseEntity {
   private String boardName;
 
   @Column(name = "board_type")
+  @Enumerated(EnumType.STRING)
   private BoardType boardType;
 
   @OneToMany(mappedBy = "id")
