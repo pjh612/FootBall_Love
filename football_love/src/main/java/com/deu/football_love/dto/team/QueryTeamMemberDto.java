@@ -2,13 +2,14 @@ package com.deu.football_love.dto.team;
 
 import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.domain.type.TeamMemberType;
+import com.deu.football_love.dto.BaseTimeDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QueryTeamMemberDto {
+public class QueryTeamMemberDto extends BaseTimeDto {
 
   private Long teamMemberId;
 
@@ -26,5 +27,7 @@ public class QueryTeamMemberDto {
     this.teamName = teamMember.getTeam().getName();
     this.memberId = teamMember.getMember().getId();
     this.authority = teamMember.getType();
+    this.setCreatedDate(teamMember.getCreatedDate());
+    this.setLastModifiedDate(teamMember.getLastModifiedDate());
   }
 }
