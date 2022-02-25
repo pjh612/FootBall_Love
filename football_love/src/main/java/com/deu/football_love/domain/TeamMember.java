@@ -30,6 +30,7 @@ public class TeamMember extends BaseEntity {
     @JoinColumn(name = "member_number")
     private Member member;
 
+    @Enumerated(EnumType.STRING)
     private TeamMemberType type;
 
     public TeamMember(Team team, Member member, TeamMemberType type) {

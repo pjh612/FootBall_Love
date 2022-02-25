@@ -21,7 +21,7 @@ public interface StadiumRepository extends JpaRepository<Stadium, Long> {
     List<Stadium> findAllByCompanyId(@Param("companyId") Long companyId);
 
     @Query("SELECT s FROM Stadium s JOIN FETCH s.company c WHERE c.id=:companyId AND s.id =:stadiumId")
-    Optional<Stadium> findByCompanyIdAndStadiumId(@Param("companyId") Long companyId,@Param("stadiumId") Long stadiumId);
+    Optional<Stadium> findByCompanyIdAndStadiumId(@Param("stadiumId") Long stadiumId,@Param("companyId") Long companyId);
 
     interface StadiumId{
         Long getId();

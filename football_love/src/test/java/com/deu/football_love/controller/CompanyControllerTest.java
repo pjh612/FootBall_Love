@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.type.MemberType;
+import com.deu.football_love.domain.type.StadiumFieldType;
 import com.deu.football_love.dto.company.AddCompanyRequest;
 import com.deu.football_love.dto.company.AddCompanyResponse;
 import com.deu.football_love.dto.member.MemberJoinRequest;
@@ -86,9 +87,9 @@ class CompanyControllerTest {
         .addCompany("companyA", businessMember.getNumber(), new Address("부산", "행복길", "11"),
             "010-1111-2222", "A급 경기장을 보유한 companyA입니다.");
     AddStadiumResponse stadiumA = stadiumService
-        .addStadium(companyA.getCompanyId(), "천연잔디", "5x5", 60000L);
+        .addStadium(companyA.getCompanyId(), StadiumFieldType.NATURAL_TURF, "5x5", 60000L);
     AddStadiumResponse stadiumB = stadiumService
-        .addStadium(companyA.getCompanyId(), "인조잔디", "5x5", 50000L);
+        .addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "5x5", 50000L);
     matchService.addMatch( stadiumA.getId(),companyA.getCompanyId(), LocalDateTime.now());
     matchService.addMatch(stadiumB.getId(),companyA.getCompanyId(), LocalDateTime.now());
     UserDetails userDetails = userDetailsService.loadUserByUsername(businessMember.getId());

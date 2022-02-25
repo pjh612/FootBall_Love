@@ -7,6 +7,7 @@ import com.deu.football_love.domain.MatchApplication;
 import com.deu.football_love.domain.Matches;
 import com.deu.football_love.domain.type.MatchApplicationState;
 import com.deu.football_love.domain.type.MatchState;
+import com.deu.football_love.domain.type.StadiumFieldType;
 import com.deu.football_love.dto.match.MatchApproveResponse;
 import com.deu.football_love.repository.MatchApplicationRepository;
 import com.deu.football_love.repository.MatchRepository;
@@ -82,7 +83,7 @@ public class MatchServiceTest {
     memberCInfo = memberService.join(joinC);
     companyInfo = companyService.addCompany("companyA", memberCInfo.getNumber(),
         new Address("city", "street", "zipcode"), "010-1234-1234", "companyA description");
-    stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), "풋살장", "30*50", 120000L);
+    stadiumInfo = stadiumService.addStadium(companyInfo.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "30*50", 120000L);
     teamAInfo = teamService.createNewTeam(memberAInfo.getId(), "teamA", "팀 A 소개");
     teamBInfo = teamService.createNewTeam(memberBInfo.getId(), "teamB", "팀 B 소개");
   }

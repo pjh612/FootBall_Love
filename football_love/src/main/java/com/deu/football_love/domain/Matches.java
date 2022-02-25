@@ -33,6 +33,7 @@ public class Matches extends BaseEntity {
     private LocalDateTime reservationTime;
 
     @Column(name = "matches_state")
+    @Enumerated(EnumType.STRING)
     private MatchState state;
 
     @Column(name = "application_refuse_message")

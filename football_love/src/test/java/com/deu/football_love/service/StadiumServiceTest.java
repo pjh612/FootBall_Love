@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.domain.type.StadiumFieldType;
 import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -43,8 +44,7 @@ class StadiumServiceTest {
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
     AddStadiumResponse newStadium =
-        stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
-
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "최대 4 : 4", 55000L);
 
     Company company = companyRepository.findById(companyA.getCompanyId()).get();
 
@@ -62,7 +62,7 @@ class StadiumServiceTest {
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
     AddStadiumResponse newStadium =
-        stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "최대 4 : 4", 55000L);
 
     QueryStadiumDto findStadium = stadiumService.findStadium(newStadium.getId());
     Assertions.assertEquals(newStadium.getId(), findStadium.getId());
@@ -81,13 +81,13 @@ class StadiumServiceTest {
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
     AddStadiumResponse stadiumA =
-        stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "최대 4 : 4", 55000L);
     AddStadiumResponse stadiumB =
-        stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 3 : 3", 45000L);
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "최대 3 : 3", 45000L);
     AddStadiumResponse stadiumC =
-        stadiumService.addStadium(companyA.getCompanyId(), "천연잔디", "최대 4 : 4", 35000L);
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.NATURAL_TURF, "최대 4 : 4", 35000L);
     AddStadiumResponse stadiumD =
-        stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 2 : 2", 25000L);
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "최대 2 : 2", 25000L);
 
     List<QueryStadiumDto> result =
         stadiumService.findAllStadiumByCompanyId(companyA.getCompanyId());
@@ -107,8 +107,8 @@ class StadiumServiceTest {
     AddCompanyResponse companyA = companyService.addCompany("companyA", memberA.getNumber(),
         new Address("busan", "geumgangro", "46233"), "01012341234", "부산 금강로에 위치한 풋살장");
     AddStadiumResponse newStadium =
-        stadiumService.addStadium(companyA.getCompanyId(), "인조잔디", "최대 4 : 4", 55000L);
-    stadiumService.deleteStadium(newStadium.getId());
+        stadiumService.addStadium(companyA.getCompanyId(), StadiumFieldType.ARTIFICIAL_TURF, "최대 4 : 4", 55000L);
+    stadiumService.deleteStadium(newStadium.getId(), companyA.getCompanyId());
     Assertions.assertThrows(IllegalArgumentException.class,
         () -> stadiumService.findStadium(newStadium.getId()));
   }
