@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.DuplicatedException;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,8 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 public class MemberService {
+
   private final MemberRepository memberRepository;
-  private final TeamRepository teamRepository;
   private final TeamMemberRepository teamMemberRepository;
   private final PostRepository postRepository;
   private final PasswordEncoder passwordEncoder;
@@ -53,8 +54,9 @@ public class MemberService {
       String refreshToken = jwtTokenProvider.createRefreshToken();
       return new LoginResponse("success", "create token success", accessToken, refreshToken,
           member.getNumber());
-    } else
+    } else {
       return new LoginResponse("fail", "create token fail", null, null, null);
+    }
   }
 
   public QueryMemberDto join(MemberJoinRequest joinRequest) {
@@ -69,8 +71,7 @@ public class MemberService {
     memberRepository.save(member);
     member.setCreatedBy(member.getNumber());
     member.setLastModifiedBy(member.getNumber());
-    QueryMemberDto memberResponse = new QueryMemberDto(member);
-    return memberResponse;
+    return new QueryMemberDto(member);
   }
 
   @Transactional(readOnly = true)
@@ -104,6 +105,7 @@ public class MemberService {
     return new LoginInfo(member);
   }
 
+  @Transactional(readOnly = true)
   public QueryMemberDto findQueryMemberDtoByNumber(Long number) {
     QueryMemberDto findMember = memberRepository.findQueryMemberDtoByNumber(number)
         .orElseThrow(() -> new IllegalArgumentException("no such member data."));
@@ -113,8 +115,9 @@ public class MemberService {
   public QueryMemberDto modifyByMemberNumber(Long memberNum, UpdateMemberRequest request) {
     Member findMember = memberRepository.findById(memberNum)
         .orElseThrow(() -> new IllegalArgumentException("no such member data."));
-    if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
+    if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd())) {
       findMember.setPwd(passwordEncoder.encode(request.getPwd()));
+    }
     findMember.setEmail(request.getEmail());
     findMember.setNickname(request.getNickname());
     findMember.setAddress(request.getAddress());
@@ -125,8 +128,9 @@ public class MemberService {
   public QueryMemberDto modifyByMemberId(String memberId, UpdateMemberRequest request) {
     Member findMember = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException("no such member data."));
-    if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd()))
+    if (!passwordEncoder.matches(request.getPwd(), findMember.getPwd())) {
       findMember.setPwd(passwordEncoder.encode(request.getPwd()));
+    }
     findMember.setEmail(request.getEmail());
     findMember.setNickname(request.getNickname());
     findMember.setAddress(request.getAddress());
@@ -137,8 +141,9 @@ public class MemberService {
   public boolean withdraw(String id) {
     Member findMember = memberRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("no such member data."));
-    if (withdrawalMemberRepository.existsByMemberId(id))
+    if (withdrawalMemberRepository.existsByMemberId(id)) {
       return false;
+    }
     withdrawalMemberRepository.save(new WithdrawalMember(findMember));
     while (findMember.getPosts().size() != 0) {
       Post post = findMember.getPosts().get(0);
