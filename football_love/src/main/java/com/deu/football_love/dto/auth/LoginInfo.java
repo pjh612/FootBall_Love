@@ -34,9 +34,8 @@ public class LoginInfo implements UserDetails {
         //this.password = member.getPwd();
         roles = new ArrayList<GrantedAuthority>();
         roles.add(new SimpleGrantedAuthority(member.getMemberType().name()));
-        if(member.getMemberType() == MemberType.ROLE_BUSINESS)
+        if(member.getMemberType() == MemberType.ROLE_BUSINESS && member.getCompany() != null)
             companyId = member.getCompany().getId();
-
     }
 
     public boolean isLoggedIn() {
