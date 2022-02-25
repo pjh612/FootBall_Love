@@ -1,12 +1,12 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.dto.member.BusinessJoinRequest;
+import com.deu.football_love.dto.member.BusinessJoinResponse;
+import com.deu.football_love.service.JoinService;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import io.swagger.models.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
   private final MemberService memberService;
+  private final JoinService joinService;
   private final JwtTokenProvider jwtTokenProvider;
   private final RedisService redisService;
 
@@ -47,14 +48,25 @@ public class MemberController {
     return loginInfo;
   }
 
-  @ApiOperation(value = "회원가입 요청")
+  @ApiOperation(value = "일반회원 회원가입 요청")
   @PostMapping
-  public ResponseEntity<QueryMemberDto> join(@Valid @RequestBody MemberJoinRequest joinRequest) {
+  public ResponseEntity<QueryMemberDto> normalJoin(@Valid @RequestBody MemberJoinRequest joinRequest) {
     QueryMemberDto joinMember = memberService.join(joinRequest);
     if (joinMember == null) {
-      return new ResponseEntity<QueryMemberDto>(HttpStatus.CONFLICT);
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
     } else {
-      return new ResponseEntity<QueryMemberDto>(joinMember, HttpStatus.OK);
+      return new ResponseEntity<>(joinMember, HttpStatus.OK);
+    }
+  }
+
+  @ApiOperation(value = "비즈니스 회원가입 요청")
+  @PostMapping("/business")
+  public ResponseEntity<BusinessJoinResponse> businessJoin(@Valid @RequestBody BusinessJoinRequest joinRequest) {
+    BusinessJoinResponse response = joinService.businessJoin(joinRequest);
+    if (response == null) {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    } else {
+      return new ResponseEntity<>(response, HttpStatus.OK);
     }
   }
 
