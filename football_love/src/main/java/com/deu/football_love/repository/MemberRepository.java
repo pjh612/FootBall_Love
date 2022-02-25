@@ -11,11 +11,11 @@ import com.deu.football_love.dto.member.QueryMemberDto;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-  @Query("select new com.deu.football_love.dto.member.QueryMemberDto(m)" + " from Member m"
-      + " left outer join m.company" + " where m.number = :memberNumber")
+  @Query("select new com.deu.football_love.dto.member.QueryMemberDto(m)" + " from Member m" + " left outer join m.company"
+      + " where m.number = :memberNumber")
   Optional<QueryMemberDto> findQueryMemberDtoByNumber(@Param("memberNumber") Long number);
 
-  @Query("select m" + " from Member m" + " JOIN FETCH m.company" + " where m.id = :id")
+  @Query("select m" + " from Member m" + " LEFT OUTER JOIN FETCH m.company" + " WHERE m.id = :id")
   Optional<Member> findByIdWithJoinCompany(@Param("id") String id);
 
   Optional<Member> findById(@Param("id") String id);

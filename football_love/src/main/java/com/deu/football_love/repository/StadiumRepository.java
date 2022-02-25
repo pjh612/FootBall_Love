@@ -1,6 +1,7 @@
 package com.deu.football_love.repository;
 
 import com.deu.football_love.domain.Stadium;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,9 @@ public interface StadiumRepository extends JpaRepository<Stadium, Long> {
 
     @Query("SELECT s FROM Stadium s JOIN s.company c WHERE c.id=:companyId")
     List<Stadium> findAllByCompanyId(@Param("companyId") Long companyId);
+
+    @Query("SELECT s FROM Stadium s JOIN FETCH s.company c WHERE c.id=:companyId AND s.id =:stadiumId")
+    Optional<Stadium> findByCompanyIdAndStadiumId(@Param("companyId") Long companyId,@Param("stadiumId") Long stadiumId);
 
     interface StadiumId{
         Long getId();

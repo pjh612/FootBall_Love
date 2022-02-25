@@ -50,7 +50,7 @@ public class TeamService {
     findMember.getTeamMembers().add(teamMember);
     teamRepository.save(team);
     teamMemberRepository.save(teamMember);
-    return new CreateTeamResponse(team.getId());
+    return new CreateTeamResponse(team.getId(),team.getName());
   }
 
   @Transactional(readOnly = true)
