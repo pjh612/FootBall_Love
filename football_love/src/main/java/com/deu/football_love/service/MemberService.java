@@ -78,6 +78,7 @@ public class MemberService {
     return memberRepository.existsById(id);
   }
 
+  @Transactional(readOnly = true)
   public boolean isDuplicationEmail(String email) {
     return memberRepository.existsByEmail(email);
   }
