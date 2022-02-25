@@ -1,5 +1,9 @@
 package com.deu.football_love.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.deu.football_love.domain.Address;
 import com.deu.football_love.domain.Company;
 import com.deu.football_love.domain.Member;
@@ -11,11 +15,6 @@ import com.deu.football_love.repository.CompanyRepository;
 import com.deu.football_love.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,9 +42,11 @@ public class CompanyService {
   @Transactional(readOnly = true)
   public List<QueryCompanyDto> findCompaniesByName(String companyName) {
     List<QueryCompanyDto> result = companyRepository.findAllByName(companyName).stream()
-        .map(c -> new QueryCompanyDto(c.getId(), c.getName(), c.getOwner().getNumber(),
-            c.getLocation(), c.getTel(), c.getDescription())
-        ).collect(Collectors.toList());
+        .map(company -> QueryCompanyDto.builder().companyId(company.getId())
+            .companyName(company.getName()).owner(company.getOwner().getNumber())
+            .location(company.getLocation()).tel(company.getTel())
+            .description(company.getDescription()).build())
+        .collect(Collectors.toList());
     return result;
   }
 
@@ -56,8 +57,8 @@ public class CompanyService {
     if (companyRepository.existsByMemberNumber(ownerNumber)) {
       throw new IllegalArgumentException("already have company.");
     }
-    Company newCompany = companyRepository
-        .save(new Company(name, findMember, location, tel, description));
+    Company newCompany =
+        companyRepository.save(new Company(name, findMember, location, tel, description));
     findMember.setCompany(newCompany);
     return AddCompanyResponse.from(newCompany);
   }

@@ -1,5 +1,7 @@
 package com.deu.football_love.domain;
 
+
+import com.deu.football_love.domain.type.MatchState;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,15 +11,19 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-public class Matches extends com.deu.football_love.domain.BaseEntity {
+public class Matches extends BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "matches_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
-    private Team team;
+    @JoinColumn(name = "teamA_id",referencedColumnName = "team_id")
+    private Team teamA;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teamB_id", referencedColumnName = "team_id")
+    private Team teamB;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stadium_id")
@@ -26,6 +32,10 @@ public class Matches extends com.deu.football_love.domain.BaseEntity {
     @Column(name = "matches_reservation_time")
     private LocalDateTime reservationTime;
 
-    @Column(name = "matches_approval")
-    private Boolean approval;
+    @Column(name = "matches_state")
+    private MatchState state;
+
+    @Column(name = "application_refuse_message")
+    private String refuseMessage = "";
+
 }

@@ -31,8 +31,11 @@ public class Team extends BaseEntity {
     @OneToMany(mappedBy = "team")
     private List<TeamMember> teamMembers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team")
-    private List<Matches> matches = new ArrayList<>();
+    @OneToMany(mappedBy = "teamA")
+    private List<Matches> matchesA = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teamB")
+    private List<Matches> matchesB = new ArrayList<>();
 
     @OneToMany(mappedBy = "team")
     private List<MatchApplication> matchApplications = new ArrayList<>();
@@ -44,7 +47,7 @@ public class Team extends BaseEntity {
     private List<ApplicationJoinTeam> applicationJoinTeams = new ArrayList<>();
 
     @OneToMany(mappedBy = "team")
-    private List<Board> boards = new ArrayList<>();
+    private List<TeamBoard> boards = new ArrayList<>();
 
     public void updateTeamProfile(String profileImgUri, String introduce){
         this.profileImgUri = profileImgUri;

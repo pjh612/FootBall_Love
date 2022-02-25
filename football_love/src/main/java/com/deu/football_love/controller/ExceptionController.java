@@ -24,7 +24,7 @@ public class ExceptionController {
             NotTeamMemberException.class,
     })
     public ResponseEntity<Object> notTeamMemberException(final RuntimeException ex) {
-        log.warn("error", ex);
+        log.warn("forbidden", ex);
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 

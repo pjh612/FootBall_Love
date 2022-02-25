@@ -14,7 +14,7 @@ import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
 import com.deu.football_love.dto.stadium.AddStadiumResponse;
 import com.deu.football_love.dto.team.CreateTeamResponse;
-import com.deu.football_love.service.BoardService;
+import com.deu.football_love.service.TeamBoardService;
 import com.deu.football_love.service.CommentService;
 import com.deu.football_love.service.CompanyService;
 import com.deu.football_love.service.MatchService;
@@ -89,8 +89,8 @@ class CompanyControllerTest {
         .addStadium(companyA.getCompanyId(), "천연잔디", "5x5", 60000L);
     AddStadiumResponse stadiumB = stadiumService
         .addStadium(companyA.getCompanyId(), "인조잔디", "5x5", 50000L);
-    matchService.addMatch(teamA.getTeamId(), stadiumA.getId(), LocalDateTime.now());
-    matchService.addMatch(teamA.getTeamId(), stadiumB.getId(), LocalDateTime.now());
+    matchService.addMatch( stadiumA.getId(),companyA.getCompanyId(), LocalDateTime.now());
+    matchService.addMatch(stadiumB.getId(),companyA.getCompanyId(), LocalDateTime.now());
     UserDetails userDetails = userDetailsService.loadUserByUsername(businessMember.getId());
     for (Object o : userDetails.getAuthorities().stream().toArray()) {
       System.out.println("hello" +o);

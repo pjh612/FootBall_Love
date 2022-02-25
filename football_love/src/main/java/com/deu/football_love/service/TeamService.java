@@ -25,7 +25,7 @@ public class TeamService {
   private final TeamRepository teamRepository;
   private final MemberRepository memberRepository;
   private final PostRepository postRepository;
-  private final BoardRepository boardRepository;
+  private final TeamBoardRepository boardRepository;
   private final TeamMemberRepository teamMemberRepository;
   private final ApplicationJoinTeamRepository applicationJoinTeamRepository;
   private final GcpStorageService gcpStorageService;
@@ -50,7 +50,7 @@ public class TeamService {
     findMember.getTeamMembers().add(teamMember);
     teamRepository.save(team);
     teamMemberRepository.save(teamMember);
-    return new CreateTeamResponse(team.getId());
+    return new CreateTeamResponse(team.getId(),team.getName());
   }
 
   @Transactional(readOnly = true)
@@ -165,7 +165,7 @@ public class TeamService {
     Team findTeam = teamRepository.findById(teamId)
         .orElseThrow(() -> new IllegalArgumentException("no such Team data"));
     while (findTeam.getBoards().size() != 0) {
-      Board board = findTeam.getBoards().get(0);
+      TeamBoard board = findTeam.getBoards().get(0);
       while (board.getPosts().size() != 0) {
         Post post = board.getPosts().get(0);
         post.deletePost();

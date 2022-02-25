@@ -77,31 +77,30 @@ public class Member extends BaseEntity {
   @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
   private WithdrawalMember withdrawalMember;
 
-  @OneToOne(mappedBy = "owner", orphanRemoval = true)
+  @OneToOne(mappedBy = "owner")
   private Company company;
 
-    @OneToMany(mappedBy = "writer")
-    private List<Comment> comments = new ArrayList<>();
+  @OneToMany(mappedBy = "writer")
+  private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<PostLike> likes = new ArrayList<>();
-
-  
+  @OneToMany(mappedBy = "member")
+  private List<PostLike> likes = new ArrayList<>();
 
 
-    @Builder(builderClassName = "MemberBuilder",
-            builderMethodName = "memberBuilder")
-    public Member(String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone, MemberType memberType) {
-        this.id = id;
-        this.pwd = pwd;
-        this.nickname = nickname;
-        this.name = name;
-        this.birth = birth;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-        this.memberType = memberType;
-    }
+  @Builder(builderClassName = "MemberBuilder",
+      builderMethodName = "memberBuilder")
+  public Member(String id, String pwd, String nickname, String name, LocalDate birth, Address address, String email, String phone,
+      MemberType memberType) {
+    this.id = id;
+    this.pwd = pwd;
+    this.nickname = nickname;
+    this.name = name;
+    this.birth = birth;
+    this.address = address;
+    this.email = email;
+    this.phone = phone;
+    this.memberType = memberType;
+  }
 
 
   public void updateMember(UpdateMemberRequest request) {
