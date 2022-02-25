@@ -26,7 +26,7 @@ const Join = () => {
       birth: e.target.birth.value,
       email: e.target.email.value,
       phone: e.target.phone.value,
-      type: e.target.checkbox.checked ? 'ROLE_BUSINESS' : 'NORMAL',
+      type: e.target.checkbox.checked ? 'ROLE_BUSINESS' : 'ROLE_NORMAL',
     };
     console.log(e.target.checkbox.checked);
     console.log(data);
