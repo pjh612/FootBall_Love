@@ -58,10 +58,10 @@ public class MemberService {
   }
 
   public QueryMemberDto join(MemberJoinRequest joinRequest) {
-    String password = joinRequest.getPwd();
-    String encodedPassword = passwordEncoder.encode(password);
-    joinRequest.setPwd(encodedPassword);
-
+    if (memberRepository.existsById(joinRequest.getId())) {
+     throw new DuplicatedException("There is already member with the same id");
+    }
+    joinRequest.setPwd(passwordEncoder.encode(joinRequest.getPwd()));
     Member member = Member.memberBuilder().address(joinRequest.getAddress())
         .birth(joinRequest.getBirth()).email(joinRequest.getEmail()).id(joinRequest.getId())
         .pwd(joinRequest.getPwd()).nickname(joinRequest.getNickname()).name(joinRequest.getName())
