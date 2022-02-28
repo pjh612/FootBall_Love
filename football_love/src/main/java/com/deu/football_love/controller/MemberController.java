@@ -1,12 +1,12 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.dto.member.BusinessJoinRequest;
+import com.deu.football_love.dto.member.BusinessJoinResponse;
+import com.deu.football_love.service.JoinService;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
-import io.swagger.models.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/api/member")
 public class MemberController {
+
   private final MemberService memberService;
+  private final JoinService joinService;
   private final JwtTokenProvider jwtTokenProvider;
   private final RedisService redisService;
 
@@ -46,29 +48,38 @@ public class MemberController {
     return loginInfo;
   }
 
-  @ApiOperation(value = "회원가입 요청")
+  @ApiOperation(value = "일반회원 회원가입 요청")
   @PostMapping
-  public ResponseEntity<QueryMemberDto> join(@Valid @RequestBody MemberJoinRequest joinRequest) {
+  public ResponseEntity<QueryMemberDto> normalJoin(@Valid @RequestBody MemberJoinRequest joinRequest) {
     QueryMemberDto joinMember = memberService.join(joinRequest);
     if (joinMember == null) {
-      return new ResponseEntity<QueryMemberDto>(HttpStatus.CONFLICT);
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
     } else {
-      return new ResponseEntity<QueryMemberDto>(joinMember, HttpStatus.OK);
+      return new ResponseEntity<>(joinMember, HttpStatus.OK);
+    }
+  }
+
+  @ApiOperation(value = "비즈니스 회원가입 요청")
+  @PostMapping("/business")
+  public ResponseEntity<BusinessJoinResponse> businessJoin(@Valid @RequestBody BusinessJoinRequest joinRequest) {
+    BusinessJoinResponse response = joinService.businessJoin(joinRequest);
+    if (response == null) {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    } else {
+      return new ResponseEntity<>(response, HttpStatus.OK);
     }
   }
 
 
-    @GetMapping("/loginInfo")
-    public ResponseEntity getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
-      if(loginInfo == null)
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-      else {
-        log.info("login Info at getMember = {} {}",loginInfo.getNumber(),loginInfo.getId());
-        QueryMemberDto queryMemberDtoByNumber = memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
-        log.info("조회 결과 id = {}", queryMemberDtoByNumber.getId());
-        return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
-      }
+  @GetMapping("/loginInfo")
+  public ResponseEntity getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+    if (loginInfo == null) {
+      return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+    } else {
+      QueryMemberDto queryMemberDtoByNumber = memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
+      return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
     }
+  }
 
   @ApiOperation(value = "jwt 로그인 요청")
   @PostMapping("/login_jwt/{id}")
@@ -76,7 +87,7 @@ public class MemberController {
       HttpServletResponse response) {
     LoginResponse loginResponse = memberService.login_jwt(loginRequest);
     if (loginResponse.getResult().equals("fail")) {
-      return new ResponseEntity<LoginResponse>(HttpStatus.CONFLICT);
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
     } else {
       ArrayList<String> data = new ArrayList<>();
       data.add(loginRequest.getId());
@@ -92,7 +103,7 @@ public class MemberController {
       redisService.setStringValue(loginResponse.getRefreshToken(), data,
           JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
       System.out.println("로그인 성공");
-      return new ResponseEntity<LoginResponse>(loginResponse, HttpStatus.OK);
+      return new ResponseEntity<>(loginResponse, HttpStatus.OK);
 
     }
   }
@@ -101,8 +112,9 @@ public class MemberController {
   public ResponseEntity refresh(HttpServletResponse response,
       @CookieValue(value = "accessToken") String accessToken,
       @CookieValue(value = "refreshToken") String refreshToken) {
-    if (accessToken == null || refreshToken == null)
+    if (accessToken == null || refreshToken == null) {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     ValidRefreshTokenResponse result =
         jwtTokenProvider.validateRefreshToken(accessToken, refreshToken);
     log.info("validate result = {} ", result);
@@ -113,38 +125,39 @@ public class MemberController {
     return new ResponseEntity(HttpStatus.BAD_REQUEST);
   }
 
-    @ApiOperation(value = "로그아웃 요청")
-    @PostMapping("/logout_jwt")
-    public ResponseEntity<LoginResponse> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
-                                                    @CookieValue(value = "accessToken") String accessToken
-            , @CookieValue(value = "refreshToken") String refreshToken
-    ) {
-        log.info("컨트롤러 진입");
-        if (accessToken == null || !jwtTokenProvider.validateToken(accessToken) || refreshToken == null || !jwtTokenProvider.validateToken(refreshToken)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        log.info("access Token = {} ", accessToken);
-        log.info("accessToken validate = {}",jwtTokenProvider.validateToken(accessToken));
-        Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
-        if (remainExpiration >= 1) {
-          log.info("블랙리스트 등록");
-            redisService.del(refreshToken);
-            redisService.setStringValue(accessToken, "true", remainExpiration);
-            log.info("remain time  = {}", remainExpiration);
-
-            return new ResponseEntity(HttpStatus.OK);
-        }
-        return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+  @ApiOperation(value = "로그아웃 요청")
+  @PostMapping("/logout_jwt")
+  public ResponseEntity<LoginResponse> logout_jwt(@AuthenticationPrincipal LoginInfo principal,
+      @CookieValue(value = "accessToken") String accessToken
+      , @CookieValue(value = "refreshToken") String refreshToken
+  ) {
+    log.info("컨트롤러 진입");
+    if (accessToken == null || !jwtTokenProvider.validateToken(accessToken) || refreshToken == null || !jwtTokenProvider
+        .validateToken(refreshToken)) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    log.info("access Token = {} ", accessToken);
+    log.info("accessToken validate = {}", jwtTokenProvider.validateToken(accessToken));
+    Long remainExpiration = jwtTokenProvider.remainExpiration(accessToken);
+    if (remainExpiration >= 1) {
+      log.info("블랙리스트 등록");
+      redisService.del(refreshToken);
+      redisService.setStringValue(accessToken, "true", remainExpiration);
+      log.info("remain time  = {}", remainExpiration);
 
-    @ApiOperation(value = "아이디 중복확인 요청")
-    @GetMapping("/duplication/id")
-    public ResponseEntity isDuplicaitonId(@RequestParam String id) {
-        if (!memberService.isDuplicationId(id)) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.CONFLICT);
-        }
+      return new ResponseEntity(HttpStatus.OK);
+    }
+    return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+  }
+
+  @ApiOperation(value = "아이디 중복확인 요청")
+  @GetMapping("/duplication/id")
+  public ResponseEntity isDuplicaitonId(@RequestParam String id) {
+    if (!memberService.isDuplicationId(id)) {
+      return new ResponseEntity(HttpStatus.OK);
+    } else {
+      return new ResponseEntity(HttpStatus.CONFLICT);
+    }
   }
 
   @ApiOperation(value = "이메일 중복확인 요청")
@@ -172,8 +185,9 @@ public class MemberController {
       @AuthenticationPrincipal LoginInfo loginInfo) {
 
     QueryMemberDto findMember = memberService.findMemberById(id);
-    if (loginInfo.getNumber() != findMember.getNumber())
+    if (loginInfo.getNumber() != findMember.getNumber()) {
       return new ResponseEntity(HttpStatus.FORBIDDEN);
+    }
     boolean deleteFlag = memberService.withdraw(id);
     if (deleteFlag) {
       return new ResponseEntity(HttpStatus.OK);
@@ -182,9 +196,7 @@ public class MemberController {
     }
   }
 
-
-
-  @ExceptionHandler({ IllegalArgumentException.class })
+  @ExceptionHandler({IllegalArgumentException.class})
   public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
     log.info(ex.getMessage());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

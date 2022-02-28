@@ -1,6 +1,6 @@
 package com.deu.football_love.controller;
 
-import com.deu.football_love.exception.LikeDuplicatedException;
+import com.deu.football_love.exception.DuplicatedException;
 import com.deu.football_love.exception.NotTeamMemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,20 +13,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionController {
 
     @ExceptionHandler({
-            LikeDuplicatedException.class,
-    })
-    public ResponseEntity<Object> likeDuplicatedException(final RuntimeException ex) {
-        log.warn("error", ex);
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler({
             NotTeamMemberException.class,
     })
     public ResponseEntity<Object> notTeamMemberException(final RuntimeException ex) {
         log.warn("forbidden", ex);
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
+    @ExceptionHandler({
+        DuplicatedException.class,
+    })
+    public ResponseEntity<Object> duplicatedException(final RuntimeException ex) {
+        log.warn("conflict", ex);
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 
 }
