@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class FootballLoveApplication {
 
     public static void main(String[] args) {
-        //github action test2
+        //github action test3
         SpringApplication.run(FootballLoveApplication.class, args);
     }
 }
