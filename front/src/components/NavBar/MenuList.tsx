@@ -73,6 +73,17 @@ export default function MenuList({ active, setActive }: any) {
           Sign in
         </button>
       )}
+      {user.type === 'ROLE_BUSINESS' ? (
+        <button
+          onClick={() => {
+            setActive(!active);
+            route('./addPlayground');
+          }}
+          className={styles.menu_button_style}
+        >
+          구장 등록
+        </button>
+      ) : null}
     </div>
   );
 }

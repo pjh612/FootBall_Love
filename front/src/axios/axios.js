@@ -95,3 +95,11 @@ export function getTeamBoardPosts(boardId) {
     url: `https://flove.fbl.p-e.kr/api/board/${boardId}/post`,
   });
 }
+
+export function makeBoardAdmin(data) {
+  return axios({
+    method: 'post',
+    url: 'https://flove.fbl.p-e.kr/api/board',
+    data: data,
+  });
+}
