@@ -48,6 +48,10 @@ public class QueryPostDto extends BaseDto {
     this.content = post.getContent();
     this.comments = post.getComments().stream().map(comment -> new QueryCommentDto(comment))
         .collect(Collectors.toList());
+    this.setCreatedBy(post.getCreatedBy());
+    this.setLastModifiedBy(post.getLastModifiedBy());
+    this.setCreatedDate(post.getCreatedDate());
+    this.setLastModifiedDate(post.getLastModifiedDate());
   }
 
   public static QueryPostDto from(Post post) {

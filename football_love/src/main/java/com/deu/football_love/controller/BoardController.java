@@ -21,6 +21,7 @@ import com.deu.football_love.dto.board.DeleteBoardResponse;
 import com.deu.football_love.service.BoardService;
 import com.deu.football_love.service.TeamBoardService;
 import com.deu.football_love.service.TeamService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -34,6 +35,7 @@ public class BoardController {
 
   private final TeamService teamService;
 
+  @ApiOperation("공용 게시판 추가")
   @PostMapping("/board")
   public ResponseEntity add(@Valid @RequestBody AddBoardRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
     String memberType = loginInfo.getAuthorities().iterator().next().getAuthority();
@@ -44,6 +46,7 @@ public class BoardController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
+  @ApiOperation("팀 게시판 추가")
   @PostMapping("/team/{teamId}/board")
   public ResponseEntity add(@PathVariable("teamId") Long teamId, @Valid @RequestBody AddTeamBoardRequest request,
       @AuthenticationPrincipal LoginInfo loginInfo) {
@@ -54,6 +57,7 @@ public class BoardController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
+  @ApiOperation("공용 게시판 삭제")
   @DeleteMapping("/board/{boardId}")
   public ResponseEntity<DeleteBoardResponse> delete(@PathVariable Long boardId, @AuthenticationPrincipal LoginInfo loginInfo) {
     String memberType = loginInfo.getAuthorities().iterator().next().getAuthority();
@@ -64,6 +68,7 @@ public class BoardController {
     return new ResponseEntity<DeleteBoardResponse>(response, HttpStatus.OK);
   }
 
+  @ApiOperation("팀 게시판 삭제")
   @DeleteMapping("/team/{teamId}/board/{boardId}")
   public ResponseEntity<DeleteTeamBoardResponse> delete(@PathVariable Long boardId, @PathVariable Long teamId,
       @AuthenticationPrincipal LoginInfo loginInfo) {

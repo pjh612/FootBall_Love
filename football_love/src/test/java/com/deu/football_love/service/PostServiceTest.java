@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.DuplicatedException;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -27,7 +28,6 @@ import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.team.CreateTeamResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
-import com.deu.football_love.exception.LikeDuplicatedException;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostRepository;
 import com.deu.football_love.repository.TeamBoardRepository;
@@ -427,7 +427,7 @@ public class PostServiceTest {
     postService.likePost(writePostResponse.getPostId(), memberJoinResponse.getNumber());
 
     // then
-    Assertions.assertThrows(LikeDuplicatedException.class, () -> postService.likePost(writePostResponse.getPostId(), memberJoinResponse.getNumber()));
+    Assertions.assertThrows(DuplicatedException.class, () -> postService.likePost(writePostResponse.getPostId(), memberJoinResponse.getNumber()));
 
 
   }

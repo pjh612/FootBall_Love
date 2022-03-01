@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.DuplicatedException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,6 @@ import com.deu.football_love.dto.post.UpdatePostRequest;
 import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
 import com.deu.football_love.dto.post.like.LikePostResponse;
-import com.deu.football_love.exception.LikeDuplicatedException;
 import com.deu.football_love.repository.TeamBoardRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostImageRepository;
@@ -93,7 +93,7 @@ public class PostService {
     if (findMember == null)
       throw new IllegalArgumentException("no such data");
     if (isLiked(postId, memberNumber))
-      throw new LikeDuplicatedException("이미 추천한 게시글 입니다.");
+      throw new DuplicatedException("이미 추천한 게시글 입니다.");
     PostLike like = new PostLike(findPost, findMember);
     postLikeRepository.save(like);
     return new LikePostResponse(true, "추천");
