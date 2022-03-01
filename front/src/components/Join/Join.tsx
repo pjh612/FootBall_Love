@@ -155,7 +155,7 @@ const Join = () => {
               display: 'block',
             }}
           />
-          <TextField
+          {/* <TextField
             id="address"
             label="주소"
             variant="outlined"
@@ -167,7 +167,7 @@ const Join = () => {
               marginTop: '20px',
               display: 'block',
             }}
-          />
+          /> */}
           <p style={{ fontFamily: 'IBM Plex Sans Thai Looped, sans-serif' }}>
             <input name="checkbox" id="checkbox1" type="checkbox"></input>
             <label htmlFor="checkbox1">사업자로 가입하기 [축구 구장을 운영하는 사업자]</label>

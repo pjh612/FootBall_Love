@@ -37,7 +37,7 @@ export default function MenuList({ active, setActive }: any) {
       <button
         onClick={() => {
           setActive(!active);
-          route('board');
+          route('community');
         }}
         className={styles.menu_button_style}
       >

@@ -12,6 +12,7 @@ import MyPage from './components/MyPage/MyPage';
 import TeamList from './components/TeamListPage/TeamList';
 import BoardPage from './components/TeamPage/TeamBoardPage';
 import AdminPage from './components/Admin/AdminPage';
+import Community from './components/community/Community';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserAction, updateTeamAction } from './action/createAction';
@@ -68,6 +69,7 @@ function App() {
             <Route path="/teams/:id/:boardNumber/write" element={<Write></Write>}></Route>
             <Route path="/teams/:id" element={<TeamPage></TeamPage>}></Route>
             <Route path="/teams/:id/:boardNumber" element={<TeamBoardPage></TeamBoardPage>}></Route>
+            <Route path="/community" element={<Community></Community>}></Route>
             <Route path="/admin" element={<AdminPage user={user}></AdminPage>}></Route>
           </Routes>
         </ThemeProvider>
