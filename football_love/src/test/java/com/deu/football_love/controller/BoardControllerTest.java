@@ -59,6 +59,20 @@ public class BoardControllerTest {
     userId = member.getId();
   }
 
+  @DisplayName("board List얻기")
+  @Test
+  public void getBoardList() throws Exception {
+    UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+    AddBoardRequest request1 = new AddBoardRequest("게시판1", BoardType.GENERAL);
+    AddBoardRequest request2 = new AddBoardRequest("게시판2", BoardType.GENERAL);
+    AddBoardRequest request3 = new AddBoardRequest("게시판3", BoardType.GENERAL);
+    boardService.add(request1);
+    boardService.add(request2);
+    boardService.add(request3);
+    mvc.perform(MockMvcRequestBuilders.get(BASE_URL).contentType(MediaType.APPLICATION_JSON).with(csrf()).with(user(userDetails)))
+        .andExpect(status().isOk()).andDo(print());
+  }
+
   @DisplayName("게시판 만들기 성공")
   @Test
   public void addBoardSuccess() throws Exception {

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.deu.football_love.domain.Team;
 import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.dto.BaseDto;
-import com.deu.football_love.dto.board.BoardDto;
+import com.deu.football_love.dto.board.QueryBoardDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class QueryTeamDto extends BaseDto {
   private String profileImgUri;
   private String introduce;
   private List<String> teamMembers = new ArrayList<>();
-  private List<BoardDto> boards = new ArrayList<>();
+  private List<QueryBoardDto> boards = new ArrayList<>();
 
   public QueryTeamDto(Team team) {
     this.id = team.getId();
@@ -30,7 +30,7 @@ public class QueryTeamDto extends BaseDto {
     team.getTeamMembers().forEach(teamMember -> {
       this.teamMembers.add(teamMember.getMember().getId());
     });
-    boards = team.getBoards().stream().map(board -> new BoardDto(board)).collect(Collectors.toList());
+    boards = team.getBoards().stream().map(board -> new QueryBoardDto(board)).collect(Collectors.toList());
     this.setCreatedBy(team.getCreatedBy());
     this.setLastModifiedBy(team.getLastModifiedBy());
     this.setCreatedDate(team.getCreatedDate());

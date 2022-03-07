@@ -12,7 +12,7 @@ import com.deu.football_love.domain.type.BoardType;
 import com.deu.football_love.domain.type.MemberType;
 import com.deu.football_love.dto.board.AddBoardRequest;
 import com.deu.football_love.dto.board.AddBoardResponse;
-import com.deu.football_love.dto.board.BoardDto;
+import com.deu.football_love.dto.board.QueryBoardDto;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ class BoardServiceTest {
 
     AddBoardRequest request = new AddBoardRequest("boardA", BoardType.NOTICE);
     AddBoardResponse response = boardService.add(request);
-    BoardDto findBoard = boardService.findById(response.getBoardId());
+    QueryBoardDto findBoard = boardService.findById(response.getBoardId());
 
     Assertions.assertEquals(response.getBoardId(), findBoard.getBoardId());
   }
