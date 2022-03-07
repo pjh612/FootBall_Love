@@ -7,12 +7,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BoardDto {
+public class QueryBoardDto {
   private Long boardId;
   private String boardName;
   private BoardType boardType;
 
-  public BoardDto(Board board) {
+  public QueryBoardDto(Board board) {
     this.boardId = board.getId();
     this.boardName = board.getBoardName();
     this.boardType = board.getBoardType();

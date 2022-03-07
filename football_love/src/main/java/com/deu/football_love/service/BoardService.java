@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,8 +8,8 @@ import com.deu.football_love.domain.Board;
 import com.deu.football_love.domain.Post;
 import com.deu.football_love.dto.board.AddBoardRequest;
 import com.deu.football_love.dto.board.AddBoardResponse;
-import com.deu.football_love.dto.board.BoardDto;
 import com.deu.football_love.dto.board.DeleteBoardResponse;
+import com.deu.football_love.dto.board.QueryBoardDto;
 import com.deu.football_love.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +19,17 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
   private final BoardRepository boardRepository;
 
+  public List<QueryBoardDto> get() {
+    List<Board> boardList = boardRepository.findCommonBoard();
+    List<QueryBoardDto> queryBoardList = new ArrayList<>();
+    for (Board board : boardList) {
+      queryBoardList.add(new QueryBoardDto(board));
+    }
+    return queryBoardList;
+  }
+
   public AddBoardResponse add(AddBoardRequest request) {
-    if (boardRepository.existsCommonBoardByBoardName(request.getBoardName()))
-      throw new IllegalArgumentException("There is already board with the same name.");
+
     Board board = new Board();
     board.setBoardName(request.getBoardName());
     board.setBoardType(request.getBoardType());
@@ -41,8 +50,8 @@ public class BoardService {
     return new DeleteBoardResponse(boardId, 200, "삭제 완료");
   }
 
-  public BoardDto findById(Long boardId) {
+  public QueryBoardDto findById(Long boardId) {
     Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("no such board data"));
-    return new BoardDto(findBoard);
+    return new QueryBoardDto(findBoard);
   }
 }
