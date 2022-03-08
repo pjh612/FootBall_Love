@@ -85,7 +85,7 @@ export function makeBoardRequest(teamId, data) {
   });
 }
 
-export function getTeamBoardPosts(boardId) {
+export function getPosts(boardId) {
   return axios({
     method: 'get',
     params: {
