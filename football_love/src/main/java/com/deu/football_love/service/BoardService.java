@@ -29,7 +29,9 @@ public class BoardService {
   }
 
   public AddBoardResponse add(AddBoardRequest request) {
-
+    if (boardRepository.existsCommonBoardByBoardName(request.getBoardName())) {
+      new IllegalArgumentException("There is a already board with the same name.");
+    }
     Board board = new Board();
     board.setBoardName(request.getBoardName());
     board.setBoardType(request.getBoardType());
