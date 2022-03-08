@@ -33,21 +33,23 @@ function App() {
   });
   const user = useUser();
 
-  useEffect(() => {
-    async function refresh() {
-      try {
-        const userInfo = await getUserInfo().then((res) => res.data);
-        const teamInfo = await getTeamInfo().then((res) => res.data);
-        const useraction = updateUserAction(userInfo);
-        const teamaction = updateTeamAction(teamInfo);
-        dispatch(useraction);
-        dispatch(teamaction);
-      } catch (err) {
-        console.log('로그인에러 [쿠키의 값이 유효하지 않습니다]');
-        console.log(err.response);
-        console.log(err);
-      }
+  async function refresh() {
+    try {
+      const userInfo = await getUserInfo().then((res) => res.data);
+      const teamInfo = await getTeamInfo().then((res) => res.data);
+      const useraction = updateUserAction(userInfo);
+      const teamaction = updateTeamAction(teamInfo);
+      dispatch(useraction);
+      dispatch(teamaction);
+    } catch (err) {
+      dispatch({
+        type: 'LOGOUT',
+      });
+      console.log('현재 쿠키가 없어 새로고침 로그인이 실패했습니다.');
     }
+  }
+
+  useEffect(() => {
     refresh();
   }, []);
 
