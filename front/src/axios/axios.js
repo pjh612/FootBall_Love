@@ -35,7 +35,7 @@ export function sendLoginData(data) {
 export function getUserInfo() {
   return axios({
     method: 'get',
-    url: `/api/member/loginInfo`,
+    url: 'https://flove.fbl.p-e.kr/api/member/loginInfo',
   });
 }
 
@@ -85,7 +85,7 @@ export function makeBoardRequest(teamId, data) {
   });
 }
 
-export function getTeamBoardPosts(boardId) {
+export function getPosts(boardId) {
   return axios({
     method: 'get',
     params: {
@@ -101,5 +101,19 @@ export function makeBoardAdmin(data) {
     method: 'post',
     url: 'https://flove.fbl.p-e.kr/api/board',
     data: data,
+  });
+}
+
+export function getBoardList() {
+  return axios({
+    method: 'get',
+    url: 'https://flove.fbl.p-e.kr/api/board',
+  });
+}
+
+export function deleteBoard(boardId) {
+  return axios({
+    method: 'delete',
+    url: `https://flove.fbl.p-e.kr/api/board/${boardId}`,
   });
 }

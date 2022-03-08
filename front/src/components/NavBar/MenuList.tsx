@@ -3,7 +3,7 @@ import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../hooks/useUser';
 
-export default function MenuList({ active, setActive }: any) {
+export default function MenuList({ active, setActive, isLogin }: any) {
   const buttonBox = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const toggle = () => {
@@ -11,15 +11,12 @@ export default function MenuList({ active, setActive }: any) {
       buttonBox.current.classList.toggle(`${styles.active}`);
     }
   };
+
   useEffect(() => {
     toggle();
   }, [active]);
 
-  const user = useUser();
-
   const route = (des) => {
-    // 열려있는 메뉴리스트를 닫아줌
-
     navigate(`./${des}`);
   };
 
@@ -52,7 +49,7 @@ export default function MenuList({ active, setActive }: any) {
       >
         팀만들기
       </button>
-      {user.number ? (
+      {isLogin ? (
         <button
           onClick={() => {
             setActive(!active);
@@ -73,17 +70,6 @@ export default function MenuList({ active, setActive }: any) {
           Sign in
         </button>
       )}
-      {user.type === 'ROLE_BUSINESS' ? (
-        <button
-          onClick={() => {
-            setActive(!active);
-            route('./addPlayground');
-          }}
-          className={styles.menu_button_style}
-        >
-          구장 등록
-        </button>
-      ) : null}
     </div>
   );
 }

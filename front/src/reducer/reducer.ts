@@ -23,7 +23,8 @@ type User = {
   teams?: any;
 };
 
-const initialUser: { user: User } = {
+const initialUser: { isLogin: boolean; user: User } = {
+  isLogin: document.cookie.includes('accessToken') ? true : false,
   user: {
     createdDate: '',
     lastModifiedDate: '',
@@ -56,7 +57,7 @@ function userReducer(state, action) {
   switch (action.type) {
     case 'UPDATE_USERINFO':
       return {
-        ...state,
+        isLogin: true,
         user: { ...action.update },
       };
 
@@ -72,11 +73,13 @@ function userReducer(state, action) {
         draft.user.teams = newTeamInfo;
       });
 
-    case 'LOGOUT':
-      return produce(state, (draft) => {
-        draft.user = null;
-      });
-
+    case 'LOGOUT': {
+      const user = initialUser;
+      user.isLogin = false;
+      return {
+        ...user,
+      };
+    }
     default:
       return { ...state };
   }

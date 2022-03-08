@@ -19,15 +19,17 @@ const Login = () => {
     e.preventDefault();
     const data = { id: e.target.id.value, pwd: e.target.password.value };
     try {
+      console.log(data);
       const loginKey = await sendLoginData(data).then((res) => res.data.memberNumber);
       console.log(loginKey);
-      const userInfo = await getUserInfo().then((res) => res.data);
-      const teamInfo = await getTeamInfo().then((res) => res.data);
-      const useraction = updateUserAction(userInfo);
-      const teamaction = updateTeamAction(teamInfo);
-      dispatch(useraction);
-      dispatch(teamaction);
+      // const teamInfo = await getTeamInfo().then((res) => res.data);
+      // const userInfo = await getUserInfo().then((res) => res.data);
+      // const useraction = updateUserAction(userInfo);
+      // const teamaction = updateTeamAction(teamInfo);
+      // dispatch(useraction);
+      // dispatch(teamaction);
       navigate('/');
+      window.location.reload();
     } catch (err) {
       console.log('로그인 에러 [ID, 비밀번호 정보가 올바르지 않습니다.]');
       console.log(err.response);

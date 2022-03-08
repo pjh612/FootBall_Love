@@ -1,17 +1,16 @@
 import Button from './Button';
 
-export default function BoardList() {
-  return (
-    <ul>
+export default function BoardList({ boards, onDeleteBoard }) {
+  const lists = [];
+  for (let i = 0; i < boards.length; i++) {
+    const board = boards[i];
+    const listItem = (
       <li>
-        첫번째 보드<Button text="Delete"></Button>
+        {board.boardName}
+        <Button event={() => onDeleteBoard(board.boardId)} text="삭제"></Button>
       </li>
-      <li>
-        첫번째 보드<Button text="Delete"></Button>
-      </li>
-      <li>
-        첫번째 보드<Button text="Delete"></Button>
-      </li>
-    </ul>
-  );
+    );
+    lists.push(listItem);
+  }
+  return <ul>{lists}</ul>;
 }

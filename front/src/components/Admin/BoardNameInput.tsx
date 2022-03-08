@@ -1,7 +1,7 @@
-export default function BoardNameInput() {
+export default function BoardNameInput({ boardName, onChangeBoardName }) {
   return (
     <>
-      <input placeholder="typing boardName"></input>
+      <input onChange={onChangeBoardName} value={boardName} placeholder="typing boardName"></input>
     </>
   );
 }
