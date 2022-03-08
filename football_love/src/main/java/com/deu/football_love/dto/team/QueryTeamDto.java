@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import com.deu.football_love.domain.Team;
-import com.deu.football_love.domain.TeamMember;
 import com.deu.football_love.dto.BaseDto;
 import com.deu.football_love.dto.board.QueryBoardDto;
 import lombok.AccessLevel;
