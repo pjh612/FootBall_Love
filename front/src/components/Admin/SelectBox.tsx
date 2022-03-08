@@ -1,6 +1,6 @@
-export default function SelectBox({ selectList }) {
+export default function SelectBox({ onSelectBoardType, selectList }) {
   return (
-    <select>
+    <select onChange={onSelectBoardType}>
       {selectList.map((item) => (
         <option value={item} key={item}>
           {item}

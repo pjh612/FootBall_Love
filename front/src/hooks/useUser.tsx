@@ -6,6 +6,11 @@ export const useUser = () => {
   return user;
 };
 
+export const useLogin = () => {
+  const isLogin = useSelector((state: RootState) => state.userReducer.isLogin);
+  return isLogin;
+};
+
 export const useTeam = () => {
   const teams = useSelector((state: RootState) => state.userReducer.user.teams);
   return teams;
