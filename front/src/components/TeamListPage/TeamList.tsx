@@ -25,6 +25,8 @@ export default function TeamList() {
         <div onClick={routeToTeamPage(team.teamId)} key={team.teamName} className={styles.team_one_wrapper}>
           <img className={styles.team_image} src={imageSrc}></img>
           <span className={styles.team_name}>{team.teamName}</span>
+          <span>{`팀원 수: ${team.totalMenmberCount}`}</span>
+          <span>{`${team.authority === 'LEADER' ? '팀마스터' : '팀원'}`}</span>
         </div>
       );
     });

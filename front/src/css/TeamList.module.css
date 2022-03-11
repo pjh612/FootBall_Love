@@ -10,7 +10,7 @@
 .team_one_wrapper {
   margin-top: 14px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   width: 80px;
   height: 130px;
@@ -23,5 +23,5 @@
 
 .team_name {
   font-size: 16px;
-  font-family: "IBM Plex Sans Thai Looped", sans-serif;
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;
 }
