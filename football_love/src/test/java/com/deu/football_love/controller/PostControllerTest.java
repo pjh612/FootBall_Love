@@ -86,18 +86,18 @@ public class PostControllerTest {
   @DisplayName("글 쓰기 테스트")
   @Test
   public void addPost() throws Exception {
-    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
+    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
     mvc.perform(multipart("/api/board/post").param("title", writePostRequest.getTitle()).param("content", writePostRequest.getContent())
         .param("teamId", Long.toString(writePostRequest.getTeamId())).param("boardId", Long.toString(writePostRequest.getBoardId()))
-        .param("authorNumber", Long.toString(writerNumber)).with(user(userDetails))).andExpect(status().isOk());
+        .with(user(userDetails))).andExpect(status().isOk());
   }
 
   @DisplayName("글 추천 테스트")
   @Test
   public void likePost() throws Exception {
-    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest);
+    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writePost(writePostRequest, writerNumber);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
     mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
@@ -107,8 +107,8 @@ public class PostControllerTest {
   @DisplayName("글 추천 중복 테스트")
   @Test
   public void DuplicatingLikePost() throws Exception {
-    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest);
+    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writePost(writePostRequest, writerNumber);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
     mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))

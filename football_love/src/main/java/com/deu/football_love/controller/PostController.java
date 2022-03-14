@@ -22,18 +22,21 @@ import javax.validation.Valid;
 @RequestMapping("/api")
 public class PostController {
 
-    private final PostService postService;
-    private final TeamService teamService;
+  private final PostService postService;
+  private final TeamService teamService;
 
-    /**
-     * 게시글 생성
-     */
-    @PostMapping("/board/post")
-    public ResponseEntity writePost(WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
-        QueryTeamMemberDto findTeamMember = teamService.findTeamMemberByTeamIdAndMemberId(writePostRequest.getTeamId(), loginInfo.getId());
-        WritePostResponse writePostResponse = postService.writePost(writePostRequest);
-        return new ResponseEntity(writePostResponse, HttpStatus.OK);
+  /**
+   * 게시글 생성
+   */
+  @PostMapping("/board/post")
+  public ResponseEntity writePost(WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
+    TeamMemberType teamMemberType = teamService.authorityCheck(writePostRequest.getTeamId(), loginInfo.getNumber());
+    if (teamMemberType == TeamMemberType.NONE) {
+      throw new NotTeamMemberException();
     }
+    WritePostResponse writePostResponse = postService.writePost(writePostRequest, loginInfo.getNumber());
+    return new ResponseEntity(writePostResponse, HttpStatus.OK);
+  }
 
     /**
      * 게시글 삭제

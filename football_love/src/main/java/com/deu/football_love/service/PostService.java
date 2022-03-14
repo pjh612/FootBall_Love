@@ -44,12 +44,17 @@ public class PostService {
   private final GcpStorageService gcpStorageService;
 
   @SneakyThrows
-  public WritePostResponse writePost(WritePostRequest request) {
+  public WritePostResponse writePost(WritePostRequest request, Long authorNumber) {
     Post newPost = new Post();
-    Member findMember = memberRepository.findById(request.getAuthorNumber())
+    Member findMember = memberRepository.findById(authorNumber)
         .orElseThrow(() -> new IllegalArgumentException());
     TeamBoard findBoard = boardRepository.findById(request.getBoardId())
         .orElseThrow(() -> new IllegalArgumentException("no such board data."));
+    //추후에 쿼리 개선하기
+    log.info("teamId = {}", findBoard.getTeam().getId());
+    log.info("request teamId = {}", request.getTeamId());
+    if (findBoard.getTeam().getId() != request.getTeamId())
+      throw new IllegalArgumentException("this board doesn't belong to the team.");
     newPost.setContent(request.getContent());
     newPost.setTitle(request.getTitle());
     newPost.setAuthor(findMember);
