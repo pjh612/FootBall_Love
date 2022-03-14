@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.exception.NotExistDataException;
 import com.deu.football_love.exception.NotTeamMemberException;
@@ -185,7 +186,6 @@ public class TeamService {
     teamRepository.delete(findTeam);
     return new DisbandmentTeamResponse(teamId);
   }
-
 
   public UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, TeamMemberType authorityType) {
     Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new NotExistDataException("no such member data."));
