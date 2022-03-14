@@ -53,9 +53,4 @@ public class StadiumController {
     return new ResponseEntity(response, HttpStatus.OK);
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleDataNotFoundException(final IllegalArgumentException ex) {
-    log.info(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 }

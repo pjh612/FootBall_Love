@@ -196,9 +196,4 @@ public class MemberController {
     }
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
-    log.info(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 }

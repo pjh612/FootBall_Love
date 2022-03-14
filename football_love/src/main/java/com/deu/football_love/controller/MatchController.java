@@ -120,10 +120,5 @@ public class MatchController {
     return authorityType == TeamMemberType.ADMIN || authorityType == TeamMemberType.LEADER;
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleDataNotFoundException(final IllegalArgumentException ex) {
-    log.info(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 
 }
