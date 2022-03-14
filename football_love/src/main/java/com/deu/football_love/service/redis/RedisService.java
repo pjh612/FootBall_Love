@@ -26,7 +26,6 @@ public class RedisService {
 
     public String getStringValue(String key) {
         return (String) redisTemplate.opsForValue().get(key);
-
     }
 
     public List<Object> getListValue(String key) {

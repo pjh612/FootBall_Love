@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.deu.football_love.exception.NotExistDataException;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -164,8 +164,8 @@ public class TeamServiceTest {
         QueryMemberDto memberA = memberService.findMemberById("memberA");
         QueryMemberDto memberB = memberService.findMemberById("memberB");
         AddTeamBoardResponse boardA = boardService.add(new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamId));
-        postService.writePost(new WritePostRequest(memberA.getNumber(), boardA.getBoardId(), teamId, "hello", "content", null));
-        postService.writePost(new WritePostRequest(memberB.getNumber(), boardA.getBoardId(), teamId, "hello", "content", null));
+        postService.writePost(new WritePostRequest(boardA.getBoardId(), teamId, "hello", "content", null),memberA.getNumber());
+        postService.writePost(new WritePostRequest(boardA.getBoardId(), teamId, "hello", "content", null),memberA.getNumber());
         teamService.disbandmentTeam(findTeam.getId());
 
 
@@ -185,8 +185,8 @@ public class TeamServiceTest {
         teamService.applyToTeam(findTeam.getId(), "memberB", "hi");
         teamService.acceptApplication(findTeam.getId(), "memberB");
         AddTeamBoardResponse addBoardResponse = boardService.add(new AddTeamBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId()));
-        WritePostResponse post1 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), findTeam.getId(), "안녕하세요", "가입인사 합니다.", null));
-        WritePostResponse post2 = postService.writePost(new WritePostRequest(findMember.getNumber(), addBoardResponse.getBoardId(), findTeam.getId(), "안녕하세요 팀장입니다.", "내일 집합이요", null));
+        WritePostResponse post1 = postService.writePost(new WritePostRequest(addBoardResponse.getBoardId(), findTeam.getId(), "안녕하세요", "가입인사 합니다.", null),findMember.getNumber());
+        WritePostResponse post2 = postService.writePost(new WritePostRequest(addBoardResponse.getBoardId(), findTeam.getId(), "안녕하세요 팀장입니다.", "내일 집합이요", null),findMember.getNumber());
 
         teamService.disbandmentTeam(findTeam.getId());
 
@@ -195,8 +195,8 @@ public class TeamServiceTest {
         assertThrows(IllegalArgumentException.class, () -> boardService.findById(addBoardResponse.getBoardId()));
         assertEquals(0, findTeam.getBoards().size());
         assertEquals(0, findMember.getPosts().size());
-        assertThrows(IllegalArgumentException.class, () -> postService.findPost(post1.getPostId()));
-        assertThrows(IllegalArgumentException.class, () -> postService.findPost(post2.getPostId()));
+        assertThrows(NotExistDataException.class, () -> postService.findPost(post1.getPostId()));
+        assertThrows(NotExistDataException.class, () -> postService.findPost(post2.getPostId()));
     }
 
     /**

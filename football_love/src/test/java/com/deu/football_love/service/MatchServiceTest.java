@@ -9,6 +9,7 @@ import com.deu.football_love.domain.type.MatchApplicationState;
 import com.deu.football_love.domain.type.MatchState;
 import com.deu.football_love.domain.type.StadiumFieldType;
 import com.deu.football_love.dto.match.MatchApproveResponse;
+import com.deu.football_love.exception.NotExistDataException;
 import com.deu.football_love.repository.MatchApplicationRepository;
 import com.deu.football_love.repository.MatchRepository;
 import com.deu.football_love.repository.StadiumRepository;
@@ -176,7 +177,7 @@ public class MatchServiceTest {
         .addMatch(stadiumInfo.getId(), companyInfo.getCompanyId(), reservationTime);
     matchService.registerTeamA(match.getMatchId(), teamAInfo.getTeamId());
     matchService.cancelMatch(match.getMatchId(), companyInfo.getCompanyId());
-    Assertions.assertThrows(IllegalArgumentException.class,
+    Assertions.assertThrows(NotExistDataException.class,
         () -> matchService.findMatch(match.getMatchId()));
   }
 

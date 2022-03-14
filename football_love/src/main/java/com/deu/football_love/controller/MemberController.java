@@ -52,33 +52,23 @@ public class MemberController {
   @PostMapping
   public ResponseEntity<QueryMemberDto> normalJoin(@Valid @RequestBody MemberJoinRequest joinRequest) {
     QueryMemberDto joinMember = memberService.join(joinRequest);
-    if (joinMember == null) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } else {
-      return new ResponseEntity<>(joinMember, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(joinMember, HttpStatus.OK);
   }
 
   @ApiOperation(value = "비즈니스 회원가입 요청")
   @PostMapping("/business")
   public ResponseEntity<BusinessJoinResponse> businessJoin(@Valid @RequestBody BusinessJoinRequest joinRequest) {
     BusinessJoinResponse response = joinService.businessJoin(joinRequest);
-    if (response == null) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } else {
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
 
   @GetMapping("/loginInfo")
   public ResponseEntity getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
-    if (loginInfo == null) {
+    if (loginInfo.getNumber() == -1) {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    } else {
-      QueryMemberDto queryMemberDtoByNumber = memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
-      return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
     }
+    return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
   }
 
   @ApiOperation(value = "jwt 로그인 요청")
@@ -86,30 +76,25 @@ public class MemberController {
   public ResponseEntity<LoginResponse> login_jwt(@RequestBody LoginRequest loginRequest,
       HttpServletResponse response) {
     LoginResponse loginResponse = memberService.login_jwt(loginRequest);
-    if (loginResponse.getResult().equals("fail")) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } else {
-      ArrayList<String> data = new ArrayList<>();
-      data.add(loginRequest.getId());
-      data.add(loginResponse.getAccessToken());
-      ResponseCookie accessTokenCookie =
-          ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken())
-              .path("/").secure(true).sameSite("None").build();
-      ResponseCookie refreshTokenCookie =
-          ResponseCookie.from(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken())
-              .path("/").secure(true).sameSite("None").build();
-      response.setHeader("Set-Cookie", accessTokenCookie.toString());
-      response.addHeader("Set-Cookie", refreshTokenCookie.toString());
-      redisService.setStringValue(loginResponse.getRefreshToken(), data,
-          JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
-      System.out.println("로그인 성공");
-      return new ResponseEntity<>(loginResponse, HttpStatus.OK);
-
-    }
+    ArrayList<String> data = new ArrayList<>();
+    data.add(loginRequest.getId());
+    data.add(loginResponse.getAccessToken());
+    ResponseCookie accessTokenCookie =
+        ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken())
+            .path("/").secure(true).sameSite("None").build();
+    ResponseCookie refreshTokenCookie =
+        ResponseCookie.from(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken())
+            .path("/").secure(true).sameSite("None").build();
+    response.setHeader("Set-Cookie", accessTokenCookie.toString());
+    response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+    redisService.setStringValue(loginResponse.getRefreshToken(), data,
+        JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
+    System.out.println("로그인 성공");
+    return new ResponseEntity<>(loginResponse, HttpStatus.OK);
   }
 
   @PostMapping("/refresh")
-  public ResponseEntity refresh(HttpServletResponse response,
+  public ResponseEntity<ValidRefreshTokenResponse> refresh(HttpServletResponse response,
       @CookieValue(value = "accessToken") String accessToken,
       @CookieValue(value = "refreshToken") String refreshToken) {
     if (accessToken == null || refreshToken == null) {
@@ -120,9 +105,9 @@ public class MemberController {
     log.info("validate result = {} ", result);
     if (result.getStatus() == 200) {
       response.addCookie((new Cookie("accessToken", result.getAccessToken())));
-      return new ResponseEntity(result, HttpStatus.OK);
+      return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   @ApiOperation(value = "로그아웃 요청")
@@ -171,24 +156,17 @@ public class MemberController {
   }
 
   @ApiOperation(value = "회원정보 수정요청")
-  @PutMapping("/{memberId}")
-  public ResponseEntity<QueryMemberDto> modify(@PathVariable String memberId,
-      @Valid @RequestBody UpdateMemberRequest request,
-      @AuthenticationPrincipal LoginInfo principal) {
-    QueryMemberDto modifiedMember = memberService.modifyByMemberId(memberId, request);
-    return new ResponseEntity<QueryMemberDto>(modifiedMember, HttpStatus.OK);
+  @PutMapping
+  public ResponseEntity<QueryMemberDto> modify(@Valid @RequestBody UpdateMemberRequest request,
+      @AuthenticationPrincipal LoginInfo loginInfo) {
+    QueryMemberDto modifiedMember = memberService.modifyByMemberId(loginInfo.getId(), request);
+    return new ResponseEntity<>(modifiedMember, HttpStatus.OK);
   }
 
   @ApiOperation(value = "회원탈퇴 요청", notes = "id와 회원을 확인해 회원탈퇴 요청을 한다.")
-  @PutMapping("/withdrawals/{id}")
-  public ResponseEntity withdrawMember(@PathVariable String id,
-      @AuthenticationPrincipal LoginInfo loginInfo) {
-
-    QueryMemberDto findMember = memberService.findMemberById(id);
-    if (loginInfo.getNumber() != findMember.getNumber()) {
-      return new ResponseEntity(HttpStatus.FORBIDDEN);
-    }
-    boolean deleteFlag = memberService.withdraw(id);
+  @PutMapping("/withdrawals")
+  public ResponseEntity withdrawMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+    boolean deleteFlag = memberService.withdraw(loginInfo.getId());
     if (deleteFlag) {
       return new ResponseEntity(HttpStatus.OK);
     } else {
@@ -196,9 +174,4 @@ public class MemberController {
     }
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
-    log.info(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 }

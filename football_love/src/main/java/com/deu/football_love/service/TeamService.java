@@ -1,5 +1,9 @@
 package com.deu.football_love.service;
 
+
+import com.deu.football_love.domain.type.TeamMemberType;
+import com.deu.football_love.exception.NotExistDataException;
+import com.deu.football_love.exception.NotTeamMemberException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,7 +16,6 @@ import com.deu.football_love.domain.Post;
 import com.deu.football_love.domain.Team;
 import com.deu.football_love.domain.TeamBoard;
 import com.deu.football_love.domain.TeamMember;
-import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.team.AcceptApplicationResponse;
 import com.deu.football_love.dto.team.ApplicationJoinTeamDto;
 import com.deu.football_love.dto.team.CreateTeamResponse;
@@ -21,7 +24,6 @@ import com.deu.football_love.dto.team.QueryTeamDto;
 import com.deu.football_love.dto.team.QueryTeamListItemDto;
 import com.deu.football_love.dto.team.QueryTeamMemberDto;
 import com.deu.football_love.dto.team.UpdateAuthorityResponse;
-import com.deu.football_love.exception.NotTeamMemberException;
 import com.deu.football_love.repository.ApplicationJoinTeamRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostRepository;
@@ -155,7 +157,7 @@ public class TeamService {
   }
 
   public void withdrawal(Long teamId, String memberId) {
-    Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("no such member data."));
+    Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new NotExistDataException("no such member data."));
     if (!teamMemberRepository.existsByTeamIdAndMemberId(teamId, memberId)) {
       throw new NotTeamMemberException("no such team_member data");
     }
@@ -163,7 +165,7 @@ public class TeamService {
   }
 
   public DisbandmentTeamResponse disbandmentTeam(Long teamId) {
-    Team findTeam = teamRepository.findById(teamId).orElseThrow(() -> new IllegalArgumentException("no such Team data"));
+    Team findTeam = teamRepository.findById(teamId).orElseThrow(() -> new NotExistDataException("no such Team data"));
     while (findTeam.getBoards().size() != 0) {
       TeamBoard board = findTeam.getBoards().get(0);
       while (board.getPosts().size() != 0) {
@@ -186,9 +188,10 @@ public class TeamService {
   }
 
   public UpdateAuthorityResponse updateAuthority(Long teamId, String memberId, TeamMemberType authorityType) {
-    Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("no such member data."));
-    TeamMember teamMember = teamMemberRepository.findByTeamIdAndMemberNumber(teamId, findMember.getNumber())
-        .orElseThrow(() -> new IllegalArgumentException("no such team_member data"));
+    Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new NotExistDataException("no such member data."));
+    TeamMember teamMember = teamMemberRepository
+        .findByTeamIdAndMemberNumber(teamId, findMember.getNumber())
+        .orElseThrow(() -> new NotExistDataException("no such team_member data"));
     teamMember.setType(authorityType);
     return new UpdateAuthorityResponse(teamId, memberId, authorityType);
   }
@@ -200,7 +203,7 @@ public class TeamService {
 
   @SneakyThrows
   public String updateTeamProfile(Long teamId, MultipartFile profileImg, String introduce) {
-    Team findTeam = teamRepository.findById(teamId).orElseThrow(() -> new IllegalArgumentException("no such team data."));
+    Team findTeam = teamRepository.findById(teamId).orElseThrow(() -> new NotExistDataException("no such team data."));
     String profileImgUri = findTeam.getProfileImgUri();
     if (profileImg != null) {
       profileImgUri = gcpStorageService.updateTeamProfileImg(profileImg, teamId);

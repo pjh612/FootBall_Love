@@ -64,8 +64,8 @@ class CommentServiceTest {
     AddTeamBoardResponse response = boardService.add(request);
     TeamBoardDto findBoard = boardService.findById(response.getBoardId());
     WritePostRequest writePostRequest =
-        new WritePostRequest(memberJoinResponse.getNumber(), findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest);
+        new WritePostRequest( findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writePost(writePostRequest, memberJoinResponse.getNumber());
     postId = writePostResponse.getPostId();
     writerNumber = memberJoinResponse.getNumber();
   }

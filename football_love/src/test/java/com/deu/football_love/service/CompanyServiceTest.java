@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.NotExistDataException;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -72,7 +73,7 @@ class CompanyServiceTest {
         List<QueryCompanyDto> findCompanies = companyService.findCompaniesByName("companyA");
 
         Assertions.assertEquals(0,companyService.findCompaniesByName("companyA").size());
-                Assertions.assertThrows(IllegalArgumentException.class, ()-> companyService.findCompany(newCompany.getCompanyId()));
+                Assertions.assertThrows(NotExistDataException.class, ()-> companyService.findCompany(newCompany.getCompanyId()));
     }
 
     @Test
@@ -88,7 +89,7 @@ class CompanyServiceTest {
 
         memberService.withdraw("memberA");
         Assertions.assertEquals(true, withdrawalMemberRepository.existsByMemberId("memberA"));
-        Assertions.assertThrows(IllegalArgumentException.class,()-> companyService.findCompany(newCompany.getCompanyId()));
+        Assertions.assertThrows(NotExistDataException.class,()-> companyService.findCompany(newCompany.getCompanyId()));
     }
 
     /**
