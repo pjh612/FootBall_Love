@@ -92,10 +92,10 @@ class CommentControllerTest {
     writerId = memberJoinResponse.getId();
     boardId = findBoard.getBoardId();
     teamId = teamA.getTeamId();
-    WritePostRequest writePostRequest = new WritePostRequest(writerNumber, boardId, teamId, "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest);
+    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writePost(writePostRequest, writerNumber);
     postId = writePostResponse.getPostId();
-    loginUser = (LoginInfo)userDetailsService.loadUserByUsername(writerId);
+    loginUser = (LoginInfo) userDetailsService.loadUserByUsername(writerId);
   }
 
   @DisplayName("댓글 달기 테스트")

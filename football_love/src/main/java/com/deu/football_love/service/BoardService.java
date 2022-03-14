@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.NotExistDataException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class BoardService {
   }
 
   public DeleteBoardResponse delete(Long boardId) {
-    Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("no such board data"));
+    Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new NotExistDataException("no such board data"));
     List<Post> posts = findBoard.getPosts();
     for (Post post : posts) {
       post.setBoard(null);
@@ -53,7 +54,7 @@ public class BoardService {
   }
 
   public QueryBoardDto findById(Long boardId) {
-    Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("no such board data"));
+    Board findBoard = boardRepository.findById(boardId).orElseThrow(() -> new NotExistDataException("no such board data"));
     return new QueryBoardDto(findBoard);
   }
 }

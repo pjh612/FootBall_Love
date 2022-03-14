@@ -58,8 +58,4 @@ public class CommentController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleAccessDeniedException(final IllegalArgumentException ex) {
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 }

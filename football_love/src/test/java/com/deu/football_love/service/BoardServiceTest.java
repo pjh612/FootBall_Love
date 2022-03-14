@@ -1,5 +1,6 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.NotExistDataException;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -58,7 +59,7 @@ class BoardServiceTest {
     AddBoardResponse response = boardService.add(request);
 
     boardService.delete(response.getBoardId());
-    Assertions.assertThrows(IllegalArgumentException.class, () -> boardService.findById(response.getBoardId()));
+    Assertions.assertThrows(NotExistDataException.class, () -> boardService.findById(response.getBoardId()));
   }
 }
 

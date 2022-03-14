@@ -106,13 +106,13 @@ public class MatchController {
 
   @ApiOperation("매치수정")
   @PutMapping
-  public ResponseEntity modify(@Valid @RequestBody ModifyMatchRequest request,
+  public ResponseEntity<ModifyMatchResponse> modify(@Valid @RequestBody ModifyMatchRequest request,
       @AuthenticationPrincipal LoginInfo loginInfo) {
     if (!isTeamAdmin(request.getTeamId(), loginInfo.getNumber())) {
       return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
     ModifyMatchResponse modifyMatchResponse = matchService.modifyMatch(request.getMatchId(), request.getStadiumId(), request.getReservationTime());
-    return new ResponseEntity<ModifyMatchResponse>(modifyMatchResponse, HttpStatus.OK);
+    return new ResponseEntity<>(modifyMatchResponse, HttpStatus.OK);
   }
 
   private boolean isTeamAdmin(Long teamId, Long memberNumber) {
@@ -120,10 +120,5 @@ public class MatchController {
     return authorityType == TeamMemberType.ADMIN || authorityType == TeamMemberType.LEADER;
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleDataNotFoundException(final IllegalArgumentException ex) {
-    log.info(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 
 }

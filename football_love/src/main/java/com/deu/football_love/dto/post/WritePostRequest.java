@@ -10,9 +10,6 @@ import java.util.List;
 
 @Data
 public class WritePostRequest {
-	@Positive
-	@NotNull
-	private Long authorNumber;
 
 	@Positive
 	@NotNull
@@ -32,8 +29,7 @@ public class WritePostRequest {
 
   	private List<MultipartFile> images;
 
-	   public WritePostRequest(Long authorNumber, Long boardId, Long teamId, String title, String content, List<MultipartFile> images) {
-        this.authorNumber = authorNumber;
+	   public WritePostRequest(Long boardId, Long teamId, String title, String content, List<MultipartFile> images) {
         this.boardId = boardId;
         this.teamId = teamId;
         this.title = title;

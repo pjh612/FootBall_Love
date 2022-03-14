@@ -28,34 +28,30 @@ public class StadiumController {
   private final StadiumService stadiumService;
 
   @GetMapping("/{stadiumId}")
-  public ResponseEntity findOne(@PathVariable Long stadiumId) {
+  public ResponseEntity<QueryStadiumDto> findOne(@PathVariable Long stadiumId) {
     QueryStadiumDto response = stadiumService.findStadium(stadiumId);
     return new ResponseEntity(response, HttpStatus.OK);
   }
 
   @GetMapping("/{companyId}")
-  public ResponseEntity findAll(@PathVariable Long companyId) {
+  public ResponseEntity<List<QueryStadiumDto>> findAll(@PathVariable Long companyId) {
     List<QueryStadiumDto> response = stadiumService.findAllStadiumByCompanyId(companyId);
     return new ResponseEntity(response, HttpStatus.OK);
   }
 
   @PostMapping
   @PreAuthorize("hasRole('BUSINESS')")
-  public ResponseEntity add(@Valid @RequestBody AddStadiumRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+  public ResponseEntity<AddStadiumResponse> add(@Valid @RequestBody AddStadiumRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
     AddStadiumResponse response = stadiumService.addStadium(loginInfo.getCompanyId(), request.getType(), request.getSize(), request.getCost());
     return new ResponseEntity(response, HttpStatus.OK);
   }
 
   @DeleteMapping
   @PreAuthorize("hasRole('BUSINESS')")
-  public ResponseEntity delete(@Valid @RequestBody DeleteStadiumRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
+  public ResponseEntity<RemoveStadiumResponse> delete(@Valid @RequestBody DeleteStadiumRequest request,
+      @AuthenticationPrincipal LoginInfo loginInfo) {
     RemoveStadiumResponse response = stadiumService.deleteStadium(request.getStadiumId(), loginInfo.getCompanyId());
     return new ResponseEntity(response, HttpStatus.OK);
   }
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public ResponseEntity handleDataNotFoundException(final IllegalArgumentException ex) {
-    log.info(ex.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-  }
 }

@@ -79,13 +79,11 @@ public class StorageControllerTest {
     mvc.perform(MockMvcRequestBuilders.post("/api/team").with(user(userDetails)).contentType("application/json")
         .content(mapper.writeValueAsString(createTeamRequest))).andExpect(status().isOk());
 
-
     // 게시판 만들기
     QueryTeamDto findTeam = teamService.findTeamByName("FC진형");
     AddTeamBoardRequest addBoardRequest = new AddTeamBoardRequest("공지사항", BoardType.NOTICE, findTeam.getId());
     mvc.perform(MockMvcRequestBuilders.post("/api/team/{teamId}/board", findTeam.getId()).with(user(userDetails)).contentType("application/json")
         .content(mapper.writeValueAsString(addBoardRequest))).andExpect(status().isOk()).andDo(print());
-
 
     // 게시판 글쓰기
     TeamBoardDto findBoard = boardService.findByTeamIdAndBoardName(findTeam.getId(), "공지사항");
@@ -94,8 +92,12 @@ public class StorageControllerTest {
     File file = new File("src/test/resources/test.JPG");
     String mimeType = Files.probeContentType(file.toPath());
     MockMultipartFile image = new MockMultipartFile("images[0]", "test.JPG", mimeType, new FileInputStream(new File("src/test/resources/test.JPG")));
-    mvc.perform(multipart("/api/board/post").file(image).param("title", title).param("content", content).param("teamId", findTeam.getId().toString())
-        .param("boardId", findBoard.getBoardId().toString()).param("authorNumber", join.getNumber().toString()).with(user(userDetails)))
+    mvc.perform(multipart("/api/board/post")
+        .file(image).param("title", title)
+        .param("content", content)
+        .param("teamId", findTeam.getId().toString())
+        .param("boardId", findBoard.getBoardId().toString())
+        .param("authorNumber", join.getNumber().toString()).with(user(userDetails)))
         .andExpect(status().isOk());
 
     Page<QueryPostDto> postList = postService.findAllPostsByBoardId(findBoard.getBoardId(), null);
