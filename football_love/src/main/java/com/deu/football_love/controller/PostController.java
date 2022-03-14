@@ -74,13 +74,11 @@ public class PostController {
     return new ResponseEntity(HttpStatus.OK);
   }
 
-    @GetMapping("/post/{postId}")
-    public ResponseEntity findPost(@PathVariable Long postId) {
-        QueryPostDto post = postService.findPost(postId);
-        if (post == null)
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        return new ResponseEntity(post, HttpStatus.OK);
-    }
+  @GetMapping("/post/{postId}")
+  public ResponseEntity<QueryPostDto> findPost(@PathVariable Long postId) {
+    QueryPostDto post = postService.findPost(postId);
+    return new ResponseEntity(post, HttpStatus.OK);
+  }
 
   @GetMapping("/board/{boardId}/post")
   public ResponseEntity<Page<QueryPostDto>> getPostList(@PathVariable Long boardId, Pageable pageable) {

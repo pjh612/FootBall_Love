@@ -47,16 +47,14 @@ public class MemberService {
   public LoginResponse login_jwt(LoginRequest loginRequest) {
     Member member = memberRepository.findById(loginRequest.getId())
         .orElseThrow(() -> new IllegalArgumentException("no such member data."));
-    if (member != null && member.getId().equals(loginRequest.getId())
-        && passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
-      List<String> roleList = Arrays.asList(member.getMemberType().name());
-      String accessToken = jwtTokenProvider.createAccessToken(member.getId(), roleList);
-      String refreshToken = jwtTokenProvider.createRefreshToken();
-      return new LoginResponse("success", "create token success", accessToken, refreshToken,
-          member.getNumber());
-    } else {
-      return new LoginResponse("fail", "create token fail", null, null, null);
+    if (!passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
+      throw new IllegalArgumentException("wrong id or password.");
     }
+    List<String> roleList = Arrays.asList(member.getMemberType().name());
+    String accessToken = jwtTokenProvider.createAccessToken(member.getId(), roleList);
+    String refreshToken = jwtTokenProvider.createRefreshToken();
+    return new LoginResponse("success", "create token success", accessToken, refreshToken,
+        member.getNumber());
   }
 
   public QueryMemberDto join(MemberJoinRequest joinRequest) {

@@ -52,33 +52,23 @@ public class MemberController {
   @PostMapping
   public ResponseEntity<QueryMemberDto> normalJoin(@Valid @RequestBody MemberJoinRequest joinRequest) {
     QueryMemberDto joinMember = memberService.join(joinRequest);
-    if (joinMember == null) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } else {
-      return new ResponseEntity<>(joinMember, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(joinMember, HttpStatus.OK);
   }
 
   @ApiOperation(value = "비즈니스 회원가입 요청")
   @PostMapping("/business")
   public ResponseEntity<BusinessJoinResponse> businessJoin(@Valid @RequestBody BusinessJoinRequest joinRequest) {
     BusinessJoinResponse response = joinService.businessJoin(joinRequest);
-    if (response == null) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } else {
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
 
   @GetMapping("/loginInfo")
   public ResponseEntity getMember(@AuthenticationPrincipal LoginInfo loginInfo) {
-    if (loginInfo == null) {
+    if (loginInfo.getNumber() == -1) {
       return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-    } else {
-      QueryMemberDto queryMemberDtoByNumber = memberService.findQueryMemberDtoByNumber(loginInfo.getNumber());
-      return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
     }
+    return new ResponseEntity(memberService.findQueryMemberDtoByNumber(loginInfo.getNumber()), HttpStatus.OK);
   }
 
   @ApiOperation(value = "jwt 로그인 요청")
@@ -86,26 +76,21 @@ public class MemberController {
   public ResponseEntity<LoginResponse> login_jwt(@RequestBody LoginRequest loginRequest,
       HttpServletResponse response) {
     LoginResponse loginResponse = memberService.login_jwt(loginRequest);
-    if (loginResponse.getResult().equals("fail")) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
-    } else {
-      ArrayList<String> data = new ArrayList<>();
-      data.add(loginRequest.getId());
-      data.add(loginResponse.getAccessToken());
-      ResponseCookie accessTokenCookie =
-          ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken())
-              .path("/").secure(true).sameSite("None").build();
-      ResponseCookie refreshTokenCookie =
-          ResponseCookie.from(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken())
-              .path("/").secure(true).sameSite("None").build();
-      response.setHeader("Set-Cookie", accessTokenCookie.toString());
-      response.addHeader("Set-Cookie", refreshTokenCookie.toString());
-      redisService.setStringValue(loginResponse.getRefreshToken(), data,
-          JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
-      System.out.println("로그인 성공");
-      return new ResponseEntity<>(loginResponse, HttpStatus.OK);
-
-    }
+    ArrayList<String> data = new ArrayList<>();
+    data.add(loginRequest.getId());
+    data.add(loginResponse.getAccessToken());
+    ResponseCookie accessTokenCookie =
+        ResponseCookie.from(JwtTokenProvider.ACCESS_TOKEN_NAME, loginResponse.getAccessToken())
+            .path("/").secure(true).sameSite("None").build();
+    ResponseCookie refreshTokenCookie =
+        ResponseCookie.from(JwtTokenProvider.REFRESH_TOKEN_NAME, loginResponse.getRefreshToken())
+            .path("/").secure(true).sameSite("None").build();
+    response.setHeader("Set-Cookie", accessTokenCookie.toString());
+    response.addHeader("Set-Cookie", refreshTokenCookie.toString());
+    redisService.setStringValue(loginResponse.getRefreshToken(), data,
+        JwtTokenProvider.REFRESH_TOKEN_VALIDATION_SECOND);
+    System.out.println("로그인 성공");
+    return new ResponseEntity<>(loginResponse, HttpStatus.OK);
   }
 
   @PostMapping("/refresh")
