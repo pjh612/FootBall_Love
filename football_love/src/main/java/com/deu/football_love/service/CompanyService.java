@@ -56,9 +56,8 @@ public class CompanyService {
       String description) {
     Member findMember = memberRepository.findById(ownerNumber).orElseThrow(() -> new IllegalArgumentException("no such member data."));
     if (companyRepository.existsByMemberNumber(ownerNumber)) {
-      throw new IllegalArgumentException("already have company.");
+      throw new DuplicatedException("already have company.");
     }
-
     Company newCompany = companyRepository.save(new Company(name, findMember, location, tel, description));
     findMember.setCompany(newCompany);
     return AddCompanyResponse.from(newCompany);
