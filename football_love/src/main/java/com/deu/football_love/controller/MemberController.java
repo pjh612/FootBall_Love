@@ -156,24 +156,17 @@ public class MemberController {
   }
 
   @ApiOperation(value = "회원정보 수정요청")
-  @PutMapping("/{memberId}")
-  public ResponseEntity<QueryMemberDto> modify(@PathVariable String memberId,
-      @Valid @RequestBody UpdateMemberRequest request,
-      @AuthenticationPrincipal LoginInfo principal) {
-    QueryMemberDto modifiedMember = memberService.modifyByMemberId(memberId, request);
-    return new ResponseEntity<QueryMemberDto>(modifiedMember, HttpStatus.OK);
+  @PutMapping
+  public ResponseEntity<QueryMemberDto> modify(@Valid @RequestBody UpdateMemberRequest request,
+      @AuthenticationPrincipal LoginInfo loginInfo) {
+    QueryMemberDto modifiedMember = memberService.modifyByMemberId(loginInfo.getId(), request);
+    return new ResponseEntity<>(modifiedMember, HttpStatus.OK);
   }
 
   @ApiOperation(value = "회원탈퇴 요청", notes = "id와 회원을 확인해 회원탈퇴 요청을 한다.")
-  @PutMapping("/withdrawals/{id}")
-  public ResponseEntity withdrawMember(@PathVariable String id,
-      @AuthenticationPrincipal LoginInfo loginInfo) {
-
-    QueryMemberDto findMember = memberService.findMemberById(id);
-    if (loginInfo.getNumber() != findMember.getNumber()) {
-      return new ResponseEntity(HttpStatus.FORBIDDEN);
-    }
-    boolean deleteFlag = memberService.withdraw(id);
+  @PutMapping("/withdrawals")
+  public ResponseEntity withdrawMember(@AuthenticationPrincipal LoginInfo loginInfo) {
+    boolean deleteFlag = memberService.withdraw(loginInfo.getId());
     if (deleteFlag) {
       return new ResponseEntity(HttpStatus.OK);
     } else {

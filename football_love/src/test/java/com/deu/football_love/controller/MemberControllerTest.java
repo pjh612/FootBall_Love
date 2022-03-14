@@ -187,7 +187,7 @@ class MemberControllerTest {
     UpdateMemberRequest updateRequest = UpdateMemberRequest.builder().pwd("1111").nickname("updatedNickName").address(ADDRESS)
         .email("fblCorp11@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
 
-    mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/" + join.getId()).contentType(MediaType.APPLICATION_JSON).with(user(userDetails)).with(csrf())
+    mvc.perform(MockMvcRequestBuilders.put(BASE_URL).contentType(MediaType.APPLICATION_JSON).with(user(userDetails)).with(csrf())
         .content(mapper.writeValueAsString(updateRequest))).andExpect(status().isOk()).andDo(print());
 
 
@@ -200,7 +200,7 @@ class MemberControllerTest {
         .address(ADDRESS).birth(BIRTH_DAY).email("fblCorp@naver.com").phone("010-1111-2222").type(MemberType.ROLE_NORMAL).build();
     QueryMemberDto join = memberService.join(joinRequest);
     UserDetails userDetails = userDetailsService.loadUserByUsername(join.getId());
-    mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/withdrawals/" + join.getId()).contentType(MediaType.APPLICATION_JSON).with(csrf())
+    mvc.perform(MockMvcRequestBuilders.put(BASE_URL + "/withdrawals/").contentType(MediaType.APPLICATION_JSON).with(csrf())
         .with(user(userDetails))).andExpect(status().isOk()).andDo(print());
 
 
