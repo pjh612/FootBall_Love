@@ -109,7 +109,7 @@ public class MemberController {
   }
 
   @PostMapping("/refresh")
-  public ResponseEntity refresh(HttpServletResponse response,
+  public ResponseEntity<ValidRefreshTokenResponse> refresh(HttpServletResponse response,
       @CookieValue(value = "accessToken") String accessToken,
       @CookieValue(value = "refreshToken") String refreshToken) {
     if (accessToken == null || refreshToken == null) {
@@ -120,9 +120,9 @@ public class MemberController {
     log.info("validate result = {} ", result);
     if (result.getStatus() == 200) {
       response.addCookie((new Cookie("accessToken", result.getAccessToken())));
-      return new ResponseEntity(result, HttpStatus.OK);
+      return new ResponseEntity<>(result, HttpStatus.OK);
     }
-    return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   @ApiOperation(value = "로그아웃 요청")

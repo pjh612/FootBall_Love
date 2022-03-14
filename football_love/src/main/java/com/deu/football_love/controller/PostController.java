@@ -32,7 +32,7 @@ public class PostController {
    * 게시글 생성
    */
   @PostMapping("/board/post")
-  public ResponseEntity writePost(WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
+  public ResponseEntity<WritePostResponse> writePost(WritePostRequest writePostRequest, @AuthenticationPrincipal LoginInfo loginInfo) {
     TeamMemberType teamMemberType = teamService.authorityCheck(writePostRequest.getTeamId(), loginInfo.getNumber());
     if (teamMemberType == TeamMemberType.NONE) {
       throw new NotTeamMemberException();
@@ -88,12 +88,12 @@ public class PostController {
         return new ResponseEntity(result,HttpStatus.OK);
     }
 
-    @PostMapping("/post/{postId}/like")
-    @ApiOperation("좋아요")
-    public ResponseEntity likePost(@PathVariable Long postId, @AuthenticationPrincipal LoginInfo loginInfo) {
-        LikePostResponse likePostResponse = postService.likePost(postId, loginInfo.getNumber());
-        return new ResponseEntity(likePostResponse, HttpStatus.OK);
-    }
+  @PostMapping("/post/{postId}/like")
+  @ApiOperation("좋아요")
+  public ResponseEntity<LikePostResponse> likePost(@PathVariable Long postId, @AuthenticationPrincipal LoginInfo loginInfo) {
+    LikePostResponse likePostResponse = postService.likePost(postId, loginInfo.getNumber());
+    return new ResponseEntity(likePostResponse, HttpStatus.OK);
+  }
 
 
 }
