@@ -1,9 +1,12 @@
 package com.deu.football_love.controller;
 
+import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.auth.LoginInfo;
 import com.deu.football_love.dto.post.*;
 import com.deu.football_love.dto.post.like.LikePostResponse;
-import com.deu.football_love.dto.team.QueryTeamMemberDto;
+import com.deu.football_love.exception.CustomException;
+import com.deu.football_love.exception.NotTeamMemberException;
+import com.deu.football_love.exception.error_code.ErrorCode;
 import com.deu.football_love.service.*;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -38,35 +41,38 @@ public class PostController {
     return new ResponseEntity(writePostResponse, HttpStatus.OK);
   }
 
-    /**
-     * 게시글 삭제
-     */
-    @DeleteMapping("/post/{postId}")
-    public ResponseEntity deletePost(@PathVariable Long postId,@Valid @RequestBody DeletePostRequest request, @AuthenticationPrincipal LoginInfo loginInfo) {
-        QueryPostDto findPost = postService.findPost(postId);
-
-        if (findPost == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        if (loginInfo.getNumber() != findPost.getAuthorNumber())
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        DeletePostResponse response = postService.deletePost(findPost.getId());
-        return new ResponseEntity(response, HttpStatus.OK);
+  /**
+   * 게시글 삭제
+   */
+  @DeleteMapping("/post/{postId}")
+  public ResponseEntity<DeletePostResponse> deletePost(@PathVariable Long postId, @AuthenticationPrincipal LoginInfo loginInfo) {
+    QueryPostDto findPost = postService.findPost(postId);
+    if (findPost == null) {
+      throw new CustomException(ErrorCode.NOT_EXIST_DATA);
     }
-
-    /**
-     * 게시글 수정
-     */
-    @PutMapping("/post/{postId}")
-    public ResponseEntity modifyPost(@PathVariable Long postId,@Valid @RequestBody UpdatePostRequest request, @AuthenticationPrincipal  LoginInfo loginInfo) {
-        QueryPostDto findPost = postService.findPost(postId);
-
-        if (findPost == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        if (loginInfo.getNumber() != findPost.getAuthorNumber())
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        postService.modifyPost(postId, request);
-        return new ResponseEntity(HttpStatus.OK);
+    if (loginInfo.getNumber() != findPost.getAuthorNumber()) {
+      throw new CustomException(ErrorCode.NOT_POST_AUTHOR);
     }
+    DeletePostResponse response = postService.deletePost(findPost.getId());
+    return new ResponseEntity(response, HttpStatus.OK);
+  }
+
+  /**
+   * 게시글 수정
+   */
+  @PutMapping("/post/{postId}")
+  public ResponseEntity<QueryPostDto> modifyPost(@PathVariable Long postId, @Valid @RequestBody UpdatePostRequest request,
+      @AuthenticationPrincipal LoginInfo loginInfo) {
+    QueryPostDto findPost = postService.findPost(postId);
+    if (findPost == null) {
+      throw new CustomException(ErrorCode.NOT_EXIST_DATA);
+    }
+    if (loginInfo.getNumber() != findPost.getAuthorNumber()) {
+      throw new CustomException(ErrorCode.NOT_POST_AUTHOR);
+    }
+    postService.modifyPost(postId, request);
+    return new ResponseEntity(HttpStatus.OK);
+  }
 
     @GetMapping("/post/{postId}")
     public ResponseEntity findPost(@PathVariable Long postId) {

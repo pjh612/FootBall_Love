@@ -4,7 +4,10 @@ import com.deu.football_love.domain.type.MatchApplicationState;
 import com.deu.football_love.domain.type.MatchState;
 import com.deu.football_love.domain.type.TeamMemberType;
 import com.deu.football_love.dto.match.QueryMatchApplicationDto;
+import com.deu.football_love.exception.CustomException;
+import com.deu.football_love.exception.NotExistDataException;
 import com.deu.football_love.exception.NotTeamMemberException;
+import com.deu.football_love.exception.error_code.ErrorCode;
 import java.time.LocalDateTime;
 import java.util.List;
 import com.deu.football_love.repository.*;
@@ -141,7 +144,7 @@ public class MatchService {
     MatchApplication findApplication = matchApplicationRepository.findByIdWithJoin(matchApplicationId)
         .orElseThrow(() -> new IllegalArgumentException("no such match application data."));
     if (!findMatch.getState().equals(MatchState.WAITING)) {
-      throw new IllegalArgumentException("It is not valid match");
+      throw new CustomException(ErrorCode.NOT_WAITING_MATCH);
     }
     TeamMemberType teamMemberType = teamService.authorityCheck(findMatch.getTeamA().getId(), approverNumber);
     if(!(teamMemberType.equals(TeamMemberType.ADMIN) || teamMemberType.equals(TeamMemberType.LEADER)))
@@ -181,7 +184,7 @@ public class MatchService {
     Matches match = matchRepository.findById(matchId)
         .orElseThrow(() -> new IllegalArgumentException("no such match data."));
     if(match.getStadium().getCompany().getId() != companyId)
-      throw new IllegalArgumentException("you have no authority");
+      throw new CustomException(ErrorCode.NOT_STADIUM_OWNER);
     matchRepository.delete(match);
   }
 
@@ -205,10 +208,10 @@ public class MatchService {
     TeamMemberType teamMemberType = teamService
         .authorityCheck(findApplication.getMatch().getTeamA().getId(), memberNumber);
     if (teamMemberType != TeamMemberType.ADMIN && teamMemberType != TeamMemberType.LEADER) {
-      throw new NotTeamMemberException("you are not team admin.");
+      throw new CustomException(ErrorCode.NOT_ADMIN);
     }
     if (findApplication.getState() != MatchApplicationState.WAITING) {
-      throw new IllegalArgumentException("The match application state is not waiting");
+      throw new CustomException(ErrorCode.NOT_WAITING_MATCH);
     }
     findApplication.refuse(refuseMessage);
 
