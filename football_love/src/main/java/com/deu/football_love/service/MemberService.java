@@ -61,7 +61,7 @@ public class MemberService {
 
   public QueryMemberDto join(MemberJoinRequest joinRequest) {
     if (memberRepository.existsById(joinRequest.getId())) {
-     throw new DuplicatedException("There is already member with the same id");
+      throw new DuplicatedException("There is already member with the same id");
     }
     joinRequest.setPwd(passwordEncoder.encode(joinRequest.getPwd()));
     Member member = Member.memberBuilder().address(joinRequest.getAddress())

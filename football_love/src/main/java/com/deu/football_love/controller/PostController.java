@@ -82,11 +82,11 @@ public class PostController {
         return new ResponseEntity(post, HttpStatus.OK);
     }
 
-    @GetMapping("/board/{boardId}/post")
-    public ResponseEntity<Page<QueryPostDto>> getPostList(@PathVariable Long boardId, Pageable pageable) {
-        Page<QueryPostDto> result = postService.findAllPostsByBoardId(boardId, pageable);
-        return new ResponseEntity(result,HttpStatus.OK);
-    }
+  @GetMapping("/board/{boardId}/post")
+  public ResponseEntity<Page<QueryPostDto>> getPostList(@PathVariable Long boardId, Pageable pageable) {
+    Page<QueryPostDto> result = postService.findAllPostsByBoardId(boardId, pageable);
+    return new ResponseEntity(result, HttpStatus.OK);
+  }
 
   @PostMapping("/post/{postId}/like")
   @ApiOperation("좋아요")
