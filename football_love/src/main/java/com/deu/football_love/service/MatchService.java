@@ -44,7 +44,7 @@ public class MatchService {
   @Transactional(readOnly = true)
   public QueryMatchDto findMatch(Long matchId) {
     Matches findMatch = matchRepository.findById(matchId)
-        .orElseThrow(() -> new IllegalArgumentException("no such stadium data"));
+        .orElseThrow(() -> new NotExistDataException("no such stadium data"));
     if (findMatch.getState().equals(MatchState.EMPTY)) {
       return new QueryMatchDto(findMatch.getId(), findMatch.getStadium().getId(), findMatch.getReservationTime(),
           findMatch.getState(), findMatch.getRefuseMessage());
@@ -111,7 +111,7 @@ public class MatchService {
    */
   public AddMatchResponse addMatch(Long stadiumId, Long companyId, LocalDateTime reservationTime) {
     Stadium findStadium = stadiumRepository.findByCompanyIdAndStadiumId(stadiumId, companyId)
-        .orElseThrow(() -> new IllegalArgumentException("no such stadium data"));
+        .orElseThrow(() -> new NotExistDataException("no such stadium data"));
     Matches newMatch = new Matches();
     newMatch.setState(MatchState.EMPTY);
     newMatch.setStadium(findStadium);
@@ -125,12 +125,12 @@ public class MatchService {
    */
   public void registerTeamA(Long matchId, Long teamId) {
     Matches findMatch = matchRepository.findById(matchId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match data."));
+        .orElseThrow(() -> new NotExistDataException("no such match data."));
     if (!findMatch.getState().equals(MatchState.EMPTY)) {
       throw new IllegalArgumentException("There is already team A.");
     }
     Team findTeam = teamRepository.findById(teamId)
-        .orElseThrow(() -> new IllegalArgumentException("no such team data."));
+        .orElseThrow(() -> new NotExistDataException("no such team data."));
     findMatch.setTeamA(findTeam);
     findMatch.setState(MatchState.WAITING);
   }
@@ -140,9 +140,9 @@ public class MatchService {
    */
   public MatchApproveResponse approveMatchApplication(Long matchId, Long matchApplicationId, Long approverNumber) {
     Matches findMatch = matchRepository.findById(matchId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match data."));
+        .orElseThrow(() -> new NotExistDataException("no such match data."));
     MatchApplication findApplication = matchApplicationRepository.findByIdWithJoin(matchApplicationId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match application data."));
+        .orElseThrow(() -> new NotExistDataException("no such match application data."));
     if (!findMatch.getState().equals(MatchState.WAITING)) {
       throw new CustomException(ErrorCode.NOT_WAITING_MATCH);
     }
@@ -162,9 +162,9 @@ public class MatchService {
    */
   public MatchApplicationResponse addMatchApplication(Long matchId, Long teamId) {
     Team team = teamRepository.findById(teamId)
-        .orElseThrow(() -> new IllegalArgumentException("no such Team data"));
+        .orElseThrow(() -> new NotExistDataException("no such Team data"));
     Matches match = matchRepository.findById(matchId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match data."));
+        .orElseThrow(() -> new NotExistDataException("no such match data."));
     if(teamId == match.getTeamA().getId())
       throw new IllegalArgumentException("team B can't be same with team A");
     MatchApplication matchApplication = new MatchApplication();
@@ -182,7 +182,7 @@ public class MatchService {
    */
   public void cancelMatch(Long matchId, Long companyId) {
     Matches match = matchRepository.findById(matchId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match data."));
+        .orElseThrow(() -> new NotExistDataException("no such match data."));
     if(match.getStadium().getCompany().getId() != companyId)
       throw new CustomException(ErrorCode.NOT_STADIUM_OWNER);
     matchRepository.delete(match);
@@ -191,9 +191,9 @@ public class MatchService {
   public ModifyMatchResponse modifyMatch(Long matchId, Long stadiumId,
       LocalDateTime reservationTime) {
     Stadium stadium = stadiumRepository.findById(stadiumId)
-        .orElseThrow(() -> new IllegalArgumentException("no such stadium data"));
+        .orElseThrow(() -> new NotExistDataException("no such stadium data"));
     Matches findMatch = matchRepository.findById(matchId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match data."));
+        .orElseThrow(() -> new NotExistDataException("no such match data."));
     findMatch.setStadium(stadium);
     findMatch.setReservationTime(reservationTime);
     return ModifyMatchResponse.from(findMatch);
@@ -204,7 +204,7 @@ public class MatchService {
    */
   public void refuseMatchApplication(Long applicationId, String refuseMessage, Long memberNumber) {
     MatchApplication findApplication = matchApplicationRepository.findByIdWithJoin(applicationId)
-        .orElseThrow(() -> new IllegalArgumentException("no such match application data."));
+        .orElseThrow(() -> new NotExistDataException("no such match application data."));
     TeamMemberType teamMemberType = teamService
         .authorityCheck(findApplication.getMatch().getTeamA().getId(), memberNumber);
     if (teamMemberType != TeamMemberType.ADMIN && teamMemberType != TeamMemberType.LEADER) {

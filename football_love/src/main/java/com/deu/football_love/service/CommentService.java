@@ -4,6 +4,7 @@ import com.deu.football_love.domain.Comment;
 import com.deu.football_love.domain.Member;
 import com.deu.football_love.domain.Post;
 import com.deu.football_love.dto.comment.*;
+import com.deu.football_love.exception.NotExistDataException;
 import com.deu.football_love.repository.CommentRepository;
 import com.deu.football_love.repository.MemberRepository;
 import com.deu.football_love.repository.PostRepository;
@@ -27,7 +28,7 @@ public class CommentService {
 
     public AddCommentResponse addComment(AddCommentRequest request) {
         Post findPost = postRepository.findById(request.getPostId()).orElseThrow(()->new IllegalArgumentException());
-        Member findMember = memberRepository.findById(request.getWriterNumber()).orElseThrow(()->new IllegalArgumentException("no such member data."));;
+        Member findMember = memberRepository.findById(request.getWriterNumber()).orElseThrow(()->new NotExistDataException("no such member data."));
         Comment comment = new Comment(findPost, findMember, request.getComment());
         commentRepository.save(comment);
         return new AddCommentResponse(true, comment.getId());
@@ -35,7 +36,7 @@ public class CommentService {
 
 
     public QueryCommentDto findCommentByCommentId(Long commentId) {
-        Comment findComment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException());
+        Comment findComment = commentRepository.findById(commentId).orElseThrow(()-> new NotExistDataException("no such comment data."));
         return QueryCommentDto.from(findComment);
     }
 
@@ -44,13 +45,13 @@ public class CommentService {
     }
 
     public void updateCommentByCommentId(UpdateCommentRequest request) {
-        Comment findComment = commentRepository.findById(request.getCommentId()).orElseThrow(()-> new IllegalArgumentException());
+        Comment findComment = commentRepository.findById(request.getCommentId()).orElseThrow(()-> new NotExistDataException("no such comment data."));
         findComment.updateComment(request);
 
     }
 
     public void deleteCommentByCommentId(Long commentId) {
-        Comment findComment = commentRepository.findById(commentId).orElseThrow(()-> new IllegalArgumentException());
+        Comment findComment = commentRepository.findById(commentId).orElseThrow(()-> new NotExistDataException("no such comment data."));
         commentRepository.delete(findComment);
     }
 }

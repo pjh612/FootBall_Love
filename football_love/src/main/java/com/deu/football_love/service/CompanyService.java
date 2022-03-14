@@ -1,5 +1,7 @@
 package com.deu.football_love.service;
 
+import com.deu.football_love.exception.DuplicatedException;
+import com.deu.football_love.exception.NotExistDataException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -28,14 +30,14 @@ public class CompanyService {
   @Transactional(readOnly = true)
   public QueryCompanyDto findCompany(Long companyId) {
     Company findCompany = companyRepository.findById(companyId)
-        .orElseThrow(() -> new IllegalArgumentException("no such company data."));
+        .orElseThrow(() -> new NotExistDataException("no such company data."));
     return QueryCompanyDto.from(findCompany);
   }
 
   @Transactional(readOnly = true)
   public QueryCompanyDto findByMemberNumber(Long memberNumber) {
     QueryCompanyDto findCompany = companyRepository.findQueryCompanyDto(memberNumber)
-        .orElseThrow(() -> new IllegalArgumentException("no such company data."));
+        .orElseThrow(() -> new NotExistDataException("no such company data."));
     return findCompany;
   }
 
@@ -64,13 +66,13 @@ public class CompanyService {
 
 
   public WithdrawalCompanyResponse withdrawalCompany(Long companyId) {
-    Company findCompany = companyRepository.findById(companyId).orElseThrow(() -> new IllegalArgumentException("no such company data."));
+    Company findCompany = companyRepository.findById(companyId).orElseThrow(() -> new NotExistDataException("no such company data."));
     companyRepository.delete(findCompany);
     return new WithdrawalCompanyResponse(companyId, findCompany.getName());
   }
 
   public void updateCompany(Long companyId, UpdateCompanyRequest request) {
-    Company company = companyRepository.findById(companyId).orElseThrow(() -> new IllegalArgumentException("no such company data."));
+    Company company = companyRepository.findById(companyId).orElseThrow(() -> new NotExistDataException("no such company data."));
     company.update(request);
   }
 }

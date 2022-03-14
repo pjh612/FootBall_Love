@@ -1,6 +1,7 @@
 package com.deu.football_love.service;
 
 import com.deu.football_love.exception.DuplicatedException;
+import com.deu.football_love.exception.NotExistDataException;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -107,7 +108,7 @@ public class PostServiceTest {
     Assertions.assertNotNull(findPost);
 
     postService.deletePost(findPost.getId());
-    Assertions.assertThrows(IllegalArgumentException.class, () -> postService.findPost(writePostResponse.getPostId()));
+    Assertions.assertThrows(NotExistDataException.class, () -> postService.findPost(writePostResponse.getPostId()));
   }
 
   /**

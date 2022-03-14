@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.deu.football_love.exception.NotExistDataException;
 import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -195,8 +195,8 @@ public class TeamServiceTest {
         assertThrows(IllegalArgumentException.class, () -> boardService.findById(addBoardResponse.getBoardId()));
         assertEquals(0, findTeam.getBoards().size());
         assertEquals(0, findMember.getPosts().size());
-        assertThrows(IllegalArgumentException.class, () -> postService.findPost(post1.getPostId()));
-        assertThrows(IllegalArgumentException.class, () -> postService.findPost(post2.getPostId()));
+        assertThrows(NotExistDataException.class, () -> postService.findPost(post1.getPostId()));
+        assertThrows(NotExistDataException.class, () -> postService.findPost(post2.getPostId()));
     }
 
     /**
