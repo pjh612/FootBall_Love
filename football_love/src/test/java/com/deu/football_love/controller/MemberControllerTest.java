@@ -77,7 +77,8 @@ class MemberControllerTest {
         .andExpect(jsonPath("$.nickname", is(joinRequest.getNickname())))
         .andExpect(jsonPath("$.address.city", is(joinRequest.getAddress().getCity())))
         .andExpect(jsonPath("$.address.street", is(joinRequest.getAddress().getStreet())))
-        .andExpect(jsonPath("$.address.zipcode", is(joinRequest.getAddress().getZipcode()))).andExpect(jsonPath("$.birth", is("20000101")))
+        .andExpect(jsonPath("$.address.zipcode", is(joinRequest.getAddress().getZipcode())))
+        .andExpect(jsonPath("$.birth", is("2000-01-01")))
         .andExpect(jsonPath("$.email", is(joinRequest.getEmail()))).andExpect(jsonPath("$.phone", is(joinRequest.getPhone())))
         .andExpect(jsonPath("$.type", is("ROLE_NORMAL"))).andDo(print());
   }
