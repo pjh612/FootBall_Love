@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { getTeamBoardPosts } from '../../axios/axios';
+import { getPosts as getItems } from '../../axios/axios';
 import { useState, useEffect } from 'react';
 import Posting from '../Board/Posting';
 type Post = {
@@ -29,7 +29,7 @@ export default function TeamBoardPage() {
 
   async function getPosts() {
     try {
-      const posts = await getTeamBoardPosts(boardId).then((res) => res.data);
+      const posts = await getItems(boardId).then((res) => res.data);
       console.log(posts.content);
       setPosts(posts.content);
     } catch (err) {

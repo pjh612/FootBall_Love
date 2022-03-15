@@ -1,27 +1,71 @@
-.wrapper {
+.background {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  background-color: #d9534f;
-  height: 160px;
   justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  background-color: #d9534f;
 }
 
-.team_one_wrapper {
-  margin-top: 14px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 80px;
-  height: 130px;
+.wrapper {
+  padding: 20px;
+  margin: 0 auto;
+  width: 1200px;
+  min-height: 100vh;
+  background-color: #d9534f;
+  height: 100%;
 }
 
-.team_image {
-  width: 70px;
-  height: 100px;
+.cardWrapper {
+  border: 3px solid black;
+  display: inline-block;
+  font-size: 16px;
+  font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+  text-align: center;
+  width: 240px;
+  height: 300px;
+  background-color: #56bbf1;
+  box-shadow: 5px 5px 5px teal;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .team_name {
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
   font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+}
+
+.team_img {
+  margin-top: 10px;
+  width: 190px;
+  height: 190px;
+  object-fit: cover;
+  border: 3px solid black;
+}
+
+@media screen and (max-width: 630px) {
+  .wrapper {
+    width: 300px;
+  }
+}
+@media screen and (min-width: 631px) and (max-width: 900px) {
+  .wrapper {
+    width: 600px;
+  }
+}
+@media screen and (min-width: 901px) and (max-width: 1200px) {
+  .wrapper {
+    width: 900px;
+  }
+}
+@media screen and (min-width: 1201px) {
+  .wrapper {
+    width: 1200px;
+  }
 }
