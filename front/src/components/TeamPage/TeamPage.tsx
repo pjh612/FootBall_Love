@@ -3,13 +3,15 @@ import { useParams } from 'react-router-dom';
 import { useTeam } from '../../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import styles from '../../css/TeamPage.module.css';
-import TeamPageInfo from './TeamPageInfo';
+// import TeamPageInfo from './TeamPageInfo';
 import { getDetailTeamInfo } from '../../axios/axios';
 import CheckLogin from '../CheckLogin';
 import MakeBoard from './MakeBoard';
 import TeamBoardList from './TeamBoardList';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
+
+const TeamInfo = lazy(() => import('./TeamPageInfo'));
 
 interface Board {
   boardId: number;
@@ -43,17 +45,17 @@ const TeamPage = () => {
     boards: [],
   });
 
-  const id = useParams().id;
+  const teamId = useParams().id;
   const teams = useTeam();
   const navigate = useNavigate();
   const nowTeam = teams.filter((team) => {
-    return team.teamId == id;
+    return team.teamId == teamId;
   });
 
   async function getDetailInfo(teamId) {
     try {
-      const detailData: any = await getDetailTeamInfo(teamId).then((res) => res.data);
-      setTeamInfo(detailData);
+      const teamData: any = await getDetailTeamInfo(teamId).then((res) => res.data);
+      setTeamInfo(teamData);
     } catch (err) {
       console.log('팀 정보를 가져오는데 실패했습니다');
       console.log(err.response);
@@ -61,20 +63,18 @@ const TeamPage = () => {
   }
 
   useEffect(() => {
-    if (nowTeam.length !== 0) {
-      getDetailInfo(id);
-    } else {
-      navigate('/');
-    }
+    getDetailInfo(teamId);
   }, []);
 
   return (
     <CheckLogin>
       <div className={styles.wrapper}>
-        <TeamPageImage teamUri={teams.profileImgUri}></TeamPageImage>
-        <TeamPageInfo teamInfo={teamInfo}></TeamPageInfo>
-        <MakeBoard teamInfo={teamInfo}></MakeBoard>
-        <TeamBoardList teamInfo={teamInfo}></TeamBoardList>
+        {/* <TeamPageImage teamUri={teams.profileImgUri}></TeamPageImage> */}
+        <Suspense fallback={<h1>로딩중이야아아아아아아</h1>}>
+          <TeamInfo teamInfo={teamInfo}></TeamInfo>
+        </Suspense>
+        {/* <MakeBoard teamInfo={teamInfo}></MakeBoard> */}
+        {/* <TeamBoardList teamInfo={teamInfo}></TeamBoardList> */}
       </div>
     </CheckLogin>
   );

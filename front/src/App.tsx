@@ -13,7 +13,7 @@ import TeamList from './components/TeamListPage/TeamList';
 import BoardPage from './components/TeamPage/TeamBoardPage';
 import AdminPage from './components/Admin/AdminPage';
 import Community from './components/community/Community';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateUserAction, updateTeamAction } from './action/createAction';
 import { useUser } from './hooks/useUser';
