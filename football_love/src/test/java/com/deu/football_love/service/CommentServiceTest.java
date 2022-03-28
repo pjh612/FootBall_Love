@@ -20,8 +20,8 @@ import com.deu.football_love.dto.comment.QueryCommentDto;
 import com.deu.football_love.dto.comment.UpdateCommentRequest;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
-import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
+import com.deu.football_love.dto.post.WriteTeamPostRequest;
 import com.deu.football_love.dto.team.CreateTeamResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
 import com.deu.football_love.repository.PostRepository;
@@ -63,9 +63,8 @@ class CommentServiceTest {
     AddTeamBoardRequest request = new AddTeamBoardRequest("boardA", BoardType.NOTICE, teamA.getTeamId());
     AddTeamBoardResponse response = boardService.add(request);
     TeamBoardDto findBoard = boardService.findById(response.getBoardId());
-    WritePostRequest writePostRequest =
-        new WritePostRequest( findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest, memberJoinResponse.getNumber());
+    WriteTeamPostRequest writePostRequest = new WriteTeamPostRequest(findBoard.getBoardId(), teamA.getTeamId(), "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writeTeamPost(writePostRequest, memberJoinResponse.getNumber());
     postId = writePostResponse.getPostId();
     writerNumber = memberJoinResponse.getNumber();
   }

@@ -4,7 +4,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.time.LocalDate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +24,13 @@ import com.deu.football_love.dto.Teamboard.AddTeamBoardRequest;
 import com.deu.football_love.dto.Teamboard.TeamBoardDto;
 import com.deu.football_love.dto.member.MemberJoinRequest;
 import com.deu.football_love.dto.member.QueryMemberDto;
-import com.deu.football_love.dto.post.WritePostRequest;
 import com.deu.football_love.dto.post.WritePostResponse;
+import com.deu.football_love.dto.post.WriteTeamPostRequest;
 import com.deu.football_love.dto.team.CreateTeamResponse;
 import com.deu.football_love.dto.team.QueryTeamDto;
 import com.deu.football_love.service.MemberService;
-import com.deu.football_love.service.TeamBoardService;
 import com.deu.football_love.service.PostService;
+import com.deu.football_love.service.TeamBoardService;
 import com.deu.football_love.service.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -87,9 +86,9 @@ public class PostControllerTest {
   @DisplayName("글 쓰기 테스트")
   @Test
   public void addPost() throws Exception {
-    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
+    WriteTeamPostRequest writePostRequest = new WriteTeamPostRequest(boardId, teamId, "title1", "hi", null);
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
-    mvc.perform(multipart("/api/board/post").param("title", writePostRequest.getTitle()).param("content", writePostRequest.getContent())
+    mvc.perform(multipart("/api/board/team/post").param("title", writePostRequest.getTitle()).param("content", writePostRequest.getContent())
         .param("teamId", Long.toString(writePostRequest.getTeamId())).param("boardId", Long.toString(writePostRequest.getBoardId()))
         .with(user(userDetails))).andExpect(status().isOk());
   }
@@ -97,8 +96,8 @@ public class PostControllerTest {
   @DisplayName("글 추천 테스트")
   @Test
   public void likePost() throws Exception {
-    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest, writerNumber);
+    WriteTeamPostRequest writePostRequest = new WriteTeamPostRequest(boardId, teamId, "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writeTeamPost(writePostRequest, writerNumber);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
     mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
@@ -108,8 +107,8 @@ public class PostControllerTest {
   @DisplayName("글 추천 중복 테스트")
   @Test
   public void DuplicatingLikePost() throws Exception {
-    WritePostRequest writePostRequest = new WritePostRequest(boardId, teamId, "title1", "hi", null);
-    WritePostResponse writePostResponse = postService.writePost(writePostRequest, writerNumber);
+    WriteTeamPostRequest writePostRequest = new WriteTeamPostRequest(boardId, teamId, "title1", "hi", null);
+    WritePostResponse writePostResponse = postService.writeTeamPost(writePostRequest, writerNumber);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(writerId);
     mvc.perform(MockMvcRequestBuilders.post("/api/post/{postId}/like", writePostResponse.getPostId()).with(user(userDetails)))
